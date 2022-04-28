@@ -14,7 +14,7 @@ int main(int argc, char **argv)
      int i = 0;
 
      if (argc != 2) {
-        printf("Arguments: <buffer input>\n");
+        printf("Argument: char is required\n");
         exit(1);
       }
      
