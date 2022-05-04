@@ -17,7 +17,7 @@
      len = 20
      depth = 2,...
      json = User_string
-[flow] data2.2 * '{' --modify--> data2.3
+[flow] data2.2 * '{' --modify--> data2.3 -------> vulnerable.
      stack = {},???};
      len = 20
      depth = 3,...,
