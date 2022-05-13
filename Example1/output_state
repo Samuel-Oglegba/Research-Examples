@@ -1,0 +1,29 @@
+[data1] char* json = constant
+    int len = 20
+[data2] empty : stack { top }
+
+[flow] data1.0 * data2.0 —jsonparse_setup—> [data2.1] empty : stack { top }
+     stack = {0,???};
+     len = 20
+     depth = 0
+     json = User_string
+[flow] data2.1  * '[' —push—> [data2.2] non-empty : stack { top “[“ }
+     stack = {[,???};
+     len = 20
+     depth = 1,...
+     json = User_string
+[flow] data2.2  * '[' —push—> [data2.3] non-empty : stack { top “[“,...,”[“ }
+     stack = {[,???};
+     len = 20
+     depth = 1,...
+     json = User_string
+[flow] data2.3 * '[' —push—> [data2.4] vulnerable : stack { top “[”{20} }.
+     stack = {[,???};
+     len = 20
+     depth = 20.
+     json = User_string
+[flow] data2.3 * '{' —modify—> [data2.5] non-empty : stack { top “{“,...,”[“ }
+     stack = {},???};
+     len = 20
+     depth = 3,...,
+     json = User_string
