@@ -86,7 +86,7 @@ real_idx = *(int *)&msg_secondary.mtext[4];
 **** How to convey if statement? ****
 [flow] data10.1 —--= data7.1->m_list_prev --—> data10.2
 
-<<-- should this assignment be covered -->>
+<<-- should this assignment be covered ??? -->>
 ### kheap_addr -= SECONDARY_SIZE;
 
 
