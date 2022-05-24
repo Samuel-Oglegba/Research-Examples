@@ -69,7 +69,7 @@ real_idx = *(int *)&msg_secondary.mtext[4];
 
 [flow] data6.0 * "0" —memset—> data6.1
 [flow] data6.1 * conts —build_msg_msg—> data6.2
-[flow] data3.0 * data6.2 —spray_skbuff—> data3.1
+[flow] data3.1 * data6.2 —spray_skbuff—> data3.2
 
 ######### use fake secondary message to read out-of-bonds… #########
 ######### Leaking adjacent secondary message ##################
@@ -98,7 +98,7 @@ real_idx = *(int *)&msg_secondary.mtext[4];
  ############## Assumes zero bytes before -- kheap_addr.
 [flow] data6.3 * "0" --memset--> data6.4
 [flow] data6.4 * conts —build_msg_msg—> data6.5
-[flow] data3.1 * data6.5 —spray_skbuff—> data3.2
+[flow] data3.2 * data6.5 —spray_skbuff—> data3.3
 
 [flow] data5.1{fake_idx} * &data13.1 —peek_msg—> &data13.2
 
