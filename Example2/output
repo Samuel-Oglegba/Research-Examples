@@ -21,6 +21,7 @@
  [data15] uint64_t kbase_addr = 0;
 
 ====================================================
+[flow] data1.0 ---= socket(conts) ---> data1.0 -- ## it does not chang a data structure
 
 [flow] data3.0 * conts --- socketpair ---> data3.1,…,data3.4
 [flow] data5.0 ---= msgget ---> data5.1,…,data5.4096
@@ -78,7 +79,7 @@ real_idx = *(int *)&msg_secondary.mtext[4];
 
 ######### the secondary message contains a pointer to the primary message ##########
 *** how represent assignment that changes the data structure? ***
-
+#####
 [flow] data7.0 —--= (msg_msg *)&data13.1.mtext[conts]--—> data7.1
 
 [flow] data10.0 —--= data7.1->m_list_next --—> data10.1

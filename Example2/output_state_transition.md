@@ -20,6 +20,8 @@
  [data15] uint64_t kbase_addr = 0;
 
  ======================================================
+ [flow] data1.0 ---= socket(conts) ---> data1.1
+ 
  [flow] data3.0 * conts --- socketpair ---> [data3.1] non-empty : array { top 1,...,4 }
  [flow] data5.0 ---= msgget---> [data5.1] non-empty : array { top 1,...,4096 }
 
