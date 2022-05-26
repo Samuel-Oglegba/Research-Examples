@@ -1,4 +1,5 @@
 ### Note: 1,...,N ==> .n.
+### 1,...,N ==> .n-1.
 ### Array: 
 
 **** Operations
@@ -11,9 +12,6 @@ empty : array { top }
 working : array { top .n-1.}
 full : array { top .n.}
 error : { null }
-
-
-**** Transition:
 
 
 ### LinkedList (sequencial access)
