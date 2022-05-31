@@ -7,7 +7,6 @@
  add(), insert(index,valueToAdd)
  update(index,newValue)
  delete(index)
-
 **** States
 empty : array { top }
 working : array { top .n-1.}
@@ -19,13 +18,13 @@ error : { null }
  add(itemToAdd)
  set(index,newValue)
  remove()
-
 **** States
 empty : linkedList { head }
 working : linkedList { head .n-1.}
 full : linkedList { head .n. }
 error : { null }
-### =============================================================================== ###
+
+### Program =============================================================================== ###
 ### Socket level abstraction
 ### Compound Type (Message)
 ### Pipe
@@ -60,7 +59,7 @@ error : { null }
 
       == Array[size1] ( top, elem … ) {
       top -> [data6] secondary_buf,
-      elem -> Compound(DoublyLinkedList) ( id ) {
+      elem -> Compound(DoublyLinkedList Message) ( id ) {
                   id -> [data7] msg
       },
       size1 -> SECONDARY_SIZE - SKB_SHARED_INFO_SIZE
@@ -79,6 +78,7 @@ error : { null }
       elem.prev-> struct msg_msg::m_list_prev,
       }
 
+### Compound =============================================================================== ###
  == Compound {
       replace -> Compound <T> {
             T -> struct ipt_replace
