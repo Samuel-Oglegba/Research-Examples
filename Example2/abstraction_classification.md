@@ -30,9 +30,9 @@ error : { null }
 ### Pipe
 == Program
       == Array[size1][size2] ( top, elem … ) {
-      top -> [data3] ss,
+      top -> ss,
       elem -> Socket ( id ) {
-                  id -> [data1] s
+                  id -> s
       },
       size1 -> NUM_SOCKETS,
       size2 -> 2
@@ -41,24 +41,24 @@ error : { null }
       *** And here define the operations/states of data abstractions ***
 
       == Array[size1][size2] ( top, elem … ) {
-      top -> [data4] pipefd,
+      top -> pipefd,
       elem -> Pipe ( id ) {
-                  id -> [data2] fd
+                  id -> fd
       },
       size1 -> NUM_PIPEFDS,
       size2 -> 2
       }
 
       == Array[size1] ( top, elem … ) {
-      top -> [data5] msqid,
-      elem -> MessageQueueID ( id ) {
+      top -> msqid,
+      elem -> Compound (MessageQueueID) ( id ) {
                   id -> { fake_idx, real_idx }
       },
       size1 -> NUM_MSQIDS
       }
 
       == Array[size1] ( top, elem … ) {
-      top -> [data6] secondary_buf,
+      top -> secondary_buf,
       elem -> Compound(DoublyLinkedList Message) ( id ) {
                   id -> [data7] msg
       },
@@ -66,7 +66,7 @@ error : { null }
       }
 
       == DoublyLinkedList (head, elem, elem.next, elem.prev) {
-            head -> [data] msg
+            head -> msg
       elem -> LinkedList ( head, elem elem.next ) {
             head -> msg***
             elem -> Compound<T> {
@@ -76,6 +76,22 @@ error : { null }
       },
       elem.next-> struct msg_msg::m_list_next,
       elem.prev-> struct msg_msg::m_list_prev,
+      }
+      
+      == LinkedList ( head, elem elem.next ) {
+      head -> ops,
+      elem -> Compound<T>{
+                  T -> struct pipe_buf_operations
+            },
+            elem.next -> ??   
+      }
+      
+      == LinkedList ( head, elem elem.next ) {
+      head -> buf,
+      elem -> Compound<T>{
+                  T -> struct pipe_buffer
+            },
+            elem.next -> ??   
       }
 
 ### Compound =============================================================================== ###
