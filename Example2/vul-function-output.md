@@ -7,17 +7,17 @@
 
 #### ======= xt_compat_target_from_user(struct xt_entry_target *t, void **dstptr, unsigned int *size) function
 
-[data1] const struct xt_target *target
-[data2] compat_xt_entry_target *ct
-[data3] int pad
-[data4] int off
-[data5] u_int16_t tsize
+[data1] const struct xt_target *target; 
+[data2] compat_xt_entry_target *ct; 
+[data3] int pad; 
+[data4] int off; 
+[data5] u_int16_t tsize; 
 ###### ========================== function inputs ==========
-[data6] struct xt_entry_target *t
-[data7] void **dstptr
-[data8] unsigned int *size
+[data6] struct xt_entry_target *t; 
+[data7] void **dstptr; 
+[data8] unsigned int *size; 
 ### ============================= end function inputs =============
-[data8] char name[sizeof(t->u.user.name)]
+[data8] char name[sizeof(t->u.user.name)]; 
 ===================================================================
 
 [flow] data6.0 --- memcpy(data6.0, data2.0,const) ---> data6.1
