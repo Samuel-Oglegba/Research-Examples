@@ -1,7 +1,7 @@
 ### The vulnerable function on the Linux Kernel 2.6.19 < 5.9
 
 ###### ================== Description ====================
-### When IPT_SO_SET_REPLACE or IP6T_SO_SET_REPLACE is called in compat mode, kernel structures need to be converted from 32bit to 64bit. Unfortunately, the allocation size for the conversion is not properly calculated, leading to a few bytes of zero written out-of-bounds in xt_compat_target_from_user()
+### When IPT_SO_SET_REPLACE or IP6T_SO_SET_REPLACE is passed as an argument in compat mode, kernel structures need to be converted from 32bit to 64bit. Unfortunately, the allocation size for the conversion is not properly calculated, leading to a few bytes of zero written out-of-bounds in xt_compat_target_from_user()
 
 ### target->targetsize is not taken into account for the allocation size - only the difference between the alignments. The check carried out is the pad = XT_ALIGN(target->targetsize) - target->targetsize
 
