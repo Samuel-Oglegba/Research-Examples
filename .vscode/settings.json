@@ -1,6 +1,7 @@
 {
       "files.associations": {
             "ip_tables.h": "c",
-            "socket.h": "c"
+            "socket.h": "c",
+            "limits": "c"
       }
 }

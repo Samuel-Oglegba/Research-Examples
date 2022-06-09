@@ -31,3 +31,29 @@
 [flow] data8.0 --- strlcpy(data6.1, data1.0,const)---> data8.1 
 [flow] data1.0 --- module_put(data1.0)---> data1.0
 [flow] data1.0 --- strncpy(data1.0, data8.1,const)---> data1.1 
+
+== Program
+      == Compound<T>(var){
+            T -> struct xt_target,
+            var -> *target
+         } Compound_Target
+          
+     
+
+      == LinkedList ( head, elem elem.next ) {
+            head -> ct,
+            elem -> Compound<T>{
+                        T -> compat_xt_entry_target *ct
+                  },
+            elem.next -> ??   
+      }
+
+
+      == Array[size1][size2] ( top, elem … ) {
+            top -> ss,
+            elem -> Socket ( id ) {
+                        id -> s
+            },
+            size1 -> NUM_SOCKETS,
+            size2 -> 2
+      }
