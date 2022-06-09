@@ -27,7 +27,7 @@ struct xt_entry_target {
 ### Target is divided into standard and custom (user-defined) targets
 
 Target<T>(){
-      T -> struct xt_entry_target<E>(label, values, states,relatioship){
+      T -> struct xt_entry_target<E>(label, values, states,relationship){
 		E( U, D){
 			U -> Union(User,Kernel,target_size){	
                         User<t> -> struct(){
@@ -36,7 +36,7 @@ Target<T>(){
                                     name -> Array[size1](top, elem…){...},
                                     revision -> __u8 revision,
                               },
-                                    label -> {"Focus on **User Element**"},
+                                    label -> {"Focus on **User Element** - target_size is determined by the name from userspace"},
                                     values -> {name{empty, TCPMSS, TTL or NFQUEUE},revision{1,...},...},
                                     states -> {empty, working, full, error},
                                     relationship -> {UsedTogether} /* - target_size is determined by the name from userspace. If name is empty, it is the standard target, else  Non-empty names are user-defined targets */
@@ -46,14 +46,14 @@ Target<T>(){
                                     size -> __u16 target_size,
                                     target -> struct xt_target *target,
                               },
-                                    label -> {"Focus on **Kernel Element**"},
+                                    label -> {"Focus on **Kernel Element** - A target represents the action to be executed after the rule matching"},
                                     values -> {target{NULL, NF_ACCEPT,NF_DROP,…},target_size{??}},
                                     states -> {empty, working, full, error},
                                     relationship -> {UsedTogether } /* -  A target represents the action to be executed after the rule matching is successful, such as dropping the data packet NF_DROP, letting NF_ACCEPT, etc. when standard target is NULL, it means the standard target is executed */
                         },
                         target_size -> __u16,
                   },
-                        label -> {"Focus on **Union 'U' Element**"},
+                        label -> {"Focus on **Union 'U' Element** - Holds the "},
                         values -> {NULL, User, Kernel, target_size},
                         states -> {empty, working, full, error},
                         relationship -> {
