@@ -1,5 +1,4 @@
-### The call sequence as explained in this articale:
-### https://github.com/google/security-research/security/advisories/GHSA-xxx5-8mvq-3528
+### The call sequence as explained in this articale: https://github.com/google/security-research/security/advisories/GHSA-xxx5-8mvq-3528
 ### the vulnerable function is xt_compat_target_from_user()
 
 ### ip_tables.c
