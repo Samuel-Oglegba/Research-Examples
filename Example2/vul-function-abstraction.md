@@ -52,11 +52,11 @@ Target<T>(){
                               },
                                     label -> {"The elements in the Kernel struct are defined by the kernel, the user can indirectly set the size"},
 
-                                    values -> { target{NULL, NF_ACCEPT,NF_DROP}, target_size{?}},/* target_sized is defined by the size of the name the user sets */
+                                    values -> { target{NULL,??}, target_size{?}},/* target_sized is defined by the size of the name the user sets */
 
                                     states -> {null, working}, /* the state transitions from NULL to the working based on **matching result**. The error state of exceeding momory is not reached because the size of name (largest data) is used */
 
-                                    relationship -> {UsedTogether } /* -  A target represents the action to be executed after the rule matching is successful, such as dropping the data packet NF_DROP, letting NF_ACCEPT, etc. when standard target is NULL, it means the standard target is executed */
+                                    relationship -> {UsedTogether } /* -  A target is used to calculate the verdict which determines the action to be executed after the rule matching is successful, such as dropping the data packet NF_DROP, letting NF_ACCEPT, etc. when standard target is NULL, it means the standard target is executed */
                         },
                         target_size -> __u16,
                   },
