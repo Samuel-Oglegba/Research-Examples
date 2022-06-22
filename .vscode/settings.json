@@ -2,6 +2,8 @@
       "files.associations": {
             "ip_tables.h": "c",
             "socket.h": "c",
-            "limits": "c"
-      }
+            "limits": "c",
+            "type_traits": "c"
+      },
+      "C_Cpp.errorSquiggles": "Enabled"
 }
