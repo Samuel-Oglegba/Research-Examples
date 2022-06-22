@@ -207,35 +207,25 @@ void xt_compat_target_from_user(struct xt_entry_target *t, void **dstptr,
 	const struct xt_target *target = t->u.kernel.target;
 	struct compat_xt_entry_target *ct = (struct compat_xt_entry_target *)t;
 	int pad, off = xt_compat_target_offset(target);
-      printf("Offset %d\n",off);
 	u_int16_t tsize = ct->u.user.target_size;
-
-      printf("size %d\n",tsize);
 
 	//t = *dstptr;
 
-      printf("size of t:: %ld\n",sizeof(t));
-
 	memcpy(t, ct, sizeof(*ct));
-      printf("here again\n");
 
       printf("data address 1:: %p\n",&t->data);
-
 	if (target->compat_from_user){
             target->compat_from_user(t->data, ct->data);
       }		
 	else{
             memcpy(t->data, ct->data, tsize - sizeof(*ct));
       }	
-
 	printf("data address 2 %p\n",&t->data);
-	printf("Name: %s\n",t->u.user.name);
 
 	//printf("xt_align %d\n",XT_ALIGN(target->targetsize));
       //printf("target size %d\n",target->targetsize);
 
       pad = XT_ALIGN(target->targetsize) - target->targetsize;
-
      
       printf("pad %d\n",pad);
 
@@ -247,8 +237,11 @@ void xt_compat_target_from_user(struct xt_entry_target *t, void **dstptr,
      //printf("size of Data2: %ld\n",sizeof(t->data));
 	tsize += off;
 	t->u.user.target_size = tsize;
-	
-      printf("the size %d\n",tsize);
+
+       printf("Outputs \n");
+	 printf("u.user.target_size:: %d\n",t->u.user.target_size);
+	 printf("u.user.name:: %s\n",t->u.user.name);
+	 printf("u.user.revision:: %d\n",t->u.user.revision);
 
 	//*size += off;
 	//*dstptr += tsize;
@@ -276,6 +269,12 @@ int main(int argc, char *argv[]) {
        t->u.user.target_size = sizeof(t);
        strcpy(t->u.user.name, "NFQUEUE");
        t->u.user.revision = 1;
+
+	 printf("Inputs \n");
+	 printf("u.user.target_size:: %d\n",t->u.user.target_size);
+	 printf("u.user.name:: %s\n",t->u.user.name);
+	 printf("u.user.revision:: %d\n",t->u.user.revision);
+
 
       //t = compat_ipt_get_target(NULL);
       xt_compat_target_from_user(t, dstptr,size);
