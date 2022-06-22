@@ -18,6 +18,9 @@
 #include <sys/syscall.h>
 #include <linux/netfilter_ipv4/ip_tables.h>
 
+#include <stdbool.h>
+
+
 typedef unsigned int u32;
 typedef unsigned int u64;
 typedef u32		compat_uptr_t;
@@ -25,6 +28,12 @@ typedef u64		compat_u64;
 typedef u32		compat_uint_t;
 #define __user
 #define __aligned(x)		__attribute__((aligned(x)))
+
+#define __ARG_PLACEHOLDER_1 0,
+#define config_enabled(cfg) _config_enabled(cfg)
+#define _config_enabled(value) __config_enabled(__ARG_PLACEHOLDER_##value)
+#define __config_enabled(arg1_or_junk) ___config_enabled(arg1_or_junk 1, 0)
+#define ___config_enabled(__ignored, val, ...) val
 
 struct compat_xt_counters {
 	compat_u64 pcnt, bcnt;			/* Packet and byte counters */
@@ -75,6 +84,7 @@ struct xt_table_info {
 
 	unsigned char entries[0] __aligned(8);
 };
+
 /*
 struct compat_xt_entry_target {
 	union {
@@ -226,6 +236,26 @@ struct xt_target {
 	unsigned short family;
 };
 
+
+#define segment_eq(a, b)	((a).seg == (b).seg)
+
+#if defined(CONFIG_CPU_DADDI_WORKAROUNDS) || (defined(CONFIG_EVA) &&	\
+					      defined(CONFIG_CPU_HAS_PREFETCH))
+#define DADDI_SCRATCH "$3"
+#else
+#define DADDI_SCRATCH "$0"
+#endif
+
+#define VERIFY_READ    0
+#define VERIFY_WRITE   1
+
+static inline bool eva_kernel_access(void)
+{
+	if (!config_enabled(CONFIG_EVA))
+		return false;
+
+	return false; //segment_eq(get_fs(), get_ds());
+}
 /*
 #define copy_from_user(to, from, n)					\
 ({									\
@@ -250,6 +280,82 @@ struct xt_target {
 	}								\
 	__cu_len;							\
 })
+*/
+
+#ifdef MODULE
+#define __MODULE_JAL(destination)					\
+	".set\tnoat\n\t"						\
+	__UA_LA "\t$1, " #destination "\n\t"				\
+	"jalr\t$1\n\t"							\
+	".set\tat\n\t"
+#else
+#define __MODULE_JAL(destination)					\
+	"jal\t" #destination "\n\t"
+#endif
+
+#define __UA_ADDU	"daddu"
+/*
+long __invoke_copy_from_user(to, from, n)				
+{									
+	register void *__cu_to_r __asm__("$4");				
+	register const void __user *__cu_from_r __asm__("$5");		
+	register long __cu_len_r __asm__("$6");				
+									
+	__cu_to_r = (to);						
+	__cu_from_r = (from);						
+	__cu_len_r = (n);						
+	__asm__ __volatile__(						
+	".set\tnoreorder\n\t"						
+	__MODULE_JAL(__copy_user)					
+	".set\tnoat\n\t"						
+	__UA_ADDU "\t$1, %1, %2\n\t"					
+	".set\tat\n\t"							
+	".set\treorder"							
+	: "+r" (__cu_to_r), "+r" (__cu_from_r), "+r" (__cu_len_r)	
+	:								
+	: "$8", "$9", "$10", "$11", "$12", "$14", "$15", "$24", "$31",	
+	  DADDI_SCRATCH, "memory");					
+	return __cu_len_r;							
+}
+*/
+/*
+long __invoke_copy_from_kernel(to, from, n){
+	return __invoke_copy_from_user(to, from, n);
+}
+*/
+/* For userland <-> userland operations */
+/*#define ___invoke_copy_in_user(to, from, n)				\
+	__invoke_copy_from_user(to, from, n)
+	*/
+
+/* For kernel <-> kernel operations */
+/*#define ___invoke_copy_in_kernel(to, from, n)				\
+	__invoke_copy_from_user(to, from, n)
+	*/
+
+/*
+int copy_from_user(to, from, n){
+	void *__cu_to;							
+	const void __user *__cu_from;					
+	long __cu_len;							
+									
+	__cu_to = (to);							
+	__cu_from = (from);						
+	__cu_len = (n);							
+	if (eva_kernel_access()) {					
+		__cu_len = __invoke_copy_from_kernel(__cu_to,		
+						     __cu_from,		
+						     __cu_len);		
+	} else {							
+		if (access_ok(VERIFY_READ, __cu_from, __cu_len)) {	
+			might_fault();                                  
+			__cu_len = __invoke_copy_from_user(__cu_to,	
+							   __cu_from,	
+							   __cu_len);   
+		}							
+	}								
+	return __cu_len;	
+}
 */
 
 extern unsigned long totalram_pages;
@@ -286,6 +392,29 @@ struct xt_table_info *xt_alloc_table_info(unsigned int size)
 	return info;
 }
 
+/*
+static void
+cleanup_entry(struct ipt_entry *e, struct net *net)
+{
+	struct xt_tgdtor_param par;
+	struct xt_entry_target *t;
+	struct xt_entry_match *ematch;
+
+	/* Cleanup all matches */
+/*	xt_ematch_foreach(ematch, e)
+		cleanup_match(ematch, net);
+	t = ipt_get_target(e);
+
+	par.net      = net;
+	par.target   = t->u.kernel.target;
+	par.targinfo = t->data;
+	par.family   = NFPROTO_IPV4;
+	if (par.target->destroy != NULL)
+		par.target->destroy(&par);
+	module_put(par.target->me);
+	xt_percpu_counter_free(e->counters.pcnt);
+}
+*/
 
 /******** STEP 1 ***/
 static int
@@ -322,14 +451,16 @@ printf("i came here again\n");
 		return -ENOMEM;
 
 	loc_cpu_entry = newinfo->entries;
-/*
+	
+	/*
 	if (copy_from_user(loc_cpu_entry, user + sizeof(tmp),
-			   tmp.size) != 0) {
+			tmp.size) != 0) {
 		ret = -EFAULT;
 		goto free_newinfo;
 	}
-*/
-     /*
+	*/
+	
+    /* 
 	ret = translate_compat_table(net, tmp.name, tmp.valid_hooks,
 				     &newinfo, &loc_cpu_entry, tmp.size,
 				     tmp.num_entries, tmp.hook_entry,
@@ -341,9 +472,10 @@ printf("i came here again\n");
 
 	//duprintf("compat_do_replace: Translated table\n");
 	printf("compat_do_replace: Translated table\n");
-
+/*
 	ret = __do_replace(net, tmp.name, tmp.valid_hooks, newinfo,
 			   tmp.num_counters, compat_ptr(tmp.counters));
+			*/
 	if (ret)
 		goto free_newinfo_untrans;
 	return 0;
@@ -360,12 +492,10 @@ printf("i came here again\n");
 
 /** MAIN FUNCTION **/
 int main(int argc, char *argv[]) {
-
 //call the first function 
 
-//compat_do_replace(struct net *net, void __user *user, unsigned int len);
-compat_do_replace(NULL, NULL, 0);
+ //compat_do_replace(struct net *net, void __user *user, unsigned int len);
+ compat_do_replace(NULL, NULL, 0);
 
-
-return 0;
+ return 0;
 } /** END OF MAIN **/
