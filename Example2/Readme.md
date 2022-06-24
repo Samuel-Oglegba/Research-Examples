@@ -3,8 +3,10 @@ gcc -m32 -static -o exploit exploit.c
      ./exploit
 
 ### Running The SingleFile that contains the exploit and vulnerable software
-gcc -m32 -static -o signlefile single_file_edited.c
-   ./signlefile
+gcc -m32 -static -o singlefile single_file_edited.c
+   ./singlefile
+
+### The VulnerableSoftwareFiles dir contains the vulnerable software files
 
 
 ############# Description and References ########################
