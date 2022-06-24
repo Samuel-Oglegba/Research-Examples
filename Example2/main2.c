@@ -210,7 +210,6 @@ void xt_compat_target_from_user(struct xt_entry_target *t, void **dstptr,
 	u_int16_t tsize = ct->u.user.target_size;
 
 	//t = *dstptr;
-
 	memcpy(t, ct, sizeof(*ct));
 
       printf("data address 1:: %p\n",&t->data);
@@ -220,6 +219,7 @@ void xt_compat_target_from_user(struct xt_entry_target *t, void **dstptr,
 	else{
             memcpy(t->data, ct->data, tsize - sizeof(*ct));
       }	
+
 	printf("data address 2 %p\n",&t->data);
 
 	//printf("xt_align %d\n",XT_ALIGN(target->targetsize));
@@ -229,19 +229,21 @@ void xt_compat_target_from_user(struct xt_entry_target *t, void **dstptr,
      
       printf("pad %d\n",pad);
 
-      //printf("size of Data: %ld\n",sizeof(t->data));
+      printf("size of Data: %ld\n",sizeof(t->data));
 	//if (pad > 0)
 	if (pad == 0)
-		memset(t->data + target->targetsize, 0, pad);
+		memset(t->data + target->targetsize, 0, 5);
+		//memset(t->data + target->targetsize, 0, pad);
 
-     //printf("size of Data2: %ld\n",sizeof(t->data));
+      printf("size of Data2: %ld\n",sizeof(t->data));
 	tsize += off;
 	t->u.user.target_size = tsize;
 
        printf("Outputs \n");
-	 printf("u.user.target_size:: %d\n",t->u.user.target_size);
-	 printf("u.user.name:: %s\n",t->u.user.name);
-	 printf("u.user.revision:: %d\n",t->u.user.revision);
+	 printf("t.u.user.target_size:: %d\n",t->u.user.target_size);
+	 printf("t.u.user.name:: %s\n",t->u.user.name);
+	 printf("t.u.user.revision:: %d\n",t->u.user.revision);
+	 printf("t.data:: %p\n",&t->data);
 
 	//*size += off;
 	//*dstptr += tsize;
@@ -258,7 +260,7 @@ int main(int argc, char *argv[]) {
       unsigned int *size;
 	struct compat_ipt_replace tmp;
 
-      // *dstptr += sizeof(struct ipt_entry);      
+     //*dstptr += sizeof(struct ipt_entry);      
       size += sizeof(struct ipt_entry) - sizeof(struct compat_ipt_entry);
       //size += sizeof(t);
 
