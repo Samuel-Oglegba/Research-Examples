@@ -1,15 +1,22 @@
-### Runing the exploit code
-gcc -m32 -static -o exploit exploit.c
+### How to Download and Use Example 2
+1. To download the repo, run the git command.
+
+   git clone https://github.com/Samuel-Oglegba/Research-Examples.git
+
+2. cd Research-Examples/Example2
+
+3. To run the vulnerable functions and exploits
+
+   gcc -m32 -static -o singlefile single_file_edited.c
+    ./singlefile
+
+4. if on a linux OS, runing the exploit alone:
+
+    gcc -m32 -static -o exploit exploit.c
      ./exploit
 
-### Running The SingleFile that contains the exploit and vulnerable software
-gcc -m32 -static -o singlefile single_file_edited.c
-   ./singlefile
 
-### The VulnerableSoftwareFiles dir contains the vulnerable software files
-
-
-############# Description and References ########################
+### Description and References 
 ######### Examples 2 - Linux Kernel 2.6.19 < 5.9 - 'Netfilter Local Privilege Escalation ########
 A heap out-of-bounds write affecting Linux since v2.6.19-rc1 was discovered in net/netfilter/x_tables.c. This allows an attacker to gain privileges or cause a DoS (via heap memory corruption) through user name space.
 

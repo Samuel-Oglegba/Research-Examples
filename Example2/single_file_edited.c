@@ -20,8 +20,6 @@
 #include <net/netfilter/nf_log.h>
 */
 
-//#include <Example2/single.h>
-//#include <single2.h>
 
 #define _GNU_SOURCE
 #include <err.h>
@@ -44,6 +42,8 @@
 #include <asm/types.h>
 
 #include <stdbool.h>
+
+#include <asm-generic/int-ll64.h>
 
 //
 
@@ -81,6 +81,24 @@ typedef u32		compat_uint_t;
 #define __config_enabled(arg1_or_junk) ___config_enabled(arg1_or_junk 1, 0)
 #define ___config_enabled(__ignored, val, ...) val
 
+/*
+ * Maximum supported processors.  Setting this smaller saves quite a
+ * bit of memory.  Use nr_cpu_ids instead of this except for static bitmaps.
+ */
+#ifndef CONFIG_NR_CPUS
+/* FIXME: This should be fixed in the arch's Kconfig */
+#define CONFIG_NR_CPUS	1
+#endif
+/* Places which use this should consider cpumask_var_t. */
+#define NR_CPUS		CONFIG_NR_CPUS
+#if NR_CPUS == 1
+#define nr_cpu_ids		1
+#else
+extern int nr_cpu_ids;
+#endif
+
+# define __percpu
+
 struct _compat_xt_align {
 	__u8 u8;
 	__u16 u16;
@@ -100,6 +118,8 @@ extern unsigned long totalram_pages;
  * @brief 
  * could not find the correct definition to this __XTENSA_UL_CONST(1)
  */
+#define __XTENSA_UL (x)	((unsigned long)(x))
+#define __XTENSA_UL_CONST(x)   x##UL
 #define PAGE_SIZE	(__XTENSA_UL_CONST(1) << PAGE_SHIFT)
 #define PAGE_ALLOC_COSTLY_ORDER 3
 #define GFP_KERNEL	(__GFP_RECLAIM | __GFP_IO | __GFP_FS)
@@ -109,8 +129,15 @@ extern unsigned long totalram_pages;
 
 #define GFP_KERNEL	(__GFP_RECLAIM | __GFP_IO | __GFP_FS)
 
+#define FWINV(bool, invflg) ((bool) ^ !!(arpinfo->invflags & (invflg)))
 
-
+static const char *const xt_prefix[NFPROTO_NUMPROTO] = {
+	[NFPROTO_UNSPEC] = "x",
+	[NFPROTO_IPV4]   = "ip",
+	[NFPROTO_ARP]    = "arp",
+	[NFPROTO_BRIDGE] = "eb",
+	[NFPROTO_IPV6]   = "ip6",
+};
 
 struct compat_xt_counters {
 	compat_u64 pcnt, bcnt;			/* Packet and byte counters */
@@ -325,6 +352,11 @@ typedef unsigned int sk_buff_data_t;
 #else
 typedef unsigned char *sk_buff_data_t;
 #endif
+
+#define L1_CACHE_SHIFT	XCHAL_DCACHE_LINEWIDTH
+#define L1_CACHE_BYTES	XCHAL_DCACHE_LINESIZE
+#define SMP_CACHE_BYTES	L1_CACHE_BYTES
+#define SMP_ALIGN(x) (((x) + SMP_CACHE_BYTES-1) & ~(SMP_CACHE_BYTES-1))
 
 /* Add comment to describe elements */
 
@@ -829,6 +861,62 @@ compat_ipt_get_target(struct compat_ipt_entry *e)
 	return (void *)e + e->target_offset;
 }//compat_ipt_get_target
 
+/**
+ * @brief system calls - unable to get proper definition
+ * 
+ */
+/* Find target, grabs ref.  Returns ERR_PTR() on error. */
+struct xt_target *xt_find_target(u8 af, const char *name, u8 revision)
+{
+	/*
+	struct xt_target *t;
+	int err = -ENOENT;
+
+	mutex_lock(&xt[af].mutex);
+	list_for_each_entry(t, &xt[af].target, list) {
+		if (strcmp(t->name, name) == 0) {
+			if (t->revision == revision) {
+				if (try_module_get(t->me)) {
+					mutex_unlock(&xt[af].mutex);
+					return t;
+				}
+			} else
+				err = -EPROTOTYPE; /* Found something. */
+/*		}
+	}
+	mutex_unlock(&xt[af].mutex);
+
+	if (af != NFPROTO_UNSPEC)
+		/* Try searching again in the family-independent list */
+	/*	return xt_find_target(NFPROTO_UNSPEC, name, revision);
+	
+
+	return ERR_PTR(err);
+	*/
+	return NULL;
+}
+
+/**
+ * @brief system call - missing some of the function definition
+ * 
+ * @param af 
+ * @param name 
+ * @param revision 
+ * @return struct xt_target* 
+ */
+struct xt_target *xt_request_find_target(u8 af, const char *name, u8 revision)
+{
+	struct xt_target *target;
+	/*
+	target = xt_find_target(af, name, revision);
+	if (IS_ERR(target)) {
+		request_module("%st_%s", xt_prefix[af], name);
+		target = xt_find_target(af, name, revision);
+	}
+	*/
+	return target;
+}//xt_request_find_target
+
 static long sys_futex(void *addr1, int op, int val1, struct timespec *timeout,
 		      void *addr2, int val3)
 {
@@ -913,7 +1001,7 @@ ip_checkentry(const struct ipt_ip *ip)
 }//ip_checkentry
 
 /* for const-correctness */
-static inline const struct xt_entry_target * ipt_get_target_c(const struct ipt_entry *e)
+static inline const struct xt_entry_target *ipt_get_target_c(const struct ipt_entry *e)
 {
 	return ipt_get_target((struct ipt_entry *)e);
 }//ipt_get_target_c
@@ -936,6 +1024,27 @@ static int check_entry(const struct ipt_entry *e)
 	return 0;
 }//check_entry
 
+/**
+ * @brief system calls - uable to complete definition due to system call
+ * 
+ * @param nfproto 
+ * @param name 
+ * @param revision 
+ * @return struct xt_match* 
+ */
+struct xt_match *
+xt_request_find_match(uint8_t nfproto, const char *name, uint8_t revision)
+{
+	struct xt_match *match;
+/*
+	match = xt_find_match(nfproto, name, revision);
+	if (IS_ERR(match)) {
+		request_module("%st_%s", xt_prefix[nfproto], name);
+		match = xt_find_match(nfproto, name, revision);
+	}
+*/
+	return match;
+}//xt_request_find_match
 
 static int compat_find_calc_match(struct xt_entry_match *m,
 		       const char *name,
@@ -1058,8 +1167,11 @@ struct xt_table_info *xt_alloc_table_info(unsigned int size)
 		return NULL;
 
 	/* Pedantry: prevent them from hitting BUG() in vmalloc.c --RR */
+	//System call
+	/*
 	if ((SMP_ALIGN(size) >> PAGE_SHIFT) + 2 > totalram_pages)
 		return NULL;
+		*/
 
 	if (sz <= (PAGE_SIZE << PAGE_ALLOC_COSTLY_ORDER)){
 		//info = kmalloc(sz, GFP_KERNEL | __GFP_NOWARN | __GFP_NORETRY);
@@ -1076,17 +1188,34 @@ struct xt_table_info *xt_alloc_table_info(unsigned int size)
 	return info;
 }//xt_alloc_table_info
 
+/**
+ * @brief vfree was replaced with free
+ * 
+ * @param af 
+ */
 void xt_compat_flush_offsets(u_int8_t af)
 {
 	if (xt[af].compat_tab) {
-		vfree(xt[af].compat_tab);
+		//vfree(xt[af].compat_tab);
+		free(xt[af].compat_tab);
 		xt[af].compat_tab = NULL;
 		xt[af].number = 0;
 		xt[af].cur = 0;
 	}
 }//xt_compat_flush_offsets
 
+/* All zeroes == unconditional rule. */
+/* Mildly perf critical (only if packet tracing is on) */
+static inline bool unconditional(const struct ipt_entry *e)
+{
+	static const struct ipt_ip uncond;
 
+	return e->target_offset == sizeof(struct ipt_entry) &&
+	       memcmp(&e->ip, &uncond, sizeof(uncond)) == 0;
+#undef FWINV
+}//unconditional
+
+/* pr_err changed to printf */
 /* Figures out from what hook each rule can be called: returns 0 if
    there are loops.  Puts hook bitmask in comefrom. */
 static int mark_source_chains(const struct xt_table_info *newinfo,
@@ -1112,7 +1241,7 @@ static int mark_source_chains(const struct xt_table_info *newinfo,
 			int visited = e->comefrom & (1 << hook);
 
 			if (e->comefrom & (1 << NF_INET_NUMHOOKS)) {
-				pr_err("iptables: loop hook %u pos %u %08X.\n",
+				printf("iptables: loop hook %u pos %u %08X.\n",
 				       hook, pos, e->comefrom);
 				return 0;
 			}
@@ -1197,6 +1326,141 @@ next:
 	return 1;
 }//mark_source_chains
 
+/** system call **/
+/**
+ * __alloc_percpu - allocate dynamic percpu area
+ * @size: size of area to allocate in bytes
+ * @align: alignment of area (max PAGE_SIZE)
+ *
+ * Equivalent to __alloc_percpu_gfp(size, align, %GFP_KERNEL).
+ */
+void __percpu *__alloc_percpu(size_t size, size_t align)
+{
+	//return pcpu_alloc(size, align, false, GFP_KERNEL);
+}//__alloc_percpu
+
+/* On SMP, ip(6)t_entry->counters.pcnt holds address of the
+ * real (percpu) counter.  On !SMP, its just the packet count,
+ * so nothing needs to be done there.
+ *
+ * xt_percpu_counter_alloc returns the address of the percpu
+ * counter, or 0 on !SMP. We force an alignment of 16 bytes
+ * so that bytes/packets share a common cache line.
+ *
+ * Hence caller must use IS_ERR_VALUE to check for error, this
+ * allows us to return 0 for single core systems without forcing
+ * callers to deal with SMP vs. NONSMP issues.
+ */
+static inline u64 xt_percpu_counter_alloc(void)
+{
+	if (nr_cpu_ids > 1) {
+		void __percpu *res = __alloc_percpu(sizeof(struct xt_counters),
+						    sizeof(struct xt_counters));
+
+		if (res == NULL)
+			return (u64) -ENOMEM;
+
+		return (u64) (__force unsigned long) res;
+	}
+
+	return 0;
+}//xt_percpu_counter_alloc
+
+/**
+ * @brief unable to find the definition of xt_check_match
+ * 
+ * @param par 
+ * @param match_size 
+ * @param proto 
+ * @param invflags 
+ * @return int 
+ */
+int xt_check_match(struct xt_mtchk_param *par, unsigned short match_size,
+	      unsigned short proto, unsigned char invflags){
+	return 0;
+}//xt_check_match
+
+static int
+check_match(struct xt_entry_match *m, struct xt_mtchk_param *par)
+{
+	const struct ipt_ip *ip = par->entryinfo;
+	int ret;
+
+	par->match     = m->u.kernel.match;
+	par->matchinfo = m->data;
+
+	ret = xt_check_match(par, m->u.match_size - sizeof(*m),
+	      ip->proto, ip->invflags & IPT_INV_PROTO);
+	if (ret < 0) {
+		printf("check failed for `%s'.\n", par->match->name);
+		return ret;
+	}
+	return 0;
+}//check_match
+
+/**
+ * @brief Unable to find the definition of xt_mtdtor_param
+ * 
+ * @param m 
+ * @param net 
+ */
+static void cleanup_match(struct xt_entry_match *m, struct net *net)
+{
+	/*
+	struct xt_mtdtor_param par;
+
+	par.net       = net;
+	par.match     = m->u.kernel.match;
+	par.matchinfo = m->data;
+	par.family    = NFPROTO_IPV4;
+	if (par.match->destroy != NULL)
+		par.match->destroy(&par);
+	module_put(par.match->me);
+	*/
+}//cleanup_match
+
+/**
+ * @brief unable to find the definition of xt_percpu_counter_free
+ * 
+ * @param pcnt 
+ */
+void xt_percpu_counter_free(unsigned long long pcnt){
+
+}//xt_percpu_counter_free
+
+/**
+ * @brief unable to get the definition to xt_tgchk_param
+ * 
+ * @param e 
+ * @param net 
+ * @param name 
+ * @return int 
+ */
+static int check_target(struct ipt_entry *e, struct net *net, const char *name)
+{
+	/*
+	struct xt_entry_target *t = ipt_get_target(e);
+	struct xt_tgchk_param par = {
+		.net       = net,
+		.table     = name,
+		.entryinfo = e,
+		.target    = t->u.kernel.target,
+		.targinfo  = t->data,
+		.hook_mask = e->comefrom,
+		.family    = NFPROTO_IPV4,
+	};
+	int ret;
+
+	ret = xt_check_target(&par, t->u.target_size - sizeof(*t),
+	      e->ip.proto, e->ip.invflags & IPT_INV_PROTO);
+	if (ret < 0) {
+		duprintf("check failed for `%s'.\n",
+			 t->u.kernel.target->name);
+		return ret;
+	}
+	*/
+	return 0;
+}//check_target
 
 static int
 compat_check_entry(struct ipt_entry *e, struct net *net, const char *name)
@@ -1719,7 +1983,7 @@ static int compat_do_ipt_set_ctl(struct sock *sk, int cmd, void __user *user, un
 */
 
 /** Mock setsockopt call **/
-//unable to find the implementation 
+//unable to find the implementation of setsockopt
 int setsockopt (int __fd, int __level, int __optname, const void *__optval, socklen_t __optlen) {
 	int ret;
 
