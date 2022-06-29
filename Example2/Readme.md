@@ -1,5 +1,5 @@
 ### How to Download and Use Example 2
-1. To download the repo, run the git command.
+1. To download the repo, run the following command.
 
    git clone https://github.com/Samuel-Oglegba/Research-Examples.git
 
