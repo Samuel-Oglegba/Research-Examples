@@ -1,26 +1,3 @@
-/*
-#include <linux/cache.h>
-#include <linux/capability.h>
-#include <linux/skbuff.h>
-#include <linux/kmod.h>
-#include <linux/vmalloc.h>
-#include <linux/netdevice.h>
-#include <linux/module.h>
-#include <linux/icmp.h>
-#include <net/ip.h>
-#include <net/compat.h>
-#include <asm/uaccess.h>
-#include <linux/mutex.h>
-#include <linux/proc_fs.h>
-#include <linux/err.h>
-#include <linux/cpumask.h>
-
-#include <linux/netfilter/x_tables.h>
-#include <linux/netfilter_ipv4/ip_tables.h>
-#include <net/netfilter/nf_log.h>
-*/
-
-
 #define _GNU_SOURCE
 #include <err.h>
 #include <errno.h>
@@ -99,13 +76,6 @@ extern int nr_cpu_ids;
 
 # define __percpu
 
-struct _compat_xt_align {
-	__u8 u8;
-	__u16 u16;
-	__u32 u32;
-	compat_u64 u64;
-};
-
 #define COMPAT_XT_ALIGN(s) __ALIGN_KERNEL((s), __alignof__(struct _compat_xt_align))
 #define __aligned(x)		__attribute__((aligned(x)))
 
@@ -131,214 +101,6 @@ extern unsigned long totalram_pages;
 
 #define FWINV(bool, invflg) ((bool) ^ !!(arpinfo->invflags & (invflg)))
 
-static const char *const xt_prefix[NFPROTO_NUMPROTO] = {
-	[NFPROTO_UNSPEC] = "x",
-	[NFPROTO_IPV4]   = "ip",
-	[NFPROTO_ARP]    = "arp",
-	[NFPROTO_BRIDGE] = "eb",
-	[NFPROTO_IPV6]   = "ip6",
-};
-
-struct compat_xt_counters {
-	compat_u64 pcnt, bcnt;			/* Packet and byte counters */
-};
-
-struct compat_ipt_entry {
-	struct ipt_ip ip;
-	compat_uint_t nfcache;
-	__u16 target_offset;
-	__u16 next_offset;
-	compat_uint_t comefrom;
-	struct compat_xt_counters counters;
-	unsigned char elems[0];
-};
-
-
-struct compat_ipt_replace {
-	char			name[XT_TABLE_MAXNAMELEN];
-	u32			valid_hooks;
-	u32			num_entries;
-	u32			size;
-	u32			hook_entry[NF_INET_NUMHOOKS];
-	u32			underflow[NF_INET_NUMHOOKS];
-	u32			num_counters;
-	compat_uptr_t		counters;	/* struct xt_counters * */
-	struct compat_ipt_entry	entries[0];
-};
-
-/* The table itself */
-struct xt_table_info {
-	/* Size per table */
-	unsigned int size;
-	/* Number of entries: FIXME. --RR */
-	unsigned int number;
-	/* Initial number of entries. Needed for module usage count */
-	unsigned int initial_entries;
-
-	/* Entry points and underflows */
-	unsigned int hook_entry[NF_INET_NUMHOOKS];
-	unsigned int underflow[NF_INET_NUMHOOKS];
-
-	/*
-	 * Number of user chains. Since tables cannot have loops, at most
-	 * @stacksize jumps (number of user chains) can possibly be made.
-	 */
-	unsigned int stacksize;
-	void ***jumpstack;
-
-	unsigned char entries[0] __aligned(8);
-};
-
-struct list_head {
-	struct list_head *next, *prev;
-};
-
-/* Furniture shopping... */
-struct xt_table {
-	struct list_head list;
-
-	/* What hooks you will enter on */
-	unsigned int valid_hooks;
-
-	/* Man behind the curtain... */
-	struct xt_table_info *private;
-
-	/* Set this to THIS_MODULE if you are a module, otherwise NULL */
-	struct module *me;
-
-	u_int8_t af;		/* address/protocol family */
-	int priority;		/* hook order */
-
-	/* called when table is needed in the given netns */
-	int (*table_init)(struct net *net);
-
-	/* A unique name... */
-	const char name[XT_TABLE_MAXNAMELEN];
-};
-
-/* Registration hooks for targets. */
-struct xt_target {
-	struct list_head list;
-
-	const char name[XT_EXTENSION_MAXNAMELEN];
-	u_int8_t revision;
-
-	/* Returns verdict. Argument order changed since 2.6.9, as this
-	   must now handle non-linear skbs, using skb_copy_bits and
-	   skb_ip_make_writable. */
-	unsigned int (*target)(struct sk_buff *skb,
-			       const struct xt_action_param *);
-
-	/* Called when user tries to insert an entry of this type:
-           hook_mask is a bitmask of hooks from which it can be
-           called. */
-	/* Should return 0 on success or an error code otherwise (-Exxxx). */
-	int (*checkentry)(const struct xt_tgchk_param *);
-
-	/* Called when entry of this type deleted. */
-	void (*destroy)(const struct xt_tgdtor_param *);
-/* #ifdef CONFIG_COMPAT */
-	/* Called when userspace align differs from kernel space one */
-	void (*compat_from_user)(void *dst, const void *src);
-	int (*compat_to_user)(void __user *dst, const void *src);
-/* #endif */
-	/* Set this to THIS_MODULE if you are a module, otherwise NULL */
-	struct module *me;
-
-	const char *table;
-	unsigned int targetsize;
-/* #ifdef CONFIG_COMPAT */
-	unsigned int compatsize;
-/* #endif */
-	unsigned int hooks;
-	unsigned short proto;
-
-	unsigned short family;
-};
-
-struct compat_xt_entry_target {
-	union {
-		struct {
-			u_int16_t target_size;
-			char name[XT_FUNCTION_MAXNAMELEN - 1];
-			u_int8_t revision;
-		} user;
-		struct {
-			u_int16_t target_size;
-			compat_uptr_t target;
-		} kernel;
-		u_int16_t target_size;
-	} u;
-	unsigned char data[0];
-};
-
-struct compat_xt_entry_match {
-	union {
-		struct {
-			u_int16_t match_size;
-			char name[XT_FUNCTION_MAXNAMELEN - 1];
-			u_int8_t revision;
-		} user;
-		struct {
-			u_int16_t match_size;
-			compat_uptr_t match;
-		} kernel;
-		u_int16_t match_size;
-	} u;
-	unsigned char data[0];
-};
-
-/*
- * ktime_t:
- *
- * A single 64-bit variable is used to store the hrtimers
- * internal representation of time values in scalar nanoseconds. The
- * design plays out best on 64-bit CPUs, where most conversions are
- * NOPs and most arithmetic ktime_t operations are plain arithmetic
- * operations.
- *
- */
-union ktime {
-	s64	tv64;
-};
-
-typedef union ktime ktime_t;		/* Kill this */
-
-/**
- * struct skb_mstamp - multi resolution time stamps
- * @stamp_us: timestamp in us resolution
- * @stamp_jiffies: timestamp in jiffies
- */
-struct skb_mstamp {
-	union {
-		u64		v64;
-		struct {
-			u32	stamp_us;
-			u32	stamp_jiffies;
-		};
-	};
-};
-
-struct rb_node {
-	unsigned long  __rb_parent_color;
-	struct rb_node *rb_right;
-	struct rb_node *rb_left;
-} __attribute__((aligned(sizeof(long))));
-    /* The alignment might seem pointless, but allegedly CRIS needs it */
-
-struct rb_root {
-	struct rb_node *rb_node;
-};
-
-#if defined(CONFIG_NF_CONNTRACK) || defined(CONFIG_NF_CONNTRACK_MODULE)
-struct nf_conntrack {
-	atomic_t use;
-};
-#endif
-
-typedef struct {
-	int counter;
-} atomic_t;
 
 #if BITS_PER_LONG > 32
 #define NET_SKBUFF_DATA_USES_OFFSET 1
@@ -358,307 +120,6 @@ typedef unsigned char *sk_buff_data_t;
 #define SMP_CACHE_BYTES	L1_CACHE_BYTES
 #define SMP_ALIGN(x) (((x) + SMP_CACHE_BYTES-1) & ~(SMP_CACHE_BYTES-1))
 
-/* Add comment to describe elements */
-
-struct sk_buff {
-	union {
-		struct {
-			/* These two members must be first. */
-			struct sk_buff		*next;
-			struct sk_buff		*prev;
-
-			union {
-				ktime_t		tstamp;
-				struct skb_mstamp skb_mstamp;
-			};
-		};
-		struct rb_node	rbnode; /* used in netem & tcp stack */
-	};
-	struct sock		*sk;
-	struct net_device	*dev;
-
-	/*
-	 * This is the control buffer. It is free to use for every
-	 * layer. Please put your private variables there. If you
-	 * want to keep them across layers you have to do a skb_clone()
-	 * first. This is owned by whoever has the skb queued ATM.
-	 */
-	char			cb[48] __aligned(8);
-
-	unsigned long		_skb_refdst;
-	void			(*destructor)(struct sk_buff *skb);
-/** Unable to find the definition */	
-/*
-#ifdef CONFIG_XFRM
-	struct	sec_path	*sp;
-#endif
-
-#if defined(CONFIG_NF_CONNTRACK) || defined(CONFIG_NF_CONNTRACK_MODULE)
-	struct nf_conntrack	*nfct;
-#endif
-#if IS_ENABLED(CONFIG_BRIDGE_NETFILTER)
-	struct nf_bridge_info	*nf_bridge;
-#endif
-*/
-	unsigned int		len,
-				data_len;
-	__u16			mac_len,
-				hdr_len;
-
-	/* Following fields are _not_ copied in __copy_skb_header()
-	 * Note that queue_mapping is here mostly to fill a hole.
-	 */
-//unable to get the definition
-/*
-	kmemcheck_bitfield_begin(flags1);
-	__u16			queue_mapping;
-	__u8			cloned:1,
-				nohdr:1,
-				fclone:2,
-				peeked:1,
-				head_frag:1,
-				xmit_more:1;
-	/* one bit hole *//*
-	kmemcheck_bitfield_end(flags1);
-*/
-
-	/* fields enclosed in headers_start/headers_end are copied
-	 * using a single memcpy() in __copy_skb_header()
-	 */
-	/* private: */
-	__u32			headers_start[0];
-	/* public: */
-
-/* if you move pkt_type around you also must adapt those constants */
-#ifdef __BIG_ENDIAN_BITFIELD
-#define PKT_TYPE_MAX	(7 << 5)
-#else
-#define PKT_TYPE_MAX	7
-#endif
-#define PKT_TYPE_OFFSET()	offsetof(struct sk_buff, __pkt_type_offset)
-
-	__u8			__pkt_type_offset[0];
-	__u8			pkt_type:3;
-	__u8			pfmemalloc:1;
-	__u8			ignore_df:1;
-	__u8			nfctinfo:3;
-
-	__u8			nf_trace:1;
-	__u8			ip_summed:2;
-	__u8			ooo_okay:1;
-	__u8			l4_hash:1;
-	__u8			sw_hash:1;
-	__u8			wifi_acked_valid:1;
-	__u8			wifi_acked:1;
-
-	__u8			no_fcs:1;
-	/* Indicates the inner headers are valid in the skbuff. */
-	__u8			encapsulation:1;
-	__u8			encap_hdr_csum:1;
-	__u8			csum_valid:1;
-	__u8			csum_complete_sw:1;
-	__u8			csum_level:2;
-	__u8			csum_bad:1;
-
-#ifdef CONFIG_IPV6_NDISC_NODETYPE
-	__u8			ndisc_nodetype:2;
-#endif
-	__u8			ipvs_property:1;
-	__u8			inner_protocol_type:1;
-	__u8			remcsum_offload:1;
-	/* 3 or 5 bit hole */
-
-#ifdef CONFIG_NET_SCHED
-	__u16			tc_index;	/* traffic control index */
-#ifdef CONFIG_NET_CLS_ACT
-	__u16			tc_verd;	/* traffic control verdict */
-#endif
-#endif
-
-	union {
-		__wsum		csum;
-		struct {
-			__u16	csum_start;
-			__u16	csum_offset;
-		};
-	};
-	__u32			priority;
-	int			skb_iif;
-	__u32			hash;
-	__be16			vlan_proto;
-	__u16			vlan_tci;
-#if defined(CONFIG_NET_RX_BUSY_POLL) || defined(CONFIG_XPS)
-	union {
-		unsigned int	napi_id;
-		unsigned int	sender_cpu;
-	};
-#endif
-	union {
-#ifdef CONFIG_NETWORK_SECMARK
-		__u32		secmark;
-#endif
-#ifdef CONFIG_NET_SWITCHDEV
-		__u32		offload_fwd_mark;
-#endif
-	};
-
-	union {
-		__u32		mark;
-		__u32		reserved_tailroom;
-	};
-
-	union {
-		__be16		inner_protocol;
-		__u8		inner_ipproto;
-	};
-
-	__u16			inner_transport_header;
-	__u16			inner_network_header;
-	__u16			inner_mac_header;
-
-	__be16			protocol;
-	__u16			transport_header;
-	__u16			network_header;
-	__u16			mac_header;
-
-	/* private: */
-	__u32			headers_end[0];
-	/* public: */
-
-	/* These elements must be at the end, see alloc_skb() for details.  */
-	sk_buff_data_t		tail;
-	sk_buff_data_t		end;
-	unsigned char		*head,
-				*data;
-	unsigned int		truesize;
-	atomic_t		users;
-};
-
-struct xt_match {
-	struct list_head list;
-
-	const char name[XT_EXTENSION_MAXNAMELEN];
-	u_int8_t revision;
-
-	/* Return true or false: return FALSE and set *hotdrop = 1 to
-           force immediate packet drop. */
-	/* Arguments changed since 2.6.9, as this must now handle
-	   non-linear skb, using skb_header_pointer and
-	   skb_ip_make_writable. */
-	bool (*match)(const struct sk_buff *skb,
-		      struct xt_action_param *);
-
-
-	/* Called when user tries to insert an entry of this type. */
-	int (*checkentry)(const struct xt_mtchk_param *);
-
-	/* Called when entry of this type deleted. */
-	void (*destroy)(const struct xt_mtdtor_param *);
-
-/* unable to find CONFIG_COMPAT */
-//#ifdef CONFIG_COMPAT
-	/* Called when userspace align differs from kernel space one */
-	void (*compat_from_user)(void *dst, const void *src);
-	int (*compat_to_user)(void __user *dst, const void *src);
-//#endif
-	/* Set this to THIS_MODULE if you are a module, otherwise NULL */
-	struct module *me;
-
-	const char *table;
-	unsigned int matchsize;
-
-//unable to define CONFIG_COMPAT
-//#ifdef CONFIG_COMPAT
-	unsigned int compatsize;
-//#endif
-	unsigned int hooks;
-	unsigned short proto;
-
-	unsigned short family;
-};
-
-
-struct compat_delta {
-	unsigned int offset; /* offset in kernel */
-	int delta; /* delta in 32bit user land */
-};
-
-
-#ifdef CONFIG_DEBUG_SPINLOCK
-
-typedef struct {
-	volatile unsigned int slock;
-} arch_spinlock_t;
-
-#define __ARCH_SPIN_LOCK_UNLOCKED { 1 }
-
-#else
-
-typedef struct { } arch_spinlock_t;
-
-#define __ARCH_SPIN_LOCK_UNLOCKED { }
-
-#endif
-
-typedef struct raw_spinlock {
-	arch_spinlock_t raw_lock;
-#ifdef CONFIG_GENERIC_LOCKBREAK
-	unsigned int break_lock;
-#endif
-#ifdef CONFIG_DEBUG_SPINLOCK
-	unsigned int magic, owner_cpu;
-	void *owner;
-#endif
-#ifdef CONFIG_DEBUG_LOCK_ALLOC
-	struct lockdep_map dep_map;
-#endif
-} raw_spinlock_t;
-
-typedef struct spinlock {
-	union {
-		struct raw_spinlock rlock;
-
-#ifdef CONFIG_DEBUG_LOCK_ALLOC
-# define LOCK_PADSIZE (offsetof(struct raw_spinlock, dep_map))
-		struct {
-			u8 __padding[LOCK_PADSIZE];
-			struct lockdep_map dep_map;
-		};
-#endif
-	};
-} spinlock_t;
-
-struct mutex {
-	/* 1: unlocked, 0: locked, negative: locked, possible waiters */
-	atomic_t		count;
-	spinlock_t		wait_lock;
-	struct list_head	wait_list;
-#if defined(CONFIG_DEBUG_MUTEXES) || defined(CONFIG_MUTEX_SPIN_ON_OWNER)
-	struct task_struct	*owner;
-#endif
-#ifdef CONFIG_MUTEX_SPIN_ON_OWNER
-	struct optimistic_spin_queue osq; /* Spinner MCS lock */
-#endif
-#ifdef CONFIG_DEBUG_MUTEXES
-	void			*magic;
-#endif
-#ifdef CONFIG_DEBUG_LOCK_ALLOC
-	struct lockdep_map	dep_map;
-#endif
-};
-
-struct xt_af {
-	struct mutex mutex;
-	struct list_head match;
-	struct list_head target;
-//unable to find the definition of CONFIG_COMPAT
-//#ifdef CONFIG_COMPAT
-	struct mutex compat_mutex;
-	struct compat_delta *compat_tab;
-	unsigned int number; /* number of slots in compat_tab[] */
-	unsigned int cur; /* number of used slots in compat_tab[] */
-//#endif
-};
 
 static struct xt_af *xt;
 
@@ -717,10 +178,613 @@ static struct xt_af *xt;
 #define atomic_read(v)	READ_ONCE((v)->counter)
 #define atomic_set(v,i)	WRITE_ONCE(((v)->counter), (i))
 
+#define FDPUT_FPUT       1
+#define FDPUT_POS_UNLOCK 2
+
+
+
+#define __ARG_PLACEHOLDER_1 0,
+#define config_enabled(cfg) _config_enabled(cfg)
+#define _config_enabled(value) __config_enabled(__ARG_PLACEHOLDER_##value)
+#define __config_enabled(arg1_or_junk) ___config_enabled(arg1_or_junk 1, 0)
+#define ___config_enabled(__ignored, val, ...) val
+
+/*
+ * IS_BUILTIN(CONFIG_FOO) evaluates to 1 if CONFIG_FOO is set to 'y', 0
+ * otherwise. For boolean options, this is equivalent to
+ * IS_ENABLED(CONFIG_FOO).
+ */
+#define IS_BUILTIN(option) config_enabled(option)
+
+/*
+ * IS_MODULE(CONFIG_FOO) evaluates to 1 if CONFIG_FOO is set to 'm', 0
+ * otherwise.
+ */
+#define IS_MODULE(option) config_enabled(option##_MODULE)
+
+/*
+ * IS_ENABLED(CONFIG_FOO) evaluates to 1 if CONFIG_FOO is set to 'y' or 'm',
+ * 0 otherwise.
+ */
+#define IS_ENABLED(option) \
+	(IS_BUILTIN(option) || IS_MODULE(option))
+
+
+
+
+#define RCU_LOCKDEP_WARN(c, s) do { } while (0)
+#define rcu_sleep_check() do { } while (0)
+
+#ifdef __CHECKER__
+#define rcu_dereference_sparse(p, space) \
+	((void)(((typeof(*p) space *)p) == p))
+#else /* #ifdef __CHECKER__ */
+#define rcu_dereference_sparse(p, space)
+#endif /* #else #ifdef __CHECKER__ */
+
+#ifndef smp_read_barrier_depends
+#define smp_read_barrier_depends()	do { } while (0)
+#endif
+
+/**
+ * lockless_dereference() - safely load a pointer for later dereference
+ * @p: The pointer to load
+ *
+ * Similar to rcu_dereference(), but for situations where the pointed-to
+ * object's lifetime is managed by something other than RCU.  That
+ * "something other" might be reference counting or simple immortality.
+ */
+#define lockless_dereference(p) \
+({ \
+	typeof(p) _________p1 = READ_ONCE(p); \
+	smp_read_barrier_depends(); /* Dependency order vs. p above. */ \
+	(_________p1); \
+})
+
+#define __rcu_dereference_check(p, c, space) \
+({ \
+	/* Dependency order vs. p above. */ \
+	typeof(*p) *________p1 = (typeof(*p) *__force)lockless_dereference(p); \
+	RCU_LOCKDEP_WARN(!(c), "suspicious rcu_dereference_check() usage"); \
+	rcu_dereference_sparse(p, space); \
+	((typeof(*p) __force __kernel *)(________p1)); \
+})
+
+#define rcu_dereference_check(p, c) \
+	__rcu_dereference_check((p), (c) || rcu_read_lock_held(), __rcu)
+
+#define rcu_dereference_raw(p) rcu_dereference_check(p, 1) /*@@@ needed? @@@*/
+
+
+#ifdef __CHECKER__
+#define __bitwise__ __attribute__((bitwise))
+#else
+#define __bitwise__
+#endif
+
+typedef unsigned __bitwise__ fmode_t;
+
+///////////////////////////////////// STRUCTS ///////////////////////////////////
+struct _compat_xt_align {
+	__u8 u8;
+	__u16 u16;
+	__u32 u32;
+	compat_u64 u64;
+};// struct _compat_xt_align
+
+static const char *const xt_prefix[NFPROTO_NUMPROTO] = {
+	[NFPROTO_UNSPEC] = "x",
+	[NFPROTO_IPV4]   = "ip",
+	[NFPROTO_ARP]    = "arp",
+	[NFPROTO_BRIDGE] = "eb",
+	[NFPROTO_IPV6]   = "ip6",
+};
+
+struct compat_xt_counters {
+	compat_u64 pcnt, bcnt;			/* Packet and byte counters */
+};// struct compat_xt_counters
+
+struct compat_ipt_entry {
+	struct ipt_ip ip;
+	compat_uint_t nfcache;
+	__u16 target_offset;
+	__u16 next_offset;
+	compat_uint_t comefrom;
+	struct compat_xt_counters counters;
+	unsigned char elems[0];
+};// struct compat_ipt_entry
+
+struct compat_ipt_replace {
+	char			name[XT_TABLE_MAXNAMELEN];
+	u32			valid_hooks;
+	u32			num_entries;
+	u32			size;
+	u32			hook_entry[NF_INET_NUMHOOKS];
+	u32			underflow[NF_INET_NUMHOOKS];
+	u32			num_counters;
+	compat_uptr_t		counters;	/* struct xt_counters * */
+	struct compat_ipt_entry	entries[0];
+};// struct compat_ipt_replace
+
+/* The table itself */
+struct xt_table_info {
+	/* Size per table */
+	unsigned int size;
+	/* Number of entries: FIXME. --RR */
+	unsigned int number;
+	/* Initial number of entries. Needed for module usage count */
+	unsigned int initial_entries;
+
+	/* Entry points and underflows */
+	unsigned int hook_entry[NF_INET_NUMHOOKS];
+	unsigned int underflow[NF_INET_NUMHOOKS];
+
+	/*
+	 * Number of user chains. Since tables cannot have loops, at most
+	 * @stacksize jumps (number of user chains) can possibly be made.
+	 */
+	unsigned int stacksize;
+	void ***jumpstack;
+
+	unsigned char entries[0] __aligned(8);
+};// struct xt_table_info 
+
+struct list_head {
+	struct list_head *next, *prev;
+};// struct list_head 
+
+/* Furniture shopping... */
+struct xt_table {
+	struct list_head list;
+
+	/* What hooks you will enter on */
+	unsigned int valid_hooks;
+
+	/* Man behind the curtain... */
+	struct xt_table_info *private;
+
+	/* Set this to THIS_MODULE if you are a module, otherwise NULL */
+	struct module *me;
+
+	u_int8_t af;		/* address/protocol family */
+	int priority;		/* hook order */
+
+	/* called when table is needed in the given netns */
+	int (*table_init)(struct net *net);
+
+	/* A unique name... */
+	const char name[XT_TABLE_MAXNAMELEN];
+};// struct xt_table
+
+/* Registration hooks for targets. */
+struct xt_target {
+	struct list_head list;
+
+	const char name[XT_EXTENSION_MAXNAMELEN];
+	u_int8_t revision;
+
+	/* Returns verdict. Argument order changed since 2.6.9, as this
+	   must now handle non-linear skbs, using skb_copy_bits and
+	   skb_ip_make_writable. */
+	unsigned int (*target)(struct sk_buff *skb,
+			       const struct xt_action_param *);
+
+	/* Called when user tries to insert an entry of this type:
+           hook_mask is a bitmask of hooks from which it can be
+           called. */
+	/* Should return 0 on success or an error code otherwise (-Exxxx). */
+	int (*checkentry)(const struct xt_tgchk_param *);
+
+	/* Called when entry of this type deleted. */
+	void (*destroy)(const struct xt_tgdtor_param *);
+/* #ifdef CONFIG_COMPAT */
+	/* Called when userspace align differs from kernel space one */
+	void (*compat_from_user)(void *dst, const void *src);
+	int (*compat_to_user)(void __user *dst, const void *src);
+/* #endif */
+	/* Set this to THIS_MODULE if you are a module, otherwise NULL */
+	struct module *me;
+
+	const char *table;
+	unsigned int targetsize;
+/* #ifdef CONFIG_COMPAT */
+	unsigned int compatsize;
+/* #endif */
+	unsigned int hooks;
+	unsigned short proto;
+
+	unsigned short family;
+};// struct xt_target
+
+struct compat_xt_entry_target {
+	union {
+		struct {
+			u_int16_t target_size;
+			char name[XT_FUNCTION_MAXNAMELEN - 1];
+			u_int8_t revision;
+		} user;
+		struct {
+			u_int16_t target_size;
+			compat_uptr_t target;
+		} kernel;
+		u_int16_t target_size;
+	} u;
+	unsigned char data[0];
+};// struct compat_xt_entry_target
+
+struct compat_xt_entry_match {
+	union {
+		struct {
+			u_int16_t match_size;
+			char name[XT_FUNCTION_MAXNAMELEN - 1];
+			u_int8_t revision;
+		} user;
+		struct {
+			u_int16_t match_size;
+			compat_uptr_t match;
+		} kernel;
+		u_int16_t match_size;
+	} u;
+	unsigned char data[0];
+};// struct compat_xt_entry_match
+
+/*
+ * ktime_t:
+ *
+ * A single 64-bit variable is used to store the hrtimers
+ * internal representation of time values in scalar nanoseconds. The
+ * design plays out best on 64-bit CPUs, where most conversions are
+ * NOPs and most arithmetic ktime_t operations are plain arithmetic
+ * operations.
+ *
+ */
+union ktime {
+	s64	tv64;
+};// union ktime
+
+typedef union ktime ktime_t;		/* Kill this */
+
+/**
+ * struct skb_mstamp - multi resolution time stamps
+ * @stamp_us: timestamp in us resolution
+ * @stamp_jiffies: timestamp in jiffies
+ */
+struct skb_mstamp {
+	union {
+		u64		v64;
+		struct {
+			u32	stamp_us;
+			u32	stamp_jiffies;
+		};
+	};
+};// struct skb_mstamp 
+
+struct rb_node {
+	unsigned long  __rb_parent_color;
+	struct rb_node *rb_right;
+	struct rb_node *rb_left;
+} __attribute__((aligned(sizeof(long))));
+    /* The alignment might seem pointless, but allegedly CRIS needs it */
+
+struct rb_root {
+	struct rb_node *rb_node;
+};// struct rb_root
+
+#if defined(CONFIG_NF_CONNTRACK) || defined(CONFIG_NF_CONNTRACK_MODULE)
+struct nf_conntrack {
+	atomic_t use;
+};
+#endif
+
+typedef struct {
+	int counter;
+} atomic_t;
+
+/* Add comment to describe elements */
+struct sk_buff {
+	union {
+		struct {
+			/* These two members must be first. */
+			struct sk_buff		*next;
+			struct sk_buff		*prev;
+
+			union {
+				ktime_t		tstamp;
+				struct skb_mstamp skb_mstamp;
+			};
+		};
+		struct rb_node	rbnode; /* used in netem & tcp stack */
+	};
+	struct sock		*sk;
+	struct net_device	*dev;
+
+	/*
+	 * This is the control buffer. It is free to use for every
+	 * layer. Please put your private variables there. If you
+	 * want to keep them across layers you have to do a skb_clone()
+	 * first. This is owned by whoever has the skb queued ATM.
+	 */
+	char			cb[48] __aligned(8);
+
+	unsigned long		_skb_refdst;
+	void			(*destructor)(struct sk_buff *skb);
+	/** Unable to find the definition */	
+	/*
+	#ifdef CONFIG_XFRM
+		struct	sec_path	*sp;
+	#endif
+
+	#if defined(CONFIG_NF_CONNTRACK) || defined(CONFIG_NF_CONNTRACK_MODULE)
+		struct nf_conntrack	*nfct;
+	#endif
+	#if IS_ENABLED(CONFIG_BRIDGE_NETFILTER)
+		struct nf_bridge_info	*nf_bridge;
+	#endif
+	*/
+		unsigned int		len,
+					data_len;
+		__u16			mac_len,
+					hdr_len;
+
+		/* Following fields are _not_ copied in __copy_skb_header()
+		* Note that queue_mapping is here mostly to fill a hole.
+		*/
+	//unable to get the definition
+	/*
+		kmemcheck_bitfield_begin(flags1);
+		__u16			queue_mapping;
+		__u8			cloned:1,
+					nohdr:1,
+					fclone:2,
+					peeked:1,
+					head_frag:1,
+					xmit_more:1;
+		/* one bit hole *//*
+		kmemcheck_bitfield_end(flags1);
+	*/
+
+		/* fields enclosed in headers_start/headers_end are copied
+		* using a single memcpy() in __copy_skb_header()
+		*/
+		/* private: */
+		__u32			headers_start[0];
+		/* public: */
+
+	/* if you move pkt_type around you also must adapt those constants */
+	#ifdef __BIG_ENDIAN_BITFIELD
+	#define PKT_TYPE_MAX	(7 << 5)
+	#else
+	#define PKT_TYPE_MAX	7
+	#endif
+	#define PKT_TYPE_OFFSET()	offsetof(struct sk_buff, __pkt_type_offset)
+
+		__u8			__pkt_type_offset[0];
+		__u8			pkt_type:3;
+		__u8			pfmemalloc:1;
+		__u8			ignore_df:1;
+		__u8			nfctinfo:3;
+
+		__u8			nf_trace:1;
+		__u8			ip_summed:2;
+		__u8			ooo_okay:1;
+		__u8			l4_hash:1;
+		__u8			sw_hash:1;
+		__u8			wifi_acked_valid:1;
+		__u8			wifi_acked:1;
+
+		__u8			no_fcs:1;
+		/* Indicates the inner headers are valid in the skbuff. */
+		__u8			encapsulation:1;
+		__u8			encap_hdr_csum:1;
+		__u8			csum_valid:1;
+		__u8			csum_complete_sw:1;
+		__u8			csum_level:2;
+		__u8			csum_bad:1;
+
+	#ifdef CONFIG_IPV6_NDISC_NODETYPE
+		__u8			ndisc_nodetype:2;
+	#endif
+		__u8			ipvs_property:1;
+		__u8			inner_protocol_type:1;
+		__u8			remcsum_offload:1;
+		/* 3 or 5 bit hole */
+
+	#ifdef CONFIG_NET_SCHED
+		__u16			tc_index;	/* traffic control index */
+	#ifdef CONFIG_NET_CLS_ACT
+		__u16			tc_verd;	/* traffic control verdict */
+	#endif
+	#endif
+
+		union {
+			__wsum		csum;
+			struct {
+				__u16	csum_start;
+				__u16	csum_offset;
+			};
+		};
+		__u32			priority;
+		int			skb_iif;
+		__u32			hash;
+		__be16			vlan_proto;
+		__u16			vlan_tci;
+	#if defined(CONFIG_NET_RX_BUSY_POLL) || defined(CONFIG_XPS)
+		union {
+			unsigned int	napi_id;
+			unsigned int	sender_cpu;
+		};
+	#endif
+		union {
+	#ifdef CONFIG_NETWORK_SECMARK
+			__u32		secmark;
+	#endif
+	#ifdef CONFIG_NET_SWITCHDEV
+			__u32		offload_fwd_mark;
+	#endif
+		};
+
+		union {
+			__u32		mark;
+			__u32		reserved_tailroom;
+		};
+
+		union {
+			__be16		inner_protocol;
+			__u8		inner_ipproto;
+		};
+
+		__u16			inner_transport_header;
+		__u16			inner_network_header;
+		__u16			inner_mac_header;
+
+		__be16			protocol;
+		__u16			transport_header;
+		__u16			network_header;
+		__u16			mac_header;
+
+		/* private: */
+		__u32			headers_end[0];
+		/* public: */
+
+		/* These elements must be at the end, see alloc_skb() for details.  */
+		sk_buff_data_t		tail;
+		sk_buff_data_t		end;
+		unsigned char		*head,
+					*data;
+		unsigned int		truesize;
+		atomic_t		users;
+}; //struct sk_buff 
+
+struct xt_match {
+	struct list_head list;
+
+	const char name[XT_EXTENSION_MAXNAMELEN];
+	u_int8_t revision;
+
+	/* Return true or false: return FALSE and set *hotdrop = 1 to
+           force immediate packet drop. */
+	/* Arguments changed since 2.6.9, as this must now handle
+	   non-linear skb, using skb_header_pointer and
+	   skb_ip_make_writable. */
+	bool (*match)(const struct sk_buff *skb,
+		      struct xt_action_param *);
+
+
+	/* Called when user tries to insert an entry of this type. */
+	int (*checkentry)(const struct xt_mtchk_param *);
+
+	/* Called when entry of this type deleted. */
+	void (*destroy)(const struct xt_mtdtor_param *);
+
+	/* unable to find CONFIG_COMPAT */
+	//#ifdef CONFIG_COMPAT
+		/* Called when userspace align differs from kernel space one */
+		void (*compat_from_user)(void *dst, const void *src);
+		int (*compat_to_user)(void __user *dst, const void *src);
+	//#endif
+		/* Set this to THIS_MODULE if you are a module, otherwise NULL */
+		struct module *me;
+
+		const char *table;
+		unsigned int matchsize;
+
+	//unable to define CONFIG_COMPAT
+	//#ifdef CONFIG_COMPAT
+		unsigned int compatsize;
+	//#endif
+		unsigned int hooks;
+		unsigned short proto;
+
+		unsigned short family;
+	};// struct xt_match
+
+
+	struct compat_delta {
+		unsigned int offset; /* offset in kernel */
+		int delta; /* delta in 32bit user land */
+};// struct compat_delta
+
+
+#ifdef CONFIG_DEBUG_SPINLOCK
+
+	typedef struct {
+		volatile unsigned int slock;
+	} arch_spinlock_t;
+
+	#define __ARCH_SPIN_LOCK_UNLOCKED { 1 }
+
+	#else
+
+	typedef struct { } arch_spinlock_t;
+
+	#define __ARCH_SPIN_LOCK_UNLOCKED { }
+
+#endif
+
+typedef struct raw_spinlock {
+	arch_spinlock_t raw_lock;
+	#ifdef CONFIG_GENERIC_LOCKBREAK
+		unsigned int break_lock;
+	#endif
+	#ifdef CONFIG_DEBUG_SPINLOCK
+		unsigned int magic, owner_cpu;
+		void *owner;
+	#endif
+	#ifdef CONFIG_DEBUG_LOCK_ALLOC
+		struct lockdep_map dep_map;
+	#endif
+} raw_spinlock_t;
+
+typedef struct spinlock {
+	union {
+		struct raw_spinlock rlock;
+
+#ifdef CONFIG_DEBUG_LOCK_ALLOC
+# define LOCK_PADSIZE (offsetof(struct raw_spinlock, dep_map))
+		struct {
+			u8 __padding[LOCK_PADSIZE];
+			struct lockdep_map dep_map;
+		};
+#endif
+	};
+} spinlock_t;
+
+struct mutex {
+	/* 1: unlocked, 0: locked, negative: locked, possible waiters */
+	atomic_t		count;
+	spinlock_t		wait_lock;
+	struct list_head	wait_list;
+	#if defined(CONFIG_DEBUG_MUTEXES) || defined(CONFIG_MUTEX_SPIN_ON_OWNER)
+		struct task_struct	*owner;
+	#endif
+	#ifdef CONFIG_MUTEX_SPIN_ON_OWNER
+		struct optimistic_spin_queue osq; /* Spinner MCS lock */
+	#endif
+	#ifdef CONFIG_DEBUG_MUTEXES
+		void			*magic;
+	#endif
+	#ifdef CONFIG_DEBUG_LOCK_ALLOC
+		struct lockdep_map	dep_map;
+	#endif
+};// struct mutex
+
+struct xt_af {
+	struct mutex mutex;
+	struct list_head match;
+	struct list_head target;
+	//unable to find the definition of CONFIG_COMPAT
+	//#ifdef CONFIG_COMPAT
+		struct mutex compat_mutex;
+		struct compat_delta *compat_tab;
+		unsigned int number; /* number of slots in compat_tab[] */
+		unsigned int cur; /* number of used slots in compat_tab[] */
+	//#endif
+};// struct xt_af
+
 struct __wait_queue_head {
 	spinlock_t		lock;
 	struct list_head	task_list;
-};
+};// struct __wait_queue_head
 typedef struct __wait_queue_head wait_queue_head_t;
 
 /**
@@ -730,7 +794,7 @@ typedef struct __wait_queue_head wait_queue_head_t;
 struct rcu_head
 {
 	/* data */
-};
+};// struct rcu_head
 
 
 /* unable to get all the system definition */
@@ -741,7 +805,7 @@ struct file {
 struct fd {
 	struct file *file;
 	unsigned int flags;
-};
+};// struct fd
 
 struct fasync_struct {
 	spinlock_t		fa_lock;
@@ -750,7 +814,7 @@ struct fasync_struct {
 	struct fasync_struct	*fa_next; /* singly linked list */
 	struct file		*fa_file;
 	struct rcu_head		fa_rcu;
-};
+};// struct fasync_struct
 
 struct socket_wq {
 	/* Note: wait MUST be first field of socket_wq */
@@ -768,7 +832,7 @@ struct sk_buff_head {
 
 	__u32		qlen;
 	spinlock_t	lock;
-};
+};// struct sk_buff_head
 
 # define __rcu
 
@@ -791,19 +855,19 @@ typedef __u64 __bitwise __addrpair;
 
 struct hlist_head {
 	struct hlist_node *first;
-};
+};// struct hlist_head
 
 struct hlist_node {
 	struct hlist_node *next, **pprev;
-};
+};// struct hlist_node
 
 struct hlist_nulls_head {
 	struct hlist_nulls_node *first;
-};
+};// struct hlist_nulls_head
 
 struct hlist_nulls_node {
 	struct hlist_nulls_node *next, **pprev;
-};
+};// struct hlist_nulls_node
 
 typedef atomic_t atomic_long_t;
 
@@ -842,121 +906,94 @@ struct proto {
 	int			(*getsockopt)(struct sock *sk, int level,
 					int optname, char __user *optval,
 					int __user *option);
-#ifdef CONFIG_COMPAT
-	int			(*compat_setsockopt)(struct sock *sk,
-					int level,
-					int optname, char __user *optval,
-					unsigned int optlen);
-	int			(*compat_getsockopt)(struct sock *sk,
-					int level,
-					int optname, char __user *optval,
-					int __user *option);
-	int			(*compat_ioctl)(struct sock *sk,
-					unsigned int cmd, unsigned long arg);
-#endif
-	int			(*sendmsg)(struct sock *sk, struct msghdr *msg,
-					   size_t len);
-	int			(*recvmsg)(struct sock *sk, struct msghdr *msg,
-					   size_t len, int noblock, int flags,
-					   int *addr_len);
-	int			(*sendpage)(struct sock *sk, struct page *page,
-					int offset, size_t size, int flags);
-	int			(*bind)(struct sock *sk,
-					struct sockaddr *uaddr, int addr_len);
+	#ifdef CONFIG_COMPAT
+		int			(*compat_setsockopt)(struct sock *sk,
+						int level,
+						int optname, char __user *optval,
+						unsigned int optlen);
+		int			(*compat_getsockopt)(struct sock *sk,
+						int level,
+						int optname, char __user *optval,
+						int __user *option);
+		int			(*compat_ioctl)(struct sock *sk,
+						unsigned int cmd, unsigned long arg);
+	#endif
+		int			(*sendmsg)(struct sock *sk, struct msghdr *msg,
+						size_t len);
+		int			(*recvmsg)(struct sock *sk, struct msghdr *msg,
+						size_t len, int noblock, int flags,
+						int *addr_len);
+		int			(*sendpage)(struct sock *sk, struct page *page,
+						int offset, size_t size, int flags);
+		int			(*bind)(struct sock *sk,
+						struct sockaddr *uaddr, int addr_len);
 
-	int			(*backlog_rcv) (struct sock *sk,
-						struct sk_buff *skb);
+		int			(*backlog_rcv) (struct sock *sk,
+							struct sk_buff *skb);
 
-	void		(*release_cb)(struct sock *sk);
+		void		(*release_cb)(struct sock *sk);
 
-	/* Keeping track of sk's, looking them up, and port selection methods. */
-	int			(*hash)(struct sock *sk);
-	void			(*unhash)(struct sock *sk);
-	void			(*rehash)(struct sock *sk);
-	int			(*get_port)(struct sock *sk, unsigned short snum);
-	void			(*clear_sk)(struct sock *sk, int size);
+		/* Keeping track of sk's, looking them up, and port selection methods. */
+		int			(*hash)(struct sock *sk);
+		void			(*unhash)(struct sock *sk);
+		void			(*rehash)(struct sock *sk);
+		int			(*get_port)(struct sock *sk, unsigned short snum);
+		void			(*clear_sk)(struct sock *sk, int size);
 
-	/* Keeping track of sockets in use */
-#ifdef CONFIG_PROC_FS
-	unsigned int		inuse_idx;
-#endif
+		/* Keeping track of sockets in use */
+	#ifdef CONFIG_PROC_FS
+		unsigned int		inuse_idx;
+	#endif
 
-	bool			(*stream_memory_free)(const struct sock *sk);
-	/* Memory pressure */
-	void			(*enter_memory_pressure)(struct sock *sk);
-	atomic_long_t		*memory_allocated;	/* Current allocated memory. */
-	struct percpu_counter	*sockets_allocated;	/* Current number of sockets. */
-	/*
-	 * Pressure flag: try to collapse.
-	 * Technical note: it is used by multiple contexts non atomically.
-	 * All the __sk_mem_schedule() is of this nature: accounting
-	 * is strict, actions are advisory and have some latency.
-	 */
-	int			*memory_pressure;
-	long			*sysctl_mem;
-	int			*sysctl_wmem;
-	int			*sysctl_rmem;
-	int			max_header;
-	bool			no_autobind;
+		bool			(*stream_memory_free)(const struct sock *sk);
+		/* Memory pressure */
+		void			(*enter_memory_pressure)(struct sock *sk);
+		atomic_long_t		*memory_allocated;	/* Current allocated memory. */
+		struct percpu_counter	*sockets_allocated;	/* Current number of sockets. */
+		/*
+		* Pressure flag: try to collapse.
+		* Technical note: it is used by multiple contexts non atomically.
+		* All the __sk_mem_schedule() is of this nature: accounting
+		* is strict, actions are advisory and have some latency.
+		*/
+		int			*memory_pressure;
+		long			*sysctl_mem;
+		int			*sysctl_wmem;
+		int			*sysctl_rmem;
+		int			max_header;
+		bool			no_autobind;
 
-	struct kmem_cache	*slab;
-	unsigned int		obj_size;
-	int			slab_flags;
+		struct kmem_cache	*slab;
+		unsigned int		obj_size;
+		int			slab_flags;
 
-	struct percpu_counter	*orphan_count;
+		struct percpu_counter	*orphan_count;
 
-	struct request_sock_ops	*rsk_prot;
-	struct timewait_sock_ops *twsk_prot;
+		struct request_sock_ops	*rsk_prot;
+		struct timewait_sock_ops *twsk_prot;
 
-	union {
-		struct inet_hashinfo	*hashinfo;
-		struct udp_table	*udp_table;
-		struct raw_hashinfo	*raw_hash;
-	} h;
+		union {
+			struct inet_hashinfo	*hashinfo;
+			struct udp_table	*udp_table;
+			struct raw_hashinfo	*raw_hash;
+		} h;
 
-	struct module		*owner;
+		struct module		*owner;
 
-	char			name[32];
+		char			name[32];
 
-	struct list_head	node;
-#ifdef SOCK_REFCNT_DEBUG
-	atomic_t		socks;
-#endif
-	int			(*diag_destroy)(struct sock *sk, int err);
-};
+		struct list_head	node;
+	#ifdef SOCK_REFCNT_DEBUG
+		atomic_t		socks;
+	#endif
+		int			(*diag_destroy)(struct sock *sk, int err);
+}; // struct proto
 
 typedef struct {
 //#ifdef CONFIG_NET_NS
 	struct net *net;
 //#endif
 } possible_net_t;
-
-#define __ARG_PLACEHOLDER_1 0,
-#define config_enabled(cfg) _config_enabled(cfg)
-#define _config_enabled(value) __config_enabled(__ARG_PLACEHOLDER_##value)
-#define __config_enabled(arg1_or_junk) ___config_enabled(arg1_or_junk 1, 0)
-#define ___config_enabled(__ignored, val, ...) val
-
-/*
- * IS_BUILTIN(CONFIG_FOO) evaluates to 1 if CONFIG_FOO is set to 'y', 0
- * otherwise. For boolean options, this is equivalent to
- * IS_ENABLED(CONFIG_FOO).
- */
-#define IS_BUILTIN(option) config_enabled(option)
-
-/*
- * IS_MODULE(CONFIG_FOO) evaluates to 1 if CONFIG_FOO is set to 'm', 0
- * otherwise.
- */
-#define IS_MODULE(option) config_enabled(option##_MODULE)
-
-/*
- * IS_ENABLED(CONFIG_FOO) evaluates to 1 if CONFIG_FOO is set to 'y' or 'm',
- * 0 otherwise.
- */
-#define IS_ENABLED(option) \
-	(IS_BUILTIN(option) || IS_MODULE(option))
-
 
 typedef struct {
 	long counter;
@@ -970,7 +1007,7 @@ struct inet_timewait_death_row {
 	struct inet_hashinfo 	*hashinfo ____cacheline_aligned_in_smp;
 	int			sysctl_tw_recycle;
 	int			sysctl_max_tw_buckets;
-};
+};// struct inet_timewait_death_row
 
 
 struct sock_common {
@@ -1011,51 +1048,51 @@ struct sock_common {
 	struct proto		*skc_prot; 
 	possible_net_t		skc_net;
 
-#if IS_ENABLED(CONFIG_IPV6)
-	struct in6_addr		skc_v6_daddr;
-	struct in6_addr		skc_v6_rcv_saddr;
-#endif
+	#if IS_ENABLED(CONFIG_IPV6)
+		struct in6_addr		skc_v6_daddr;
+		struct in6_addr		skc_v6_rcv_saddr;
+	#endif
 
-	atomic64_t		skc_cookie;
+		atomic64_t		skc_cookie;
 
-	/* following fields are padding to force
-	 * offset(struct sock, sk_refcnt) == 128 on 64bit arches
-	 * assuming IPV6 is enabled. We use this padding differently
-	 * for different kind of 'sockets'
-	 */
-	union {
-		unsigned long	skc_flags;
-		struct sock	*skc_listener; /* request_sock */
-		struct inet_timewait_death_row *skc_tw_dr; /* inet_timewait_sock */
-	};
-	/*
-	 * fields between dontcopy_begin/dontcopy_end
-	 * are not copied in sock_copy()
-	 */
-	/* private: */
-	int			skc_dontcopy_begin[0];
-	/* public: */
-	union {
-		struct hlist_node	skc_node;
-		struct hlist_nulls_node skc_nulls_node;
-	};
-	int			skc_tx_queue_mapping;
-	union {
-		int		skc_incoming_cpu;
-		u32		skc_rcv_wnd;
-		u32		skc_tw_rcv_nxt; /* struct tcp_timewait_sock  */
-	};
+		/* following fields are padding to force
+		* offset(struct sock, sk_refcnt) == 128 on 64bit arches
+		* assuming IPV6 is enabled. We use this padding differently
+		* for different kind of 'sockets'
+		*/
+		union {
+			unsigned long	skc_flags;
+			struct sock	*skc_listener; /* request_sock */
+			struct inet_timewait_death_row *skc_tw_dr; /* inet_timewait_sock */
+		};
+		/*
+		* fields between dontcopy_begin/dontcopy_end
+		* are not copied in sock_copy()
+		*/
+		/* private: */
+		int			skc_dontcopy_begin[0];
+		/* public: */
+		union {
+			struct hlist_node	skc_node;
+			struct hlist_nulls_node skc_nulls_node;
+		};
+		int			skc_tx_queue_mapping;
+		union {
+			int		skc_incoming_cpu;
+			u32		skc_rcv_wnd;
+			u32		skc_tw_rcv_nxt; /* struct tcp_timewait_sock  */
+		};
 
-	atomic_t		skc_refcnt;
-	/* private: */
-	int                     skc_dontcopy_end[0];
-	union {
-		u32		skc_rxhash;
-		u32		skc_window_clamp;
-		u32		skc_tw_snd_nxt; /* struct tcp_timewait_sock */
-	};
-	/* public: */
-};
+		atomic_t		skc_refcnt;
+		/* private: */
+		int                     skc_dontcopy_end[0];
+		union {
+			u32		skc_rxhash;
+			u32		skc_window_clamp;
+			u32		skc_tw_snd_nxt; /* struct tcp_timewait_sock */
+		};
+		/* public: */
+}; //struct sock_common
 
 
 /* This is the per-socket lock.  The spinlock provides a synchronization
@@ -1110,19 +1147,19 @@ struct timer_list {
 	u32			flags;
 	int			slack;
 
-#ifdef CONFIG_TIMER_STATS
-	int			start_pid;
-	void			*start_site;
-	char			start_comm[16];
+	#ifdef CONFIG_TIMER_STATS
+		int			start_pid;
+		void			*start_site;
+		char			start_comm[16];
+	#endif
+	#ifdef CONFIG_LOCKDEP
+		struct lockdep_map	lockdep_map;
 #endif
-#ifdef CONFIG_LOCKDEP
-	struct lockdep_map	lockdep_map;
-#endif
-};
+}; //struct timer_list
 
 /* unable to get the definition */
 struct page{
-	};
+	};//struct page
 
 struct page_frag {
 	struct page *page;
@@ -1133,7 +1170,7 @@ struct page_frag {
 	__u16 offset;
 	__u16 size;
 #endif
-};
+};//struct page_frag 
 
 #ifndef __LITTLE_ENDIAN
 #define __LITTLE_ENDIAN 1234
@@ -1158,7 +1195,7 @@ struct sock_cgroup_data {
 #endif
 		u64		val;
 	};
-};
+}; //struct sock_cgroup_data 
 
 /**
   *	struct sock - network layer representation of sockets
@@ -1239,181 +1276,137 @@ struct sock {
 	 * Now struct inet_timewait_sock also uses sock_common, so please just
 	 * don't add nothing before this first member (__sk_common) --acme
 	 */
-struct sock_common	__sk_common;
-#define sk_node			__sk_common.skc_node
-#define sk_nulls_node		__sk_common.skc_nulls_node
-#define sk_refcnt		__sk_common.skc_refcnt
-#define sk_tx_queue_mapping	__sk_common.skc_tx_queue_mapping
+	struct sock_common	__sk_common;
+	#define sk_node			__sk_common.skc_node
+	#define sk_nulls_node		__sk_common.skc_nulls_node
+	#define sk_refcnt		__sk_common.skc_refcnt
+	#define sk_tx_queue_mapping	__sk_common.skc_tx_queue_mapping
 
-#define sk_dontcopy_begin	__sk_common.skc_dontcopy_begin
-#define sk_dontcopy_end		__sk_common.skc_dontcopy_end
-#define sk_hash			__sk_common.skc_hash
-#define sk_portpair		__sk_common.skc_portpair
-#define sk_num			__sk_common.skc_num
-#define sk_dport		__sk_common.skc_dport
-#define sk_addrpair		__sk_common.skc_addrpair
-#define sk_daddr		__sk_common.skc_daddr
-#define sk_rcv_saddr		__sk_common.skc_rcv_saddr
-#define sk_family		__sk_common.skc_family
-#define sk_state		__sk_common.skc_state
-#define sk_reuse		__sk_common.skc_reuse
-#define sk_reuseport		__sk_common.skc_reuseport
-#define sk_ipv6only		__sk_common.skc_ipv6only
-#define sk_net_refcnt		__sk_common.skc_net_refcnt
-#define sk_bound_dev_if		__sk_common.skc_bound_dev_if
-#define sk_bind_node		__sk_common.skc_bind_node
-#define sk_prot			__sk_common.skc_prot
-#define sk_net			__sk_common.skc_net
-#define sk_v6_daddr		__sk_common.skc_v6_daddr
-#define sk_v6_rcv_saddr	__sk_common.skc_v6_rcv_saddr
-#define sk_cookie		__sk_common.skc_cookie
-#define sk_incoming_cpu		__sk_common.skc_incoming_cpu
-#define sk_flags		__sk_common.skc_flags
-#define sk_rxhash		__sk_common.skc_rxhash
+	#define sk_dontcopy_begin	__sk_common.skc_dontcopy_begin
+	#define sk_dontcopy_end		__sk_common.skc_dontcopy_end
+	#define sk_hash			__sk_common.skc_hash
+	#define sk_portpair		__sk_common.skc_portpair
+	#define sk_num			__sk_common.skc_num
+	#define sk_dport		__sk_common.skc_dport
+	#define sk_addrpair		__sk_common.skc_addrpair
+	#define sk_daddr		__sk_common.skc_daddr
+	#define sk_rcv_saddr		__sk_common.skc_rcv_saddr
+	#define sk_family		__sk_common.skc_family
+	#define sk_state		__sk_common.skc_state
+	#define sk_reuse		__sk_common.skc_reuse
+	#define sk_reuseport		__sk_common.skc_reuseport
+	#define sk_ipv6only		__sk_common.skc_ipv6only
+	#define sk_net_refcnt		__sk_common.skc_net_refcnt
+	#define sk_bound_dev_if		__sk_common.skc_bound_dev_if
+	#define sk_bind_node		__sk_common.skc_bind_node
+	#define sk_prot			__sk_common.skc_prot
+	#define sk_net			__sk_common.skc_net
+	#define sk_v6_daddr		__sk_common.skc_v6_daddr
+	#define sk_v6_rcv_saddr	__sk_common.skc_v6_rcv_saddr
+	#define sk_cookie		__sk_common.skc_cookie
+	#define sk_incoming_cpu		__sk_common.skc_incoming_cpu
+	#define sk_flags		__sk_common.skc_flags
+	#define sk_rxhash		__sk_common.skc_rxhash
 
-	socket_lock_t		sk_lock;
-	struct sk_buff_head	sk_receive_queue;
-	/*
-	 * The backlog queue is special, it is always used with
-	 * the per-socket spinlock held and requires low latency
-	 * access. Therefore we special case it's implementation.
-	 * Note : rmem_alloc is in this structure to fill a hole
-	 * on 64bit arches, not because its logically part of
-	 * backlog.
-	 */
-	struct {
-		atomic_t	rmem_alloc;
-		int		len;
-		struct sk_buff	*head;
-		struct sk_buff	*tail;
-	} sk_backlog;
-#define sk_rmem_alloc sk_backlog.rmem_alloc
-	int			sk_forward_alloc;
+		socket_lock_t		sk_lock;
+		struct sk_buff_head	sk_receive_queue;
+		/*
+		* The backlog queue is special, it is always used with
+		* the per-socket spinlock held and requires low latency
+		* access. Therefore we special case it's implementation.
+		* Note : rmem_alloc is in this structure to fill a hole
+		* on 64bit arches, not because its logically part of
+		* backlog.
+		*/
+		struct {
+			atomic_t	rmem_alloc;
+			int		len;
+			struct sk_buff	*head;
+			struct sk_buff	*tail;
+		} sk_backlog;
+	#define sk_rmem_alloc sk_backlog.rmem_alloc
+		int			sk_forward_alloc;
 
-	__u32			sk_txhash;
-#ifdef CONFIG_NET_RX_BUSY_POLL
-	unsigned int		sk_napi_id;
-	unsigned int		sk_ll_usec;
-#endif
-	atomic_t		sk_drops;
-	int			sk_rcvbuf;
+		__u32			sk_txhash;
+	#ifdef CONFIG_NET_RX_BUSY_POLL
+		unsigned int		sk_napi_id;
+		unsigned int		sk_ll_usec;
+	#endif
+		atomic_t		sk_drops;
+		int			sk_rcvbuf;
 
-	struct sk_filter __rcu	*sk_filter;
-	union {
-		struct socket_wq __rcu	*sk_wq;
-		struct socket_wq	*sk_wq_raw;
-	};
-#ifdef CONFIG_XFRM
-	struct xfrm_policy __rcu *sk_policy[2];
-#endif
-	struct dst_entry	*sk_rx_dst;
-	struct dst_entry __rcu	*sk_dst_cache;
-	/* Note: 32bit hole on 64bit arches */
-	atomic_t		sk_wmem_alloc;
-	atomic_t		sk_omem_alloc;
-	int			sk_sndbuf;
-	struct sk_buff_head	sk_write_queue;
-	kmemcheck_bitfield_begin(flags);
-	unsigned int		sk_shutdown  : 2,
-				sk_no_check_tx : 1,
-				sk_no_check_rx : 1,
-				sk_userlocks : 4,
-				sk_protocol  : 8,
-				sk_type      : 16;
-#define SK_PROTOCOL_MAX U8_MAX
-	kmemcheck_bitfield_end(flags);
-	int			sk_wmem_queued;
-	gfp_t			sk_allocation;
-	u32			sk_pacing_rate; /* bytes per second */
-	u32			sk_max_pacing_rate;
-	netdev_features_t	sk_route_caps;
-	netdev_features_t	sk_route_nocaps;
-	int			sk_gso_type;
-	unsigned int		sk_gso_max_size;
-	u16			sk_gso_max_segs;
-	int			sk_rcvlowat;
-	unsigned long	        sk_lingertime;
-	struct sk_buff_head	sk_error_queue;
-	struct proto		*sk_prot_creator;
-	rwlock_t		sk_callback_lock;
-	int			sk_err,
-				sk_err_soft;
-	u32			sk_ack_backlog;
-	u32			sk_max_ack_backlog;
-	__u32			sk_priority;
-	__u32			sk_mark;
-	struct pid		*sk_peer_pid;
-	const struct cred	*sk_peer_cred;
-	long			sk_rcvtimeo;
-	long			sk_sndtimeo;
-	struct timer_list	sk_timer;
-	ktime_t			sk_stamp;
-	u16			sk_tsflags;
-	u32			sk_tskey;
-	struct socket		*sk_socket;
-	void			*sk_user_data;
-	struct page_frag	sk_frag;
-	struct sk_buff		*sk_send_head;
-	__s32			sk_peek_off;
-	int			sk_write_pending;
-#ifdef CONFIG_SECURITY
-	void			*sk_security;
-#endif
-	struct sock_cgroup_data	sk_cgrp_data;
-	struct mem_cgroup	*sk_memcg;
-	void			(*sk_state_change)(struct sock *sk);
-	void			(*sk_data_ready)(struct sock *sk);
-	void			(*sk_write_space)(struct sock *sk);
-	void			(*sk_error_report)(struct sock *sk);
-	int			(*sk_backlog_rcv)(struct sock *sk,
-						  struct sk_buff *skb);
-	void                    (*sk_destruct)(struct sock *sk);
-	struct sock_reuseport __rcu	*sk_reuseport_cb;
-};
-
-#define RCU_LOCKDEP_WARN(c, s) do { } while (0)
-#define rcu_sleep_check() do { } while (0)
-
-#ifdef __CHECKER__
-#define rcu_dereference_sparse(p, space) \
-	((void)(((typeof(*p) space *)p) == p))
-#else /* #ifdef __CHECKER__ */
-#define rcu_dereference_sparse(p, space)
-#endif /* #else #ifdef __CHECKER__ */
-
-#ifndef smp_read_barrier_depends
-#define smp_read_barrier_depends()	do { } while (0)
-#endif
-
-/**
- * lockless_dereference() - safely load a pointer for later dereference
- * @p: The pointer to load
- *
- * Similar to rcu_dereference(), but for situations where the pointed-to
- * object's lifetime is managed by something other than RCU.  That
- * "something other" might be reference counting or simple immortality.
- */
-#define lockless_dereference(p) \
-({ \
-	typeof(p) _________p1 = READ_ONCE(p); \
-	smp_read_barrier_depends(); /* Dependency order vs. p above. */ \
-	(_________p1); \
-})
-
-#define __rcu_dereference_check(p, c, space) \
-({ \
-	/* Dependency order vs. p above. */ \
-	typeof(*p) *________p1 = (typeof(*p) *__force)lockless_dereference(p); \
-	RCU_LOCKDEP_WARN(!(c), "suspicious rcu_dereference_check() usage"); \
-	rcu_dereference_sparse(p, space); \
-	((typeof(*p) __force __kernel *)(________p1)); \
-})
-
-#define rcu_dereference_check(p, c) \
-	__rcu_dereference_check((p), (c) || rcu_read_lock_held(), __rcu)
-
-#define rcu_dereference_raw(p) rcu_dereference_check(p, 1) /*@@@ needed? @@@*/
-
+		struct sk_filter __rcu	*sk_filter;
+		union {
+			struct socket_wq __rcu	*sk_wq;
+			struct socket_wq	*sk_wq_raw;
+		};
+	#ifdef CONFIG_XFRM
+		struct xfrm_policy __rcu *sk_policy[2];
+	#endif
+		struct dst_entry	*sk_rx_dst;
+		struct dst_entry __rcu	*sk_dst_cache;
+		/* Note: 32bit hole on 64bit arches */
+		atomic_t		sk_wmem_alloc;
+		atomic_t		sk_omem_alloc;
+		int			sk_sndbuf;
+		struct sk_buff_head	sk_write_queue;
+		kmemcheck_bitfield_begin(flags);
+		unsigned int		sk_shutdown  : 2,
+					sk_no_check_tx : 1,
+					sk_no_check_rx : 1,
+					sk_userlocks : 4,
+					sk_protocol  : 8,
+					sk_type      : 16;
+	#define SK_PROTOCOL_MAX U8_MAX
+		kmemcheck_bitfield_end(flags);
+		int			sk_wmem_queued;
+		gfp_t			sk_allocation;
+		u32			sk_pacing_rate; /* bytes per second */
+		u32			sk_max_pacing_rate;
+		netdev_features_t	sk_route_caps;
+		netdev_features_t	sk_route_nocaps;
+		int			sk_gso_type;
+		unsigned int		sk_gso_max_size;
+		u16			sk_gso_max_segs;
+		int			sk_rcvlowat;
+		unsigned long	        sk_lingertime;
+		struct sk_buff_head	sk_error_queue;
+		struct proto		*sk_prot_creator;
+		rwlock_t		sk_callback_lock;
+		int			sk_err,
+					sk_err_soft;
+		u32			sk_ack_backlog;
+		u32			sk_max_ack_backlog;
+		__u32			sk_priority;
+		__u32			sk_mark;
+		struct pid		*sk_peer_pid;
+		const struct cred	*sk_peer_cred;
+		long			sk_rcvtimeo;
+		long			sk_sndtimeo;
+		struct timer_list	sk_timer;
+		ktime_t			sk_stamp;
+		u16			sk_tsflags;
+		u32			sk_tskey;
+		struct socket		*sk_socket;
+		void			*sk_user_data;
+		struct page_frag	sk_frag;
+		struct sk_buff		*sk_send_head;
+		__s32			sk_peek_off;
+		int			sk_write_pending;
+	#ifdef CONFIG_SECURITY
+		void			*sk_security;
+	#endif
+		struct sock_cgroup_data	sk_cgrp_data;
+		struct mem_cgroup	*sk_memcg;
+		void			(*sk_state_change)(struct sock *sk);
+		void			(*sk_data_ready)(struct sock *sk);
+		void			(*sk_write_space)(struct sock *sk);
+		void			(*sk_error_report)(struct sock *sk);
+		int			(*sk_backlog_rcv)(struct sock *sk,
+							struct sk_buff *skb);
+		void                    (*sk_destruct)(struct sock *sk);
+		struct sock_reuseport __rcu	*sk_reuseport_cb;
+}; //struct sock
 
 typedef enum {
 	SS_FREE = 0,			/* not allocated		*/
@@ -1480,7 +1473,7 @@ struct proto_ops {
 	ssize_t 	(*splice_read)(struct socket *sock,  loff_t *ppos,
 				       struct pipe_inode_info *pipe, size_t len, unsigned int flags);
 	int		(*set_peek_off)(struct sock *sk, int val);
-};
+}; //struct proto_ops
 
 /**
  *  struct socket - general BSD socket
@@ -1506,50 +1499,7 @@ struct socket {
 	struct file		*file;
 	struct sock		*sk;
 	const struct proto_ops	*ops;
-};
-
-/*
- * copy_from_user: - Copy a block of data from user space.
- * @to:	  Destination address, in kernel space.
- * @from: Source address, in user space.
- * @n:	  Number of bytes to copy.
- *
- * Context: User context only. This function may sleep if pagefaults are
- *          enabled.
- *
- * Copy data from user space to kernel space.
- *
- * Returns number of bytes that could not be copied.
- * On success, this will be zero.
- *
- * If some data could not be copied, this function will pad the copied
- * data to the requested size using zero bytes.
- */
-/*
-#define copy_from_user(to, from, n)					\
-({									\
-	void *__cu_to;							\
-	const void __user *__cu_from;					\
-	long __cu_len;							\
-									\
-	__cu_to = (to);							\
-	__cu_from = (from);						\
-	__cu_len = (n);							\
-	if (eva_kernel_access()) {					\
-		__cu_len = __invoke_copy_from_kernel(__cu_to,		\
-						     __cu_from,		\
-						     __cu_len);		\
-	} else {							\
-		if (access_ok(VERIFY_READ, __cu_from, __cu_len)) {	\
-			might_fault();                                  \
-			__cu_len = __invoke_copy_from_user(__cu_to,	\
-							   __cu_from,	\
-							   __cu_len);   \
-		}							\
-	}								\
-	__cu_len;							\
-})
-*/
+}; //struct socket 
 
 struct fdtable {
 	unsigned int max_fds;
@@ -1558,7 +1508,7 @@ struct fdtable {
 	unsigned long *open_fds;
 	unsigned long *full_fds_bits;
 	struct rcu_head rcu;
-};
+};//struct fdtable
 
 #if defined __x86_64__ && !defined __ILP32__
 # define __WORDSIZE	64
@@ -1599,22 +1549,7 @@ struct files_struct {
 	unsigned long open_fds_init[1];
 	unsigned long full_fds_bits_init[1];
 	struct file __rcu * fd_array[NR_OPEN_DEFAULT];
-};
-
-#ifdef __CHECKER__
-#define __bitwise__ __attribute__((bitwise))
-#else
-#define __bitwise__
-#endif
-
-typedef unsigned __bitwise__ fmode_t;
-
-/**
- * Unable to fix the definition
- */
-int copy_from_user(to, from, n){
-  return 0;
-}
+};//struct files_struct
 
 /**
  * struct xt_mtchk_param - parameters for match extensions'
@@ -1638,26 +1573,59 @@ struct xt_mtchk_param {
 	unsigned int hook_mask;
 	u_int8_t family;
 	bool nft_compat;
-};
+};//struct xt_mtchk_param
 
-
-////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////// END OF STRUCTS ////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+/**
+ * @brief Unable to fix the definition
+ * 
+ * @return int 
+ */
+int copy_from_user(to, from, n){
+  return 0;
+}
+/**
+ * @brief 
+ * 
+ * @param ptr 
+ * @return long 
+ */
 static inline long __must_check PTR_ERR(__force const void *ptr)
 {
 	return (long) ptr;
 }//PTR_ERR
 
+/**
+ * @brief 
+ * 
+ * @param ptr 
+ * @return true 
+ * @return false 
+ */
 static inline bool __must_check IS_ERR(__force const void *ptr)
 {
 	return IS_ERR_VALUE((unsigned long)ptr);
 }//IS_ERR
 
+/**
+ * @brief 
+ * 
+ * @param target 
+ * @return int 
+ */
 int xt_compat_target_offset(const struct xt_target *target)
 {
 	u_int16_t csize = target->compatsize ? : target->targetsize;
 	return XT_ALIGN(target->targetsize) - COMPAT_XT_ALIGN(csize);
 }//xt_compat_target_offset
 
+/**
+ * @brief 
+ * 
+ * @param match 
+ * @return int 
+ */
 int xt_compat_match_offset(const struct xt_match *match)
 {
 	u_int16_t csize = match->compatsize ? : match->matchsize;
@@ -1697,8 +1665,12 @@ int xt_compat_add_offset(u_int8_t af, unsigned int offset, int delta)
 	return 0;
 }//xt_compat_add_offset
 
-//Unable to fix the definition
-//void module_put(struct module *module)
+/**
+ * @brief Unable to fix the definition
+ * void module_put(struct module *module)
+ * 
+ * @param module 
+ */
 void module_put(void *module)
 {
 	/*
@@ -1714,7 +1686,14 @@ void module_put(void *module)
 	*/
 }//module_put
 
-
+/**
+ * @brief 
+ * 
+ * @param m 
+ * @param dstptr 
+ * @param size 
+ * @return int 
+ */
 int xt_compat_match_from_user(struct xt_entry_match *m, void **dstptr,
 			      unsigned int *size)
 {
@@ -1741,7 +1720,12 @@ int xt_compat_match_from_user(struct xt_entry_match *m, void **dstptr,
 	return 0;
 }//xt_compat_match_from_user
 
-/* Helper functions */
+/**
+ * @brief Helper functions
+ * 
+ * @param e 
+ * @return struct xt_entry_target* 
+ */
 static inline struct xt_entry_target *
 compat_ipt_get_target(struct compat_ipt_entry *e)
 {
@@ -1749,10 +1733,14 @@ compat_ipt_get_target(struct compat_ipt_entry *e)
 }//compat_ipt_get_target
 
 /**
- * @brief system calls - unable to get proper definition
+ * @brief  system calls - unable to get proper definition
+ * Find target, grabs ref.  Returns ERR_PTR() on error.
  * 
+ * @param af 
+ * @param name 
+ * @param revision 
+ * @return struct xt_target* 
  */
-/* Find target, grabs ref.  Returns ERR_PTR() on error. */
 struct xt_target *xt_find_target(u8 af, const char *name, u8 revision)
 {
 	/*
@@ -1781,7 +1769,7 @@ struct xt_target *xt_find_target(u8 af, const char *name, u8 revision)
 	return ERR_PTR(err);
 	*/
 	return NULL;
-}
+}//xt_find_target
 
 /**
  * @brief system call - missing some of the function definition
@@ -1804,12 +1792,31 @@ struct xt_target *xt_request_find_target(u8 af, const char *name, u8 revision)
 	return target;
 }//xt_request_find_target
 
+/**
+ * @brief 
+ * 
+ * @param addr1 
+ * @param op 
+ * @param val1 
+ * @param timeout 
+ * @param addr2 
+ * @param val3 
+ * @return long 
+ */
 static long sys_futex(void *addr1, int op, int val1, struct timespec *timeout,
 		      void *addr2, int val3)
 {
 	return syscall(SYS_futex, addr1, op, val1, timeout, addr2, val3);
-}
+}//sys_futex
 
+/**
+ * @brief 
+ * 
+ * @param p 
+ * @param expected 
+ * @param desired 
+ * @return unsigned long 
+ */
 static unsigned long cmpxchg(unsigned long *p, unsigned long expected,
 			     unsigned long desired)
 {
@@ -1818,13 +1825,26 @@ static unsigned long cmpxchg(unsigned long *p, unsigned long expected,
 	__atomic_compare_exchange_n(p, &exp, desired, 0,
 				    __ATOMIC_SEQ_CST, __ATOMIC_SEQ_CST);
 	return exp;
-}
+}//cmpxchg
 
+/**
+ * @brief 
+ * 
+ * @param p 
+ * @param val 
+ * @return unsigned long 
+ */
 static unsigned long xchg(unsigned long *p, unsigned long val)
 {
 	return __atomic_exchange_n(p, val, __ATOMIC_SEQ_CST);
-}
+}//xchg
 
+/**
+ * @brief 
+ * 
+ * @param m 
+ * @return int 
+ */
 static int mutex_lock(unsigned long *m)
 {
 	int c;
@@ -1844,6 +1864,12 @@ static int mutex_lock(unsigned long *m)
 	return 0;
 }//mutex_lock
 
+/**
+ * @brief 
+ * 
+ * @param m 
+ * @return int 
+ */
 static int mutex_unlock(unsigned long *m)
 {
 	if (*m == 2)
@@ -1857,20 +1883,30 @@ static int mutex_unlock(unsigned long *m)
 }//mutex_unlock
 
 
-
-//unable to define CONFIG_COMPAT
+/**
+ * @brief unable to define CONFIG_COMPAT
+ * 
+ * @param af 
+ */
 //#ifdef CONFIG_COMPAT
 void xt_compat_lock(u_int8_t af)
 {
 	mutex_lock(&xt[af].compat_mutex);
-}
+}//xt_compat_lock
 
 void xt_compat_unlock(u_int8_t af)
 {
 	mutex_unlock(&xt[af].compat_mutex);
-}
+}//xt_compat_unlock
 //#endif
 
+/**
+ * @brief 
+ * 
+ * @param ip 
+ * @return true 
+ * @return false 
+ */
 static bool
 ip_checkentry(const struct ipt_ip *ip)
 {
@@ -1887,12 +1923,23 @@ ip_checkentry(const struct ipt_ip *ip)
 	return true;
 }//ip_checkentry
 
-/* for const-correctness */
+/**
+ * @brief for const-correctness
+ * 
+ * @param e 
+ * @return const struct xt_entry_target* 
+ */
 static inline const struct xt_entry_target *ipt_get_target_c(const struct ipt_entry *e)
 {
 	return ipt_get_target((struct ipt_entry *)e);
 }//ipt_get_target_c
 
+/**
+ * @brief 
+ * 
+ * @param e 
+ * @return int 
+ */
 static int check_entry(const struct ipt_entry *e)
 {
 	const struct xt_entry_target *t;
@@ -1933,6 +1980,15 @@ xt_request_find_match(uint8_t nfproto, const char *name, uint8_t revision)
 	return match;
 }//xt_request_find_match
 
+/**
+ * @brief 
+ * 
+ * @param m 
+ * @param name 
+ * @param ip 
+ * @param size 
+ * @return int 
+ */
 static int compat_find_calc_match(struct xt_entry_match *m,
 		       const char *name,
 		       const struct ipt_ip *ip,
@@ -1952,6 +2008,19 @@ static int compat_find_calc_match(struct xt_entry_match *m,
 	return 0;
 }// compat_find_calc_match
 
+/**
+ * @brief 
+ * 
+ * @param e 
+ * @param newinfo 
+ * @param size 
+ * @param base 
+ * @param limit 
+ * @param hook_entries 
+ * @param underflows 
+ * @param name 
+ * @return int 
+ */
 static int check_compat_entry_size_and_hooks(struct compat_ipt_entry *e,
 				  struct xt_table_info *newinfo,
 				  unsigned int *size,
@@ -2091,8 +2160,14 @@ void xt_compat_flush_offsets(u_int8_t af)
 	}
 }//xt_compat_flush_offsets
 
-/* All zeroes == unconditional rule. */
-/* Mildly perf critical (only if packet tracing is on) */
+/**
+ * @brief All zeroes == unconditional rule. 
+ * Mildly perf critical (only if packet tracing is on)
+ * 
+ * @param e 
+ * @return true 
+ * @return false 
+ */
 static inline bool unconditional(const struct ipt_entry *e)
 {
 	static const struct ipt_ip uncond;
@@ -2102,9 +2177,16 @@ static inline bool unconditional(const struct ipt_entry *e)
 #undef FWINV
 }//unconditional
 
-/* pr_err changed to printf */
-/* Figures out from what hook each rule can be called: returns 0 if
-   there are loops.  Puts hook bitmask in comefrom. */
+/**
+ * @brief pr_err changed to printf 
+ *  Figures out from what hook each rule can be called: returns 0 if
+   there are loops.  Puts hook bitmask in comefrom. 
+ * 
+ * @param newinfo 
+ * @param valid_hooks 
+ * @param entry0 
+ * @return int 
+ */
 static int mark_source_chains(const struct xt_table_info *newinfo,
 		   unsigned int valid_hooks, void *entry0)
 {
@@ -2213,8 +2295,8 @@ next:
 	return 1;
 }//mark_source_chains
 
-/** system call **/
 /**
+ *  @brief system call
  * __alloc_percpu - allocate dynamic percpu area
  * @size: size of area to allocate in bytes
  * @align: alignment of area (max PAGE_SIZE)
@@ -2226,6 +2308,11 @@ void __percpu *__alloc_percpu(size_t size, size_t align)
 	//return pcpu_alloc(size, align, false, GFP_KERNEL);
 }//__alloc_percpu
 
+/**
+ * @brief 
+ * 
+ * @return u64 
+ */
 /* On SMP, ip(6)t_entry->counters.pcnt holds address of the
  * real (percpu) counter.  On !SMP, its just the packet count,
  * so nothing needs to be done there.
@@ -2267,6 +2354,13 @@ int xt_check_match(struct xt_mtchk_param *par, unsigned short match_size,
 	return 0;
 }//xt_check_match
 
+/**
+ * @brief 
+ * 
+ * @param m 
+ * @param par 
+ * @return int 
+ */
 static int
 check_match(struct xt_entry_match *m, struct xt_mtchk_param *par)
 {
@@ -2349,6 +2443,14 @@ static int check_target(struct ipt_entry *e, struct net *net, const char *name)
 	return 0;
 }//check_target
 
+/**
+ * @brief 
+ * 
+ * @param e 
+ * @param net 
+ * @param name 
+ * @return int 
+ */
 static int
 compat_check_entry(struct ipt_entry *e, struct net *net, const char *name)
 {
@@ -2391,6 +2493,11 @@ compat_check_entry(struct ipt_entry *e, struct net *net, const char *name)
 	return ret;
 }//compat_check_entry
 
+/**
+ * @brief 
+ * 
+ * @param e 
+ */
 static void compat_release_entry(struct compat_ipt_entry *e)
 {
 	struct xt_entry_target *t;
@@ -2456,8 +2563,258 @@ void xt_free_table_info(struct xt_table_info *info)
 
 }//xt_free_table_info
 
+/////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// STEP 1 LOOKUP /////////////////////////////
+/**
+ * @brief unable to get the proper definition of {file}
+ * 
+ * @param file 
+ * @param err 
+ * @return struct socket* 
+ */
+struct socket *sock_from_file(struct file *file, int *err)
+{
+	/*
+	if (file->f_op == &socket_file_ops)
+		return file->private_data;	/* set in sock_map_fd */
 
-///////////////////////////////////////////////////////////
+/*	*err = -ENOTSOCK;
+	return NULL;
+	*/
+}//sock_from_file
+
+/**
+ * @brief unable to get the proper definition of {rcu_dereference_raw}
+ * The caller must ensure that fd table isn't shared or hold rcu or file lock
+ * 
+ * @param files 
+ * @param fd 
+ * @return struct file* 
+ */
+static inline struct file *__fcheck_files(struct files_struct *files, unsigned int fd)
+{
+	/*
+	struct fdtable *fdt = rcu_dereference_raw(files->fdt);
+
+	if (fd < fdt->max_fds)
+		return rcu_dereference_raw(fdt->fd[fd]);
+	return NULL;
+	*/
+}//__fcheck_files
+
+/**
+ * @brief  unable to get the proper definition of {atomic_read, unlikely, FDPUT_FPUT}
+ * 
+ * @param fd 
+ * @param mask 
+ * @return unsigned 
+ */
+/*
+ * Lightweight file lookup - no refcnt increment if fd table isn't shared.
+ *
+ * You can use this instead of fget if you satisfy all of the following
+ * conditions:
+ * 1) You must call fput_light before exiting the syscall and returning control
+ *    to userspace (i.e. you cannot remember the returned struct file * after
+ *    returning to userspace).
+ * 2) You must not call filp_close on the returned struct file * in between
+ *    calls to fget_light and fput_light.
+ * 3) You must not clone the current task in between the calls to fget_light
+ *    and fput_light.
+ *
+ * The fput_needed flag returned by fget_light should be passed to the
+ * corresponding fput_light.
+ */
+static unsigned long __fget_light(unsigned int fd, fmode_t mask)
+{
+	/*
+	struct files_struct *files = current->files;
+	struct file *file;
+
+	if (atomic_read(&files->count) == 1) {
+		file = __fcheck_files(files, fd);
+		if (!file || unlikely(file->f_mode & mask))
+			return 0;
+		return (unsigned long)file;
+	} else {
+		file = __fget(fd, mask);
+		if (!file)
+			return 0;
+		return FDPUT_FPUT | (unsigned long)file;
+	}
+	*/
+}//__fget_light
+
+/**
+ * @brief 
+ * 
+ * @param v 
+ * @return struct fd 
+ */
+static inline struct fd __to_fd(unsigned long v)
+{
+	return (struct fd){(struct file *)(v & ~3),v & 3};
+}//__to_fd
+
+/**
+ * @brief 
+ * 
+ * @param fd 
+ * @return unsigned 
+ */
+unsigned long __fdget(unsigned int fd)
+{
+	return __fget_light(fd, FMODE_PATH);
+}//__fdget
+
+/**
+ * @brief 
+ * 
+ * @param fd 
+ * @return struct fd 
+ */
+static inline struct fd fdget(unsigned int fd)
+{
+	return __to_fd(__fdget(fd));
+}//fdget
+
+/**
+ * @brief unable to get the proper definition of {atomic_long_dec_and_test} -system call
+ * 
+ * @param file 
+ */
+void fput(struct file *file)
+{
+	/*
+	if (atomic_long_dec_and_test(&file->f_count)) {
+		struct task_struct *task = current;
+
+		if (likely(!in_interrupt() && !(task->flags & PF_KTHREAD))) {
+			init_task_work(&file->f_u.fu_rcuhead, ____fput);
+			if (!task_work_add(task, &file->f_u.fu_rcuhead, true))
+				return;
+			/*
+			 * After this task has run exit_task_work(),
+			 * task_work_add() will fail.  Fall through to delayed
+			 * fput to avoid leaking *file.
+			 */
+/*		}
+
+		if (llist_add(&file->f_u.fu_llist, &delayed_fput_list))
+			schedule_delayed_work(&delayed_fput_work, 1);
+	}
+	*/
+}//fput
+
+/**
+ * @brief 
+ * 
+ * @param fd 
+ */
+static inline void fdput(struct fd fd)
+{
+	if (fd.flags & FDPUT_FPUT)
+		fput(fd.file);
+}//fdput
+
+/**
+ * @brief 
+ * 
+ * @param fd 
+ * @param err 
+ * @param fput_needed 
+ * @return struct socket* 
+ */
+static struct socket *sockfd_lookup_light(int fd, int *err, int *fput_needed)
+{
+	struct fd f = fdget(fd);
+	struct socket *sock;
+
+	*err = -EBADF;
+	if (f.file) {
+		sock = sock_from_file(f.file, err);
+		if (likely(sock)) {
+			*fput_needed = f.flags;
+			return sock;
+		}
+		fdput(f);
+	}
+	return NULL;
+
+}//sockfd_lookup_light
+
+/**
+ * @brief 
+ * 
+ * @param sock 
+ * @param level 
+ * @param optname 
+ * @return int 
+ */
+static inline int security_socket_setsockopt(struct socket *sock,
+					     int level, int optname)
+{
+	return 0;
+}//security_socket_setsockopt
+
+/**
+ * @brief  pending definition -- unable to get definition -- system parameters
+ *	This is meant for all protocols to use and covers goings on
+ *	at the socket level. Everything here is generic.
+ * 
+ * @param sock 
+ * @param level 
+ * @param optname 
+ * @param optval 
+ * @param optlen 
+ * @return int 
+ */
+int sock_setsockopt(struct socket *sock, int level, int optname,
+		    char __user *optval, unsigned int optlen)
+{
+	return 0;
+}//sock_setsockopt
+
+/**
+ * @brief 
+ * 
+ * @param file 
+ * @param fput_needed 
+ */
+static inline void fput_light(struct file *file, int fput_needed)
+{
+	if (fput_needed)
+		fput(file);
+}//fput_light
+
+/**
+ * @brief unable to get definition -- system parameters {CONFIG_NET_NS, &init_net}
+ * 
+ * @param pnet 
+ * @return struct net* 
+ */
+static inline struct net *read_pnet(const possible_net_t *pnet)
+{
+//#ifdef CONFIG_NET_NS
+	return pnet->net;
+//#else
+//	return &init_net;
+//#endif
+}//read_pnet
+
+/**
+ * @brief
+ * 
+ * @param sk 
+ * @return struct net* 
+ */
+static inline
+struct net *sock_net(const struct sock *sk)
+{
+	return read_pnet(&sk->sk_net);
+}//sock_net
+
+/////////////////////////////// END STEP 1 LOOKUP /////////////////////////
 
 
 /** Step 5 */
@@ -2840,217 +3197,12 @@ static int compat_do_replace(struct net *net, void __user *user, unsigned int le
 	xt_free_table_info(newinfo);
 	return ret;
 }//compat_do_replace
+/** End of Step 2 */
 
 
 /** Step 1 **/
-/*
-static int compat_do_ipt_set_ctl(struct sock *sk, int cmd, void __user *user, unsigned int len)
-{
-	int ret;
-
-	if (!ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN))
-		return -EPERM;
-
-	switch (cmd) {
-	case IPT_SO_SET_REPLACE:
-		ret = compat_do_replace(sock_net(sk), user, len);
-		break;
-
-	case IPT_SO_SET_ADD_COUNTERS:
-		ret = do_add_counters(sock_net(sk), user, len, 1);
-		break;
-
-	default:
-		printf("do_ipt_set_ctl:  unknown request %i\n", cmd);
-		ret = -EINVAL;
-	}
-
-	return ret;
-}
-*/
-/**
- * unable to get the proper definition of {file}
- */
-
-struct socket *sock_from_file(struct file *file, int *err)
-{
-	/*
-	if (file->f_op == &socket_file_ops)
-		return file->private_data;	/* set in sock_map_fd */
-
-/*	*err = -ENOTSOCK;
-	return NULL;
-	*/
-}//sock_from_file
-
-/**
- * unable to get the proper definition of {rcu_dereference_raw}
- */
-
-/*
- * The caller must ensure that fd table isn't shared or hold rcu or file lock
- */
-static inline struct file *__fcheck_files(struct files_struct *files, unsigned int fd)
-{
-	/*
-	struct fdtable *fdt = rcu_dereference_raw(files->fdt);
-
-	if (fd < fdt->max_fds)
-		return rcu_dereference_raw(fdt->fd[fd]);
-	return NULL;
-	*/
-}
-
-/**
- * unable to get the proper definition of {atomic_read, unlikely, FDPUT_FPUT}
- */
-
-/*
- * Lightweight file lookup - no refcnt increment if fd table isn't shared.
- *
- * You can use this instead of fget if you satisfy all of the following
- * conditions:
- * 1) You must call fput_light before exiting the syscall and returning control
- *    to userspace (i.e. you cannot remember the returned struct file * after
- *    returning to userspace).
- * 2) You must not call filp_close on the returned struct file * in between
- *    calls to fget_light and fput_light.
- * 3) You must not clone the current task in between the calls to fget_light
- *    and fput_light.
- *
- * The fput_needed flag returned by fget_light should be passed to the
- * corresponding fput_light.
- */
-static unsigned long __fget_light(unsigned int fd, fmode_t mask)
-{
-	/*
-	struct files_struct *files = current->files;
-	struct file *file;
-
-	if (atomic_read(&files->count) == 1) {
-		file = __fcheck_files(files, fd);
-		if (!file || unlikely(file->f_mode & mask))
-			return 0;
-		return (unsigned long)file;
-	} else {
-		file = __fget(fd, mask);
-		if (!file)
-			return 0;
-		return FDPUT_FPUT | (unsigned long)file;
-	}
-	*/
-}//__fget_light
-
-static inline struct fd __to_fd(unsigned long v)
-{
-	return (struct fd){(struct file *)(v & ~3),v & 3};
-}//__to_fd
-
-unsigned long __fdget(unsigned int fd)
-{
-	return __fget_light(fd, FMODE_PATH);
-}
-
-static inline struct fd fdget(unsigned int fd)
-{
-	return __to_fd(__fdget(fd));
-}//fdget
-
-#define FDPUT_FPUT       1
-#define FDPUT_POS_UNLOCK 2
-
-/**
- * @brief unable to get the proper definition of {atomic_long_dec_and_test}
- * 
- * @param file 
- */
-void fput(struct file *file)
-{
-	/*
-	if (atomic_long_dec_and_test(&file->f_count)) {
-		struct task_struct *task = current;
-
-		if (likely(!in_interrupt() && !(task->flags & PF_KTHREAD))) {
-			init_task_work(&file->f_u.fu_rcuhead, ____fput);
-			if (!task_work_add(task, &file->f_u.fu_rcuhead, true))
-				return;
-			/*
-			 * After this task has run exit_task_work(),
-			 * task_work_add() will fail.  Fall through to delayed
-			 * fput to avoid leaking *file.
-			 */
-/*		}
-
-		if (llist_add(&file->f_u.fu_llist, &delayed_fput_list))
-			schedule_delayed_work(&delayed_fput_work, 1);
-	}
-	*/
-}//fput
-
-static inline void fdput(struct fd fd)
-{
-	if (fd.flags & FDPUT_FPUT)
-		fput(fd.file);
-}//fdput
-
-static struct socket *sockfd_lookup_light(int fd, int *err, int *fput_needed)
-{
-	struct fd f = fdget(fd);
-	struct socket *sock;
-
-	*err = -EBADF;
-	if (f.file) {
-		sock = sock_from_file(f.file, err);
-		if (likely(sock)) {
-			*fput_needed = f.flags;
-			return sock;
-		}
-		fdput(f);
-	}
-	return NULL;
-
-}//sockfd_lookup_light
-
-static inline int security_socket_setsockopt(struct socket *sock,
-					     int level, int optname)
-{
-	return 0;
-}//security_socket_setsockopt
-
-/*    @brief pending definition
- *	This is meant for all protocols to use and covers goings on
- *	at the socket level. Everything here is generic.
- */
-int sock_setsockopt(struct socket *sock, int level, int optname,
-		    char __user *optval, unsigned int optlen)
-{
-	return 0;
-}//sock_setsockopt
-
-static inline void fput_light(struct file *file, int fput_needed)
-{
-	if (fput_needed)
-		fput(file);
-}//fput_light
-
-static inline struct net *read_pnet(const possible_net_t *pnet)
-{
-//#ifdef CONFIG_NET_NS
-	return pnet->net;
-//#else
-//	return &init_net;
-//#endif
-}
-
-static inline
-struct net *sock_net(const struct sock *sk)
-{
-	return read_pnet(&sk->sk_net);
-}//sock_net
-
 ////////////////////////////////////////////////////////////////////////////
 /** Mock setsockopt call **/
-//setsockopt(int fd, int level, int optname, char __user * optval, int optlen)
 int setsockopt(int fd, int level, int optname, const void * optval, socklen_t optlen)
 {
 	int ret, err, fput_needed;
@@ -3066,95 +3218,6 @@ int setsockopt(int fd, int level, int optname, const void * optval, socklen_t op
 	return ret;
 }
 
-/*
-int setsockopt(int fd, int level, int optname, const void * optval, socklen_t optlen)
-{
-	int err, fput_needed;
-	struct socket *sock;
-
-	if (optlen < 0)
-		return -EINVAL;
-
-	sock = sockfd_lookup_light(fd, &err, &fput_needed);
-	if (sock != NULL) {
-		err = security_socket_setsockopt(sock, level, optname);
-		if (err)
-			goto out_put;
-
-		if (level == SOL_SOCKET)
-			err =
-			    sock_setsockopt(sock, level, optname, optval,
-					    optlen);
-		else
-			err =
-			    sock->ops->setsockopt(sock, level, optname, optval,
-						  optlen);
-out_put:
-		fput_light(sock->file, fput_needed);
-	}
-	return err;
-}
-*/
-
-/*
-int socket(int family, int type, int protocol)
-{
-	int retval;
-	struct socket *sock;
-	int flags;
-
-	/* Check the SOCK_* constants for consistency.  */
-/*	BUILD_BUG_ON(SOCK_CLOEXEC != O_CLOEXEC);
-	BUILD_BUG_ON((SOCK_MAX | SOCK_TYPE_MASK) != SOCK_TYPE_MASK);
-	BUILD_BUG_ON(SOCK_CLOEXEC & SOCK_TYPE_MASK);
-	BUILD_BUG_ON(SOCK_NONBLOCK & SOCK_TYPE_MASK);
-
-	flags = type & ~SOCK_TYPE_MASK;
-	if (flags & ~(SOCK_CLOEXEC | SOCK_NONBLOCK))
-		return -EINVAL;
-	type &= SOCK_TYPE_MASK;
-
-	if (SOCK_NONBLOCK != O_NONBLOCK && (flags & SOCK_NONBLOCK))
-		flags = (flags & ~SOCK_NONBLOCK) | O_NONBLOCK;
-
-	retval = sock_create(family, type, protocol, &sock);
-	if (retval < 0)
-		goto out;
-
-	retval = sock_map_fd(sock, flags & (O_CLOEXEC | O_NONBLOCK));
-	if (retval < 0)
-		goto out_release;
-
-out:
-	/* It may be already another descriptor 8) Not kernel problem. */
-/*	return retval;
-
-out_release:
-	sock_release(sock);
-	return retval;
-}
-*/
-
-/** Mock setsockopt call **/
-//unable to find the implementation of setsockopt
-/*
-int setsockopt (int __fd, int __level, int __optname, const void *__optval, socklen_t __optlen) {
-	int ret;
-	int retval;
-
-///////////////////////////////////////////
-	struct socket *sock;
-	retval = sock_create(family, type, protocol, &sock);
-
-///////////////////////////////////////////
-
-
-	ret = compat_do_replace(sock_net(__fd), __optval, __optlen);
-	
-	printf("calling mock setsockopt\n");
-	return 3;
-}
-*/
 /** End Mock socket setup Call **/
 
 
