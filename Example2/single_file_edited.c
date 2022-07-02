@@ -2758,24 +2758,6 @@ static inline int security_socket_setsockopt(struct socket *sock,
 }//security_socket_setsockopt
 
 /**
- * @brief  pending definition -- unable to get definition -- system parameters
- *	This is meant for all protocols to use and covers goings on
- *	at the socket level. Everything here is generic.
- * 
- * @param sock 
- * @param level 
- * @param optname 
- * @param optval 
- * @param optlen 
- * @return int 
- */
-int sock_setsockopt(struct socket *sock, int level, int optname,
-		    char __user *optval, unsigned int optlen)
-{
-	return 0;
-}//sock_setsockopt
-
-/**
  * @brief 
  * 
  * @param file 
@@ -2818,30 +2800,7 @@ struct net *sock_net(const struct sock *sk)
 
 
 /** Step 5 */
-void xt_compat_target_from_user(struct xt_entry_target *t, void **dstptr,
-				unsigned int *size)
-{
-	const struct xt_target *target = t->u.kernel.target;
-	struct compat_xt_entry_target *ct = (struct compat_xt_entry_target *)t;
-	int pad, off = xt_compat_target_offset(target);
-	u_int16_t tsize = ct->u.user.target_size;
 
-	t = *dstptr;
-	memcpy(t, ct, sizeof(*ct));
-	if (target->compat_from_user)
-		target->compat_from_user(t->data, ct->data);
-	else
-		memcpy(t->data, ct->data, tsize - sizeof(*ct));
-	pad = XT_ALIGN(target->targetsize) - target->targetsize;
-	if (pad > 0)
-		memset(t->data + target->targetsize, 0, pad);
-
-	tsize += off;
-	t->u.user.target_size = tsize;
-
-	*size += off;
-	*dstptr += tsize;
-}//xt_compat_target_from_user
 
 void xt_compat_init_offsets(u_int8_t af, unsigned int number)
 {

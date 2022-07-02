@@ -7,8 +7,8 @@ struct ipt_entry;
 /**
  * @brief {
  * modified =>{xt_table_info}, 
- * used =>{net, xt_table_info, compat_ipt_entry, ipt_entry}, 
- * read =>{xt_table_info}
+ * read =>{xt_table_info},
+ *  used =>{net, xt_table_info, compat_ipt_entry, ipt_entry}
  * }
  * 
  * @param net 

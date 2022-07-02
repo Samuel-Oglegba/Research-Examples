@@ -1,8 +1,12 @@
-//=1=== Data Structures =====
+//=== Data Structures =====
 struct socket;
 
 /**
- * @brief {modified =>{}, used =>{socket}, read =>{}}
+ * @brief {
+ * modified =>{}, 
+ * read =>{socket}, 
+ * used =>{"socket:: converts data `socket` to data `net` via  sock_net operation"}
+ * }
  * 
  * @param fd 
  * @param level 

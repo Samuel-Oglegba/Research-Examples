@@ -1,4 +1,4 @@
-//=1=== Data Structures =====
+//=== Data Structures =====
 struct net *net;
 struct xt_table_info;
 struct xt_table;

@@ -1,4 +1,4 @@
-//=1=== Data Structures =====
+//=== Data Structures =====
 struct compat_ipt_entry;
 struct xt_table_info;
 struct xt_entry_target;
@@ -61,3 +61,29 @@ static int compat_copy_entry_from_user(struct compat_ipt_entry *e, void **dstptr
 	return ret;
 }//compat_copy_entry_from_user
 
+
+//=== Data Structures =====
+struct compat_ipt_entry;
+struct xt_entry_target;
+struct xt_entry_match;
+
+/**
+ * @brief {
+ * modified =>{xt_entry_target}, 
+ * used =>{compat_ipt_entry -- uses data x to perform y operation on z}, 
+ * read =>{compat_ipt_entry, xt_entry_target}
+ * }
+ * 
+ * @param e 
+ */
+static void compat_release_entry(struct compat_ipt_entry *e)
+{
+	struct xt_entry_target *t;
+	struct xt_entry_match *ematch;
+
+	/* Cleanup all matches */
+	xt_ematch_foreach(ematch, e)
+		module_put(ematch->u.kernel.match->me);
+	t = compat_ipt_get_target(e);
+	module_put(t->u.kernel.target->me);
+}//compat_release_entry
