@@ -7,9 +7,15 @@ struct ipt_entry;
 
 /**
  * @brief {
- * modified =>{xt_table, xt_counters}, 
- * used =>{net, xt_table_info, xt_table, xt_counters, ipt_entry}, 
- * read =>{xt_table_info, xt_table, }
+ * modified =>{xt_table, xt_counters, ipt_entry}, 
+ * read =>{net, xt_table_info, xt_table, xt_counters, ipt_entry}
+ * used =>{
+ *          "net          :: used to get the value of data `xt_table` via try_then_request_module operation", 
+ *          "xt_table_info:: ", 
+ *          "xt_table     :: used to get the data `xt_table_info` via xt_replace_table operation operation", 
+ *          "xt_counters  :: ", 
+ *          "ipt_entry    :: used for iteration with data `xt_table_info` via xt_entry_foreach operation"
+ *    }, 
  * }
  * unable to fix due to system calls
  * 

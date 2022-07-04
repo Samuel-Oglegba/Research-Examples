@@ -6,8 +6,13 @@ struct compat_xt_entry_target;
 /**
  * @brief {
  * modified =>{xt_entry_target, xt_target, compat_xt_entry_target}, 
- * used =>{xt_entry_target, xt_target, compat_xt_entry_target}, 
- * read =>{xt_entry_target, xt_target, compat_xt_entry_target}}
+ * read =>{xt_entry_target, xt_target, compat_xt_entry_target},
+ * used =>{
+ *          "xt_entry_target       :: used to set the value of data `xt_target`", 
+ *          "xt_target             :: used to set the value of `xt_entry_target` and using `compat_xt_entry_target` via target->compat_from_user operation", 
+ *          "compat_xt_entry_target:: used to set the value of data `xt_entry_target` via target->compat_from_user operation"
+ *    } 
+ * }
  * 
  * @param t 
  * @param dstptr 
