@@ -10,7 +10,6 @@ struct compat_xt_entry_match;
  * used =>{
  *          "xt_entry_match       :: used to get the data `xt_match` via assignment (m->u.kernel.match)", 
  *          "xt_entry_match       :: used to get the data `compat_xt_entry_match` via casting", 
- *          "xt_match             :: used as a parameter in xt_compat_match_offset operation",
  *          "xt_match             :: used to update the value of `xt_entry_match` elements via compat_from_user, memset, & assignment operations",
  *          "compat_xt_entry_match:: used to update the value of `xt_entry_match` elements via compat_from_user & memset operations",
  *    } 
@@ -58,7 +57,6 @@ struct xt_match;
  * used =>{
  *          "xt_entry_match:: used to get data `xt_match` via xt_request_find_match operation", 
  *          "xt_match:: used to update the value of `xt_entry_match` element by assignment",
- *          "xt_match:: used as a parameter in xt_compat_match_offset operation" 
  *    } 
  * }
  * 

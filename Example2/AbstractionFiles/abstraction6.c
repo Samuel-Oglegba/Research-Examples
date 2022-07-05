@@ -13,11 +13,10 @@ struct xt_entry_match;
  * used =>{
  *          "ipt_entry      :: used to iteratively set the value of data `xt_entry_match` via xt_ematch_foreach operation", 
  *          "net            :: used with data `xt_entry_match` in cleanup_match operation", 
- *          "net            :: used to set `xt_tgdtor_param` element via assignment par.net = net", 
- *          "xt_tgdtor_param:: used in the module_put operation",
+ *          "net            :: used to set `xt_tgdtor_param` element via assignment (par.net = net)", 
  *          "xt_entry_target:: used to set `xt_tgdtor_param` elements (target & targinfo) via assignment",
  *          "xt_entry_match :: used to iterate over data `ipt_entry` via xt_ematch_foreach operation",
- *          "xt_entry_match :: used with data `net` in cleanup_match operation",
+ *          "xt_entry_match :: used with data `net` in the cleanup_match operation",
  *    } 
  * }
  * 

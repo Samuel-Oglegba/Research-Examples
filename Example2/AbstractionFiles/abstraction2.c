@@ -1,17 +1,18 @@
 //=== Data Structures =====
 struct net;
 struct compat_ipt_replace;
-struct xt_table_info;
+struct xt_table;
+struct xt_table_info; // xt_table_info is an element of xt_table
 struct ipt_entry;
 
 /**
  * @brief {
  * modified =>{compat_ipt_replace, xt_table_info, xt_target}, 
  * read =>{net, compat_ipt_replace, xt_table_info},
- * used =>{"net               :: used to get the value of `xt_table` via __do_replace operation, `xt_table` is parent to `xt_table_info`",
- *         "compat_ipt_replace:: the user data is copied to `compat_ipt_replace` via copy_from_user operation",
+ * used =>{"net               :: used to get the value of data `xt_table` via __do_replace operation. `xt_table` is parent to `xt_table_info`",
+ *         "compat_ipt_replace:: the user data is copied to data `compat_ipt_replace` via copy_from_user operation",
  *         "compat_ipt_replace:: used to set the size of data `xt_table_info` via xt_alloc_table_info operation"
- *         "compat_ipt_replace:: used to make changes to the state of `xt_table_info` via translate_compat_table operation"
+ *         "compat_ipt_replace:: used to make changes to the state of data `xt_table_info` via translate_compat_table operation"
  *         "xt_table_info     :: it's size element is used to iterate over data `ipt_entry` and clean up data `net` via xt_entry_foreach & cleanup_entry" 
  *         }
  * }

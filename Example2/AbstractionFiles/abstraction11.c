@@ -9,11 +9,9 @@ struct ipt_entry;
  * modified =>{xt_table_info}, 
  * read =>{net, xt_table_info, compat_ipt_entry, ipt_entry},
  * used =>{
- *          "net             :: used to set `xt_mtchk_param` and check for matching `xt_entry_target` via the compat_check_entry operation",
+ *          "net             :: used for matching data `xt_entry_target` via the compat_check_entry operation",
  *          "xt_table_info   :: the size of `xt_table_info` is used to iterate over `ipt_entry` via xt_entry_foreach operation", 
  *          "xt_table_info   :: the size of `xt_table_info` is used to iterate over `compat_ipt_entry` via xt_entry_foreach operation", 
- *          "compat_ipt_entry:: used for iteration over the table entries via xt_entry_foreach operation", 
- *          "ipt_entry       :: used for iteration over the table entries xt_entry_foreach operation when the size of `xt_table_info` is used"
  *         }
  * }
  * 

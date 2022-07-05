@@ -10,10 +10,9 @@ struct xt_mtchk_param;
  * read =>{ipt_entry, net, xt_entry_match, xt_mtchk_param},
  * used =>{
  *          "ipt_entry     :: used to set the value of elements in  data `xt_mtchk_param` by assignment", 
- *          "net           :: used to set the the net element of data `xt_mtchk_param` by assignment mtpar.net = net;", 
+ *          "net           :: used to set the the net element of data `xt_mtchk_param` by assignment (mtpar.net = net)", 
  *          "xt_entry_match:: used to iterate over data `ipt_entry` via xt_ematch_foreach operation",
- *          "xt_entry_match:: used with data `xt_mtchk_param` as parameters to check_match operation",
- *          "xt_mtchk_param:: used twith data `xt_entry_match`  as parameters to check_match operation ",
+ *          "xt_entry_match:: used with data `xt_mtchk_param` as parameters of check_match operation",
  *    } 
  * }
  * 

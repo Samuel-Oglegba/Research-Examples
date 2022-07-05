@@ -7,11 +7,9 @@ struct ipt_ip;
  * modified =>{xt_mtchk_param, ipt_ip}, 
  * read =>{xt_entry_match, xt_mtchk_param, ipt_ip},
  * used =>{
- *          "xt_entry_match:: used to set the value of elements (match & matchinfo) in  data `xt_mtchk_param` by assignment", 
+ *          "xt_entry_match:: used to set the value of elements in  data `xt_mtchk_param` (match & matchinfo) by assignment", 
  *          "xt_entry_match:: used with `xt_mtchk_param` & `ipt_ip` as parameters to xt_check_match operation"
- *          "xt_mtchk_param:: used to set the value of data `ipt_ip` by assignment par->entryinfo", 
- *          "xt_mtchk_param:: used with `xt_entry_match` & `ipt_ip` as parameters to xt_check_match operation", 
- *          "ipt_ip        :: used with `xt_entry_match` & `xt_mtchk_param` as parameters to xt_check_match operation", 
+ *          "xt_mtchk_param:: used to set the value of data `ipt_ip` by assignment (par->entryinfo)", 
  *    } 
  * }
  * 

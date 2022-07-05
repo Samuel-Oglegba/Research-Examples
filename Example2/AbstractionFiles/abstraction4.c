@@ -10,9 +10,9 @@ struct ipt_entry;
  * modified =>{xt_table, xt_counters, ipt_entry}, 
  * read =>{net, xt_table_info, xt_table, xt_counters, ipt_entry}
  * used =>{
- *          "net          :: used to get the value of data `xt_table` via try_then_request_module operation", 
+ *          "net          :: used to get data `xt_table` via try_then_request_module operation", 
  *          "xt_table_info:: ", 
- *          "xt_table     :: used to get the data `xt_table_info` via xt_replace_table operation operation", 
+ *          "xt_table     :: used to get data `xt_table_info` via xt_replace_table operation", 
  *          "xt_counters  :: ", 
  *          "ipt_entry    :: used for iteration with data `xt_table_info` via xt_entry_foreach operation"
  *    }, 

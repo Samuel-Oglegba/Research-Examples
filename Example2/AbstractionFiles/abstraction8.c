@@ -9,8 +9,8 @@ struct xt_tgchk_param;
  * modified =>{xt_entry_target}, 
  * read =>{ipt_entry, net, xt_entry_target, xt_tgchk_param},
  * used =>{
- *          "ipt_entry      :: used to get the value of data `xt_entry_target` via xt_check_target operation", 
- *          "ipt_entry      :: used to set the value of elements of data `xt_tgchk_param`", 
+ *          "ipt_entry      :: used to get the value of data `xt_entry_target` via ipt_get_target operation", 
+ *          "ipt_entry      :: used to set the value of elements of data `xt_tgchk_param` via assignments", 
  *          "net            :: used to set the value of the net element of data `xt_tgchk_param`", 
  *          "xt_entry_target:: used to set `xt_tgchk_param` elements (target & targinfo) via assignment",
  *          "xt_tgchk_param :: used with `xt_entry_target` & `ipt_entry` as parameters to xt_check_target operation",
@@ -59,7 +59,6 @@ struct xt_entry_target;
  * read =>{ipt_entry, xt_entry_target},
  * used =>{
  *          "ipt_entry      :: used to get the value of data `xt_entry_target` via ipt_get_target_c operation", 
- *          "net            :: used to set the value of the net element of data `xt_tgchk_param`", 
  *          "xt_entry_target:: "
  *    } 
  * }
