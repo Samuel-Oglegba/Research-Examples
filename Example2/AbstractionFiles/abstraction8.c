@@ -47,3 +47,40 @@ static int check_target(struct ipt_entry *e, struct net *net, const char *name)
 	
 	return 0;
 }//check_target
+
+
+//=== Data Structures =====
+struct ipt_entry;
+struct xt_entry_target;
+
+/**
+ * @brief {
+ * modified =>{xt_entry_target}, 
+ * read =>{ipt_entry, xt_entry_target},
+ * used =>{
+ *          "ipt_entry      :: used to get the value of data `xt_entry_target` via ipt_get_target_c operation", 
+ *          "net            :: used to set the value of the net element of data `xt_tgchk_param`", 
+ *          "xt_entry_target:: "
+ *    } 
+ * }
+ * 
+ * @param e 
+ * @return int 
+ */
+static int check_entry(const struct ipt_entry *e)
+{
+	const struct xt_entry_target *t;
+
+	if (!ip_checkentry(&e->ip))
+		return -EINVAL;
+
+	if (e->target_offset + sizeof(struct xt_entry_target) >
+	    e->next_offset)
+		return -EINVAL;
+
+	t = ipt_get_target_c(e);
+	if (e->target_offset + t->u.target_size > e->next_offset)
+		return -EINVAL;
+
+	return 0;
+}//check_entry

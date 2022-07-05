@@ -1687,40 +1687,6 @@ void module_put(void *module)
 }//module_put
 
 /**
- * @brief 
- * 
- * @param m 
- * @param dstptr 
- * @param size 
- * @return int 
- */
-int xt_compat_match_from_user(struct xt_entry_match *m, void **dstptr,
-			      unsigned int *size)
-{
-	const struct xt_match *match = m->u.kernel.match;
-	struct compat_xt_entry_match *cm = (struct compat_xt_entry_match *)m;
-	int pad, off = xt_compat_match_offset(match);
-	u_int16_t msize = cm->u.user.match_size;
-
-	m = *dstptr;
-	memcpy(m, cm, sizeof(*cm));
-	if (match->compat_from_user)
-		match->compat_from_user(m->data, cm->data);
-	else
-		memcpy(m->data, cm->data, msize - sizeof(*cm));
-	pad = XT_ALIGN(match->matchsize) - match->matchsize;
-	if (pad > 0)
-		memset(m->data + match->matchsize, 0, pad);
-
-	msize += off;
-	m->u.user.match_size = msize;
-
-	*size += off;
-	*dstptr += msize;
-	return 0;
-}//xt_compat_match_from_user
-
-/**
  * @brief Helper functions
  * 
  * @param e 
@@ -1934,29 +1900,6 @@ static inline const struct xt_entry_target *ipt_get_target_c(const struct ipt_en
 	return ipt_get_target((struct ipt_entry *)e);
 }//ipt_get_target_c
 
-/**
- * @brief 
- * 
- * @param e 
- * @return int 
- */
-static int check_entry(const struct ipt_entry *e)
-{
-	const struct xt_entry_target *t;
-
-	if (!ip_checkentry(&e->ip))
-		return -EINVAL;
-
-	if (e->target_offset + sizeof(struct xt_entry_target) >
-	    e->next_offset)
-		return -EINVAL;
-
-	t = ipt_get_target_c(e);
-	if (e->target_offset + t->u.target_size > e->next_offset)
-		return -EINVAL;
-
-	return 0;
-}//check_entry
 
 /**
  * @brief system calls - uable to complete definition due to system call
