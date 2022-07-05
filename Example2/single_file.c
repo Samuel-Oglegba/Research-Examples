@@ -2351,6 +2351,58 @@ static inline u64 xt_percpu_counter_alloc(void)
  */
 int xt_check_match(struct xt_mtchk_param *par, unsigned short match_size,
 	      unsigned short proto, unsigned char invflags){
+	/*
+	int ret;
+
+	if (XT_ALIGN(par->match->matchsize) != size &&
+	    par->match->matchsize != -1) {
+		/*
+		 * ebt_among is exempt from centralized matchsize checking
+		 * because it uses a dynamic-size data set.
+		 */
+	/*	pr_err("%s_tables: %s.%u match: invalid size "
+		       "%u (kernel) != (user) %u\n",
+		       xt_prefix[par->family], par->match->name,
+		       par->match->revision,
+		       XT_ALIGN(par->match->matchsize), size);
+		return -EINVAL;
+	}
+	if (par->match->table != NULL &&
+	    strcmp(par->match->table, par->table) != 0) {
+		pr_err("%s_tables: %s match: only valid in %s table, not %s\n",
+		       xt_prefix[par->family], par->match->name,
+		       par->match->table, par->table);
+		return -EINVAL;
+	}
+	if (par->match->hooks && (par->hook_mask & ~par->match->hooks) != 0) {
+		char used[64], allow[64];
+
+		pr_err("%s_tables: %s match: used from hooks %s, but only "
+		       "valid from %s\n",
+		       xt_prefix[par->family], par->match->name,
+		       textify_hooks(used, sizeof(used), par->hook_mask,
+		                     par->family),
+		       textify_hooks(allow, sizeof(allow), par->match->hooks,
+		                     par->family));
+		return -EINVAL;
+	}
+	if (par->match->proto && (par->match->proto != proto || inv_proto)) {
+		pr_err("%s_tables: %s match: only valid for protocol %u\n",
+		       xt_prefix[par->family], par->match->name,
+		       par->match->proto);
+		return -EINVAL;
+	}
+	if (par->match->checkentry != NULL) {
+		ret = par->match->checkentry(par);
+		if (ret < 0)
+			return ret;
+		else if (ret > 0)
+			/* Flag up potential errors. */
+/*			return -EIO;
+	}
+	*/
+	return 0;
+
 	return 0;
 }//xt_check_match
 
@@ -2406,7 +2458,10 @@ static void cleanup_match(struct xt_entry_match *m, struct net *net)
  * @param pcnt 
  */
 void xt_percpu_counter_free(unsigned long long pcnt){
-
+	/*
+	if (nr_cpu_ids > 1)
+		free_percpu((void __percpu *) (unsigned long) pcnt);
+	*/
 }//xt_percpu_counter_free
 
 /**

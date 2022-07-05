@@ -1,4 +1,4 @@
-//=1=== Data Structures =====
+//=== Data Structures =====
 struct xt_entry_target;
 struct xt_target;
 struct compat_xt_entry_target;
