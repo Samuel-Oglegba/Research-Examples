@@ -5,7 +5,7 @@ struct socket;
  * @brief {
  * modified =>{}, 
  * read =>{socket}, 
- * used =>{"socket:: converts data `socket` to data `net` via  sock_net operation"}
+ * used =>{"socket:: used to convert data `socket` to data `net` via  sock_net operation"}
  * }
  * 
  * @param fd 
