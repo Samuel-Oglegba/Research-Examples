@@ -11,7 +11,7 @@ struct xt_entry_match;
  * modified =>{xt_table_info, xt_entry_target, xt_target, ipt_entry, xt_entry_match}, 
  * read =>{compat_ipt_entry, xt_table_info, xt_entry_target, ipt_entry, xt_entry_match},
  * used =>{
- *          "compat_ipt_entry:: the value is copied to data `xt_target` via memcpy operation", 
+ *          "compat_ipt_entry:: the value is copied to data `ipt_entry` via memcpy operation", 
  *          "compat_ipt_entry:: used to iteratively set the value of data `xt_entry_match` via xt_ematch_foreach operation", 
  *          "compat_ipt_entry:: used to get the value of  data `xt_entry_target` via compat_ipt_get_target operation", 
  *          "xt_entry_target :: used to set the value of data `xt_target` by reading it's target element"
