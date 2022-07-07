@@ -7,6 +7,12 @@ struct ipt_entry;
 
 /**
  * @brief {
+ * TODO - 07/05/2022: 
+ * ==> Remove the mockup functions
+ * ==> merge the 'read' with 'used' set, then add details to explain the 'modified' set (abstraction files)
+ * ==> Add the file and line number of where the functions in the single files come from
+ * ==> Prepare a detailed document to organise all the references to original source of information for the abstraction files (send on Thursday for review)
+ * 
  * modified =>{compat_ipt_replace, xt_table_info, xt_target}, 
  * read =>{net, compat_ipt_replace, xt_table_info},
  * used =>{"net               :: used to get the value of data `xt_table` via __do_replace operation. `xt_table` is parent to `xt_table_info`",

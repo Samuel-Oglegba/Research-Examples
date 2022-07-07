@@ -262,9 +262,94 @@ static struct xt_af *xt;
 #define __bitwise__
 #endif
 
+#define try_then_request_module(x, mod...) (x)
+
+/* Attach to any functions which should be ignored in wchan output. */
+#define __sched		__attribute__((__section__(".sched.text")))
+
 typedef unsigned __bitwise__ fmode_t;
 
+typedef unsigned __bitwise__ gfp_t;
+
+#define	NUMA_NO_NODE	(-1)
+
+#define ___GFP_DIRECT_RECLAIM	0x400000u
+#define ___GFP_KSWAPD_RECLAIM	0x2000000u
+#define ___GFP_IO		0x40u
+#define ___GFP_FS		0x80u
+#define ___GFP_HIGHMEM		0x02u
+#define ___GFP_ZERO		0x8000u
+
+#define __GFP_IO	((__force gfp_t)___GFP_IO)
+#define __GFP_FS	((__force gfp_t)___GFP_FS)
+#define __GFP_RECLAIM ((__force gfp_t)(___GFP_DIRECT_RECLAIM|___GFP_KSWAPD_RECLAIM))
+
+#define GFP_KERNEL	(__GFP_RECLAIM | __GFP_IO | __GFP_FS)
+
+#define __GFP_HIGHMEM	((__force gfp_t)___GFP_HIGHMEM)
+#define __GFP_ZERO	((__force gfp_t)___GFP_ZERO)
+
+#define __pgprot(x)	((pgprot_t) { (x) } )
+
+typedef struct { unsigned long pgprot; } pgprot_t;
+
+/* Software bits in the page table entry */
+#define _PAGE_PRESENT	0x001		/* SW pte present bit */
+#define _PAGE_YOUNG	0x004		/* SW pte young bit */
+#define _PAGE_DIRTY	0x008		/* SW pte dirty bit */
+#define _PAGE_READ	0x010		/* SW pte read bit */
+#define _PAGE_WRITE	0x020		/* SW pte write bit */
+#define _PAGE_SPECIAL	0x040		/* SW associated with special page */
+#define _PAGE_UNUSED	0x080		/* SW bit for pgste usage state */
+#define __HAVE_ARCH_PTE_SPECIAL
+
+#define PAGE_KERNEL	__pgprot(_PAGE_PRESENT | _PAGE_READ | _PAGE_WRITE | \
+				 _PAGE_YOUNG | _PAGE_DIRTY)
+
+
+/* Don't assign or return these: may not be this big! */
+//typedef struct cpumask { DECLARE_BITMAP(bits, NR_CPUS); } cpumask_t;
+
+extern struct cpumask __cpu_possible_mask;
+#define cpu_possible_mask ((const struct cpumask *)&__cpu_possible_mask)
+
+#define for_each_cpu(cpu, mask)			\
+	for ((cpu) = 0; (cpu) < 1; (cpu)++, (void)mask)
+
+#define for_each_possible_cpu(cpu) for_each_cpu((cpu), cpu_possible_mask)
+
+
+static inline void barrier(void)
+{
+	asm volatile("" : : : "memory");
+}
+
+#define smp_wmb()	barrier()
+
+extern void __local_bh_enable_ip(unsigned long ip, unsigned int cnt);
+
+#define PREEMPT_SHIFT	0
+#define PREEMPT_BITS	8
+#define SOFTIRQ_SHIFT	(PREEMPT_SHIFT + PREEMPT_BITS)
+#define SOFTIRQ_OFFSET	(1UL << SOFTIRQ_SHIFT)
+#define SOFTIRQ_DISABLE_OFFSET	(2 * SOFTIRQ_OFFSET)
+
+#define _THIS_IP_  ({ __label__ __here; __here: (unsigned long)&&__here; })
+
+
+static inline void local_bh_enable(void)
+{
+	__local_bh_enable_ip(_THIS_IP_, SOFTIRQ_DISABLE_OFFSET);
+}
+
 ///////////////////////////////////// STRUCTS ///////////////////////////////////
+typedef struct seqcount {
+	unsigned sequence;
+#ifdef CONFIG_DEBUG_LOCK_ALLOC
+	struct lockdep_map dep_map;
+#endif
+} seqcount_t;
+
 struct _compat_xt_align {
 	__u8 u8;
 	__u16 u16;
@@ -1575,10 +1660,90 @@ struct xt_mtchk_param {
 	bool nft_compat;
 };//struct xt_mtchk_param
 
+struct xt_table *xt_find_table_lock(struct net *net, u_int8_t af,
+				    const char *name);
+
+struct xt_tgchk_param {
+	struct net *net;
+	const char *table;
+	const void *entryinfo;
+	const struct xt_target *target;
+	void *targinfo;
+	unsigned int hook_mask;
+	u_int8_t family;
+	bool nft_compat;
+};
+
+
+/**
+ * struct xt_mdtor_param - match destructor parameters
+ * Fields as above.
+ */
+struct xt_mtdtor_param {
+	struct net *net;
+	const struct xt_match *match;
+	void *matchinfo;
+	u_int8_t family;
+};
+
+
 //////////////////////////////////////// END OF STRUCTS ////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
+
 /**
- * @brief Unable to fix the definition
+ * @brief Source file -- vmalloc.c (line 1720)
+ * 
+ * @param size 
+ * @param node 
+ * @param flags 
+ * @return void* 
+ */
+static inline void *__vmalloc_node_flags(unsigned long size,
+					int node, gfp_t flags)
+{
+	return __vmalloc_node(size, 1, flags, PAGE_KERNEL,
+					node, __builtin_return_address(0));
+}//__vmalloc_node_flags
+
+
+/**
+ * @brief Source file -- vmalloc.c (line 1736)
+ * 
+ *	vmalloc  -  allocate virtually contiguous memory
+ *	@size:		allocation size
+ *	Allocate enough pages to cover @size from the page level
+ *	allocator and map them into contiguous kernel virtual space.
+ *
+ *	For tight control over page level allocator and protection flags
+ *	use __vmalloc() instead.
+ */
+void *vmalloc(unsigned long size)
+{
+	return __vmalloc_node_flags(size, NUMA_NO_NODE,
+				    GFP_KERNEL | __GFP_HIGHMEM);
+}
+
+/**
+ * @brief Source file -- vmalloc.c (line 1753)
+ * 
+ *	vzalloc - allocate virtually contiguous memory with zero fill
+ *	@size:	allocation size
+ *	Allocate enough pages to cover @size from the page level
+ *	allocator and map them into contiguous kernel virtual space.
+ *	The memory allocated is set to zero.
+ *
+ *	For tight control over page level allocator and protection flags
+ *	use __vmalloc() instead.
+ */
+void *vzalloc(unsigned long size)
+{
+	return __vmalloc_node_flags(size, NUMA_NO_NODE,
+				GFP_KERNEL | __GFP_HIGHMEM | __GFP_ZERO);
+}//vzalloc
+
+/**
+ * @brief Source file -- uaccess.h (line 404)
+ * Unable to fix the definition
  * 
  * @return int 
  */
@@ -1586,7 +1751,7 @@ int copy_from_user(to, from, n){
   return 0;
 }
 /**
- * @brief 
+ * @brief  Source file -- err.h (line 28)
  * 
  * @param ptr 
  * @return long 
@@ -1597,7 +1762,7 @@ static inline long __must_check PTR_ERR(__force const void *ptr)
 }//PTR_ERR
 
 /**
- * @brief 
+ * @brief Source file -- err.h (line 33)
  * 
  * @param ptr 
  * @return true 
@@ -1609,7 +1774,19 @@ static inline bool __must_check IS_ERR(__force const void *ptr)
 }//IS_ERR
 
 /**
- * @brief 
+ * @brief Source file -- err.h (line 38)
+ * 
+ * @param ptr 
+ * @return true 
+ * @return false 
+ */
+static inline bool __must_check IS_ERR_OR_NULL(__force const void *ptr)
+{
+	return unlikely(!ptr) || IS_ERR_VALUE((unsigned long)ptr);
+}//IS_ERR_OR_NULL
+
+/**
+ * @brief Source file -- x_tables.c (line 595)
  * 
  * @param target 
  * @return int 
@@ -1621,7 +1798,7 @@ int xt_compat_target_offset(const struct xt_target *target)
 }//xt_compat_target_offset
 
 /**
- * @brief 
+ * @brief Source file -- x_tables.c (line 481)
  * 
  * @param match 
  * @return int 
@@ -1633,7 +1810,9 @@ int xt_compat_match_offset(const struct xt_match *match)
 }//xt_compat_match_offset
 
 /**
- * @brief vmalloc changed to malloc
+ * @brief  Source file -- x_tables.c (line 420)
+ * 
+ * vmalloc changed to malloc
  * 
  * @param af 
  * @param offset 
@@ -1647,8 +1826,7 @@ int xt_compat_add_offset(u_int8_t af, unsigned int offset, int delta)
 	if (!xp->compat_tab) {
 		if (!xp->number)
 			return -EINVAL;
-		//xp->compat_tab = vmalloc(sizeof(struct compat_delta) * xp->number);
-		xp->compat_tab = malloc(sizeof(struct compat_delta) * xp->number);
+		xp->compat_tab = vmalloc(sizeof(struct compat_delta) * xp->number);
 		if (!xp->compat_tab)
 			return -ENOMEM;
 		xp->cur = 0;
@@ -1666,28 +1844,28 @@ int xt_compat_add_offset(u_int8_t af, unsigned int offset, int delta)
 }//xt_compat_add_offset
 
 /**
- * @brief Unable to fix the definition
- * void module_put(struct module *module)
+ * @brief unable to define correctly {struct module, atomic_dec_if_positive(), trace_module_put(), preempt_enable()} in the software -- system call
+ * 
+ * Source file -- module.c (line 1100)
  * 
  * @param module 
  */
-void module_put(void *module)
+/*
+void module_put(struct module *module)
 {
-	/*
 	int ret;
-
 	if (module) {
 		preempt_disable();
 		ret = atomic_dec_if_positive(&module->refcnt);
 		WARN_ON(ret < 0);	/* Failed to put refcount */
-	/*	trace_module_put(module, _RET_IP_);
+/*		trace_module_put(module, _RET_IP_);
 		preempt_enable();
 	}
-	*/
 }//module_put
+*/
 
 /**
- * @brief 
+ * @brief Source file -- x_tables.c (line 488)
  * 
  * @param m 
  * @param dstptr 
@@ -1721,7 +1899,8 @@ int xt_compat_match_from_user(struct xt_entry_match *m, void **dstptr,
 }//xt_compat_match_from_user
 
 /**
- * @brief Helper functions
+ * @brief Source file -- ip_tables.c (line 86)
+ * Helper functions
  * 
  * @param e 
  * @return struct xt_entry_target* 
@@ -1733,7 +1912,10 @@ compat_ipt_get_target(struct compat_ipt_entry *e)
 }//compat_ipt_get_target
 
 /**
- * @brief  system calls - unable to get proper definition
+ * @brief  unable to define correctly {mutex_lock(), list_for_each_entry(), list} in the software -- system call
+ * 
+ * Source file -- .../netfilter/x_tables.c (line 223)
+ * 
  * Find target, grabs ref.  Returns ERR_PTR() on error.
  * 
  * @param af 
@@ -1741,9 +1923,10 @@ compat_ipt_get_target(struct compat_ipt_entry *e)
  * @param revision 
  * @return struct xt_target* 
  */
+/*
 struct xt_target *xt_find_target(u8 af, const char *name, u8 revision)
 {
-	/*
+	
 	struct xt_target *t;
 	int err = -ENOENT;
 
@@ -1763,16 +1946,15 @@ struct xt_target *xt_find_target(u8 af, const char *name, u8 revision)
 
 	if (af != NFPROTO_UNSPEC)
 		/* Try searching again in the family-independent list */
-	/*	return xt_find_target(NFPROTO_UNSPEC, name, revision);
+/*		return xt_find_target(NFPROTO_UNSPEC, name, revision);
 	
 
 	return ERR_PTR(err);
-	*/
-	return NULL;
 }//xt_find_target
+*/
 
 /**
- * @brief system call - missing some of the function definition
+ * @brief Source file -- .../netfilter/x_tables.c (line 250)
  * 
  * @param af 
  * @param name 
@@ -1782,109 +1964,94 @@ struct xt_target *xt_find_target(u8 af, const char *name, u8 revision)
 struct xt_target *xt_request_find_target(u8 af, const char *name, u8 revision)
 {
 	struct xt_target *target;
-	/*
+	
 	target = xt_find_target(af, name, revision);
 	if (IS_ERR(target)) {
 		request_module("%st_%s", xt_prefix[af], name);
 		target = xt_find_target(af, name, revision);
 	}
-	*/
+	
 	return target;
 }//xt_request_find_target
 
 /**
- * @brief 
+ * @brief unable to define correctly {might_sleep(), __mutex_unlock_slowpath} in the software -- system call
  * 
- * @param addr1 
- * @param op 
- * @param val1 
- * @param timeout 
- * @param addr2 
- * @param val3 
- * @return long 
+ * Source file -- mutex.c (line 95)
+ *
+ * mutex_lock - acquire the mutex
+ * @lock: the mutex to be acquired
+ *
+ * Lock the mutex exclusively for this task. If the mutex is not
+ * available right now, it will sleep until it can get it.
+ *
+ * The mutex must later on be released by the same task that
+ * acquired it. Recursive locking is not allowed. The task
+ * may not exit without first unlocking the mutex. Also, kernel
+ * memory where the mutex resides must not be freed with
+ * the mutex still locked. The mutex must first be initialized
+ * (or statically defined) before it can be locked. memset()-ing
+ * the mutex to 0 is not allowed.
+ *
+ * ( The CONFIG_DEBUG_MUTEXES .config option turns on debugging
+ *   checks that will enforce the restrictions and will also do
+ *   deadlock debugging. )
+ *
+ * This function is similar to (but not equivalent to) down().
  */
-static long sys_futex(void *addr1, int op, int val1, struct timespec *timeout,
-		      void *addr2, int val3)
+/*
+void __sched mutex_lock(struct mutex *lock)
 {
-	return syscall(SYS_futex, addr1, op, val1, timeout, addr2, val3);
-}//sys_futex
-
-/**
- * @brief 
- * 
- * @param p 
- * @param expected 
- * @param desired 
- * @return unsigned long 
- */
-static unsigned long cmpxchg(unsigned long *p, unsigned long expected,
-			     unsigned long desired)
-{
-	unsigned long exp = expected;
-
-	__atomic_compare_exchange_n(p, &exp, desired, 0,
-				    __ATOMIC_SEQ_CST, __ATOMIC_SEQ_CST);
-	return exp;
-}//cmpxchg
-
-/**
- * @brief 
- * 
- * @param p 
- * @param val 
- * @return unsigned long 
- */
-static unsigned long xchg(unsigned long *p, unsigned long val)
-{
-	return __atomic_exchange_n(p, val, __ATOMIC_SEQ_CST);
-}//xchg
-
-/**
- * @brief 
- * 
- * @param m 
- * @return int 
- */
-static int mutex_lock(unsigned long *m)
-{
-	int c;
-
-	c = cmpxchg(m, 0, 1);
-	if (!c)
-		return 0;
-
-	if (c == 1)
-		c = xchg(m, 2);
-
-	while (c) {
-		sys_futex(m, FUTEX_WAIT, 2, NULL, NULL, 0);
-		c = xchg(m, 2);
-	}
-
-	return 0;
+	might_sleep();
+	/*
+	 * The locking fastpath is the 1->0 transition from
+	 * 'unlocked' into 'locked' state.
+	 */
+/*	__mutex_fastpath_lock(&lock->count, __mutex_lock_slowpath);
+	mutex_set_owner(lock);
 }//mutex_lock
+*/
+
+
 
 /**
- * @brief 
+ * @brief unable to define correctly {__mutex_unlock_slowpath} in the software -- system call
  * 
- * @param m 
- * @return int 
+ * Source file -- mutex.c (line 423)
+ * 
+ * mutex_unlock - release the mutex
+ * @lock: the mutex to be released
+ *
+ * Unlock a mutex that has been locked by this task previously.
+ *
+ * This function must not be used in interrupt context. Unlocking
+ * of a not locked mutex is not allowed.
+ *
+ * This function is similar to (but not equivalent to) up().
  */
-static int mutex_unlock(unsigned long *m)
+/*
+void __sched mutex_unlock(struct mutex *lock)
 {
-	if (*m == 2)
-		*m = 0;
-	else if (xchg(m, 0) == 1)
-		return 0;
-
-	sys_futex(m, FUTEX_WAKE, 1, NULL, NULL, 0);
-
-	return 0;
+	/*
+	 * The unlocking fastpath is the 0->1 transition from 'locked'
+	 * into 'unlocked' state:
+	 */
+/* #ifndef CONFIG_DEBUG_MUTEXES
+	/*
+	 * When debugging is enabled we must not clear the owner before time,
+	 * the slow path will always be taken, and that clears the owner field
+	 * after verifying that it was indeed current.
+	 */
+/*	mutex_clear_owner(lock);
+/* #endif
+	__mutex_fastpath_unlock(&lock->count, __mutex_unlock_slowpath);
 }//mutex_unlock
+*/
 
 
 /**
- * @brief unable to define CONFIG_COMPAT
+ * @brief Source file -- .../netfilter/x_tables.c (line 751)
+ * unable to define CONFIG_COMPAT
  * 
  * @param af 
  */
@@ -1894,6 +2061,11 @@ void xt_compat_lock(u_int8_t af)
 	mutex_lock(&xt[af].compat_mutex);
 }//xt_compat_lock
 
+/**
+ * @brief Source file -- .../netfilter/x_tables.c (line 757)
+ * 
+ * @param af 
+ */
 void xt_compat_unlock(u_int8_t af)
 {
 	mutex_unlock(&xt[af].compat_mutex);
@@ -1901,7 +2073,7 @@ void xt_compat_unlock(u_int8_t af)
 //#endif
 
 /**
- * @brief 
+ * @brief Source file -- ip_tables.c (line 139)
  * 
  * @param ip 
  * @return true 
@@ -1924,7 +2096,8 @@ ip_checkentry(const struct ipt_ip *ip)
 }//ip_checkentry
 
 /**
- * @brief for const-correctness
+ * @brief Source file -- ip_tables.c (line 182)
+ * for const-correctness
  * 
  * @param e 
  * @return const struct xt_entry_target* 
@@ -1935,7 +2108,7 @@ static inline const struct xt_entry_target *ipt_get_target_c(const struct ipt_en
 }//ipt_get_target_c
 
 /**
- * @brief 
+ * @brief Source file -- ip_tables.c (line 571)
  * 
  * @param e 
  * @return int 
@@ -1959,29 +2132,27 @@ static int check_entry(const struct ipt_entry *e)
 }//check_entry
 
 /**
- * @brief system calls - uable to complete definition due to system call
+ * @brief Source file -- .../netfilter/x_tables.c (line 208) 
  * 
  * @param nfproto 
  * @param name 
  * @param revision 
  * @return struct xt_match* 
  */
-struct xt_match *
-xt_request_find_match(uint8_t nfproto, const char *name, uint8_t revision)
+struct xt_match * xt_request_find_match(uint8_t nfproto, const char *name, uint8_t revision)
 {
 	struct xt_match *match;
-/*
+
 	match = xt_find_match(nfproto, name, revision);
 	if (IS_ERR(match)) {
 		request_module("%st_%s", xt_prefix[nfproto], name);
 		match = xt_find_match(nfproto, name, revision);
 	}
-*/
 	return match;
 }//xt_request_find_match
 
 /**
- * @brief 
+ * @brief Source file -- ip_tables.c (line 1445) 
  * 
  * @param m 
  * @param name 
@@ -2009,7 +2180,7 @@ static int compat_find_calc_match(struct xt_entry_match *m,
 }// compat_find_calc_match
 
 /**
- * @brief 
+ * @brief Source file -- ip_tables.c (line 1477) 
  * 
  * @param e 
  * @param newinfo 
@@ -2109,7 +2280,8 @@ release_matches:
 }//check_compat_entry_size_and_hooks
 
 /**
- * @brief unable to use kmalloc and vmalloc
+ * @brief Source file -- .../netfilter/x_tables.c (line 657) 
+ * unable to use kmalloc and vmalloc
  * 
  * @param size 
  * @return struct xt_table_info* 
@@ -2122,12 +2294,9 @@ struct xt_table_info *xt_alloc_table_info(unsigned int size)
 	if (sz < sizeof(*info))
 		return NULL;
 
-	/* Pedantry: prevent them from hitting BUG() in vmalloc.c --RR */
-	//System call
-	/*
+	/* Pedantry: prevent them from hitting BUG() in vmalloc.c --RR */	
 	if ((SMP_ALIGN(size) >> PAGE_SHIFT) + 2 > totalram_pages)
-		return NULL;
-		*/
+		return NULL;		
 
 	if (sz <= (PAGE_SIZE << PAGE_ALLOC_COSTLY_ORDER)){
 		//info = kmalloc(sz, GFP_KERNEL | __GFP_NOWARN | __GFP_NORETRY);
@@ -2145,7 +2314,8 @@ struct xt_table_info *xt_alloc_table_info(unsigned int size)
 }//xt_alloc_table_info
 
 /**
- * @brief vfree was replaced with free
+ * @brief  Source file -- .../netfilter/x_tables.c (line 445) 
+ * vfree was replaced with free
  * 
  * @param af 
  */
@@ -2161,7 +2331,8 @@ void xt_compat_flush_offsets(u_int8_t af)
 }//xt_compat_flush_offsets
 
 /**
- * @brief All zeroes == unconditional rule. 
+ * @brief Source file -- ip_tables.c (line 171) 
+ * All zeroes == unconditional rule. 
  * Mildly perf critical (only if packet tracing is on)
  * 
  * @param e 
@@ -2178,7 +2349,9 @@ static inline bool unconditional(const struct ipt_entry *e)
 }//unconditional
 
 /**
- * @brief pr_err changed to printf 
+ * @brief Source file -- ip_tables.c (line 449) 
+ * 
+ * duprintf changed to printf 
  *  Figures out from what hook each rule can be called: returns 0 if
    there are loops.  Puts hook bitmask in comefrom. 
  * 
@@ -2296,20 +2469,25 @@ next:
 }//mark_source_chains
 
 /**
- *  @brief system call
+ *  @brief unable to get the correct definition of {pcpu_alloc} in the software -- System call
+ * 
+ * Source file -- percpu.c (line 1078) 
+ *
  * __alloc_percpu - allocate dynamic percpu area
  * @size: size of area to allocate in bytes
  * @align: alignment of area (max PAGE_SIZE)
  *
  * Equivalent to __alloc_percpu_gfp(size, align, %GFP_KERNEL).
  */
+/*
 void __percpu *__alloc_percpu(size_t size, size_t align)
 {
-	//return pcpu_alloc(size, align, false, GFP_KERNEL);
+	return pcpu_alloc(size, align, false, GFP_KERNEL);
 }//__alloc_percpu
+*/
 
 /**
- * @brief 
+ * @brief Source file -- .../netfilter/x_tables.c (line 376) 
  * 
  * @return u64 
  */
@@ -2341,7 +2519,8 @@ static inline u64 xt_percpu_counter_alloc(void)
 }//xt_percpu_counter_alloc
 
 /**
- * @brief unable to find the definition of xt_check_match
+ * @brief Source file -- ../netfilter/x_tables.c (line 364) 
+ * unable to find the definition of xt_check_match
  * 
  * @param par 
  * @param match_size 
@@ -2349,9 +2528,10 @@ static inline u64 xt_percpu_counter_alloc(void)
  * @param invflags 
  * @return int 
  */
-int xt_check_match(struct xt_mtchk_param *par, unsigned short match_size,
-	      unsigned short proto, unsigned char invflags){
-	/*
+int xt_check_match(struct xt_mtchk_param *par,
+		   unsigned int size, u_int8_t proto, bool inv_proto)
+{
+	
 	int ret;
 
 	if (XT_ALIGN(par->match->matchsize) != size &&
@@ -2360,7 +2540,7 @@ int xt_check_match(struct xt_mtchk_param *par, unsigned short match_size,
 		 * ebt_among is exempt from centralized matchsize checking
 		 * because it uses a dynamic-size data set.
 		 */
-	/*	pr_err("%s_tables: %s.%u match: invalid size "
+		printf("%s_tables: %s.%u match: invalid size "
 		       "%u (kernel) != (user) %u\n",
 		       xt_prefix[par->family], par->match->name,
 		       par->match->revision,
@@ -2369,7 +2549,7 @@ int xt_check_match(struct xt_mtchk_param *par, unsigned short match_size,
 	}
 	if (par->match->table != NULL &&
 	    strcmp(par->match->table, par->table) != 0) {
-		pr_err("%s_tables: %s match: only valid in %s table, not %s\n",
+		printf("%s_tables: %s match: only valid in %s table, not %s\n",
 		       xt_prefix[par->family], par->match->name,
 		       par->match->table, par->table);
 		return -EINVAL;
@@ -2377,7 +2557,7 @@ int xt_check_match(struct xt_mtchk_param *par, unsigned short match_size,
 	if (par->match->hooks && (par->hook_mask & ~par->match->hooks) != 0) {
 		char used[64], allow[64];
 
-		pr_err("%s_tables: %s match: used from hooks %s, but only "
+		printf("%s_tables: %s match: used from hooks %s, but only "
 		       "valid from %s\n",
 		       xt_prefix[par->family], par->match->name,
 		       textify_hooks(used, sizeof(used), par->hook_mask,
@@ -2387,7 +2567,7 @@ int xt_check_match(struct xt_mtchk_param *par, unsigned short match_size,
 		return -EINVAL;
 	}
 	if (par->match->proto && (par->match->proto != proto || inv_proto)) {
-		pr_err("%s_tables: %s match: only valid for protocol %u\n",
+		printf("%s_tables: %s match: only valid for protocol %u\n",
 		       xt_prefix[par->family], par->match->name,
 		       par->match->proto);
 		return -EINVAL;
@@ -2398,16 +2578,15 @@ int xt_check_match(struct xt_mtchk_param *par, unsigned short match_size,
 			return ret;
 		else if (ret > 0)
 			/* Flag up potential errors. */
-/*			return -EIO;
+			return -EIO;
 	}
-	*/
+	
 	return 0;
 
-	return 0;
 }//xt_check_match
 
 /**
- * @brief 
+ * @brief Source file -- ip_tables.c (line 590) 
  * 
  * @param m 
  * @param par 
@@ -2432,14 +2611,13 @@ check_match(struct xt_entry_match *m, struct xt_mtchk_param *par)
 }//check_match
 
 /**
- * @brief Unable to find the definition of xt_mtdtor_param
+ * @brief Source file -- ip_tables.c (line 557) 
  * 
  * @param m 
  * @param net 
  */
 static void cleanup_match(struct xt_entry_match *m, struct net *net)
 {
-	/*
 	struct xt_mtdtor_param par;
 
 	par.net       = net;
@@ -2449,23 +2627,74 @@ static void cleanup_match(struct xt_entry_match *m, struct net *net)
 	if (par.match->destroy != NULL)
 		par.match->destroy(&par);
 	module_put(par.match->me);
-	*/
+	
 }//cleanup_match
 
 /**
- * @brief unable to find the definition of xt_percpu_counter_free
+ * @brief unable to get the correct definition of {struct pcpu_chunk kmemleak_free_percpu(), spin_lock_irqsave(), 
+ * pcpu_free_area(), pcpu_chunk_addr_search(), pcpu_reserved_chunk} in the software -- System call
+ * 
+ * Source file -- percpu.c (line 1229)
+ * 
+ * @param ptr 
+ */
+/*
+void free_percpu(void __percpu *ptr)
+{
+	void *addr;
+	struct pcpu_chunk *chunk;
+	unsigned long flags;
+	int off, occ_pages;
+
+	if (!ptr)
+		return;
+
+	kmemleak_free_percpu(ptr);
+
+	addr = __pcpu_ptr_to_addr(ptr);
+
+	spin_lock_irqsave(&pcpu_lock, flags);
+
+	chunk = pcpu_chunk_addr_search(addr);
+	off = addr - chunk->base_addr;
+
+	pcpu_free_area(chunk, off, &occ_pages);
+
+	if (chunk != pcpu_reserved_chunk)
+		pcpu_nr_empty_pop_pages += occ_pages;
+
+	/* if there are more than one fully free chunks, wake up grim reaper */
+/*	if (chunk->free_size == pcpu_unit_size) {
+		struct pcpu_chunk *pos;
+
+		list_for_each_entry(pos, &pcpu_slot[pcpu_nr_slots - 1], list)
+			if (pos != chunk) {
+				pcpu_schedule_balance_work();
+				break;
+			}
+	}
+
+	spin_unlock_irqrestore(&pcpu_lock, flags);
+}// free_percpu
+*/
+
+
+/**
+ * @brief Source file -- x_tables.c (line 390)
+ * 
+ * unable to find the definition of xt_percpu_counter_free -- System Call
  * 
  * @param pcnt 
  */
 void xt_percpu_counter_free(unsigned long long pcnt){
-	/*
+	
 	if (nr_cpu_ids > 1)
 		free_percpu((void __percpu *) (unsigned long) pcnt);
-	*/
+	
 }//xt_percpu_counter_free
 
 /**
- * @brief unable to get the definition to xt_tgchk_param
+ * @brief Source file -- ip_tables.c (line 631)
  * 
  * @param e 
  * @param net 
@@ -2474,7 +2703,7 @@ void xt_percpu_counter_free(unsigned long long pcnt){
  */
 static int check_target(struct ipt_entry *e, struct net *net, const char *name)
 {
-	/*
+	
 	struct xt_entry_target *t = ipt_get_target(e);
 	struct xt_tgchk_param par = {
 		.net       = net,
@@ -2494,12 +2723,12 @@ static int check_target(struct ipt_entry *e, struct net *net, const char *name)
 			 t->u.kernel.target->name);
 		return ret;
 	}
-	*/
+	
 	return 0;
 }//check_target
 
 /**
- * @brief 
+ * @brief Source file -- ip_tables.c (line 1606)
  * 
  * @param e 
  * @param net 
@@ -2549,7 +2778,7 @@ compat_check_entry(struct ipt_entry *e, struct net *net, const char *name)
 }//compat_check_entry
 
 /**
- * @brief 
+ * @brief Source file -- ip_tables.c (line 1464)
  * 
  * @param e 
  */
@@ -2567,15 +2796,17 @@ static void compat_release_entry(struct compat_ipt_entry *e)
 
 
 /**
- * @brief could not find the definition of xt_tgdtor_param
+ * @brief unable to get the correct definition of {stuct xt_tgdtor_param} in the software -- System call
+ * 
+ * Source file -- ip_tables.c (line 781) * 
  * 
  * @param e 
  * @param net 
  */
-static void
-cleanup_entry(struct ipt_entry *e, struct net *net)
+/*
+static void cleanup_entry(struct ipt_entry *e, struct net *net)
 {
-	/*
+
 	struct xt_tgdtor_param par;
 	struct xt_entry_target *t;
 	struct xt_entry_match *ematch;
@@ -2593,17 +2824,20 @@ cleanup_entry(struct ipt_entry *e, struct net *net)
 		par.target->destroy(&par);
 	module_put(par.target->me);
 	xt_percpu_counter_free(e->counters.pcnt);
-	*/
+	
 }//cleanup_entry
+*/
 
 /**
- * @brief unable to define this function due to kernel requirements
+ * @brief unable to get the correct definition of {kvfree()} in the software -- System call
+ * 
+ * Source file -- x_tables.c (line 682)
  * 
  * @param info 
  */
+/*
 void xt_free_table_info(struct xt_table_info *info)
 {
-	/*
 	int cpu;
 
 	if (info->jumpstack != NULL) {
@@ -2614,51 +2848,61 @@ void xt_free_table_info(struct xt_table_info *info)
 	}
 
 	kvfree(info);
-	*/
 
 }//xt_free_table_info
+*/
 
 /////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// STEP 1 LOOKUP /////////////////////////////
 /**
- * @brief unable to get the proper definition of {file}
+ * @brief unable to get the correct definition of {struct file, struct socket_file_ops} in the software -- System call
+ * 
+ * Source file -- socket.c (line 408)
  * 
  * @param file 
  * @param err 
  * @return struct socket* 
  */
+/*
 struct socket *sock_from_file(struct file *file, int *err)
 {
-	/*
+	
 	if (file->f_op == &socket_file_ops)
 		return file->private_data;	/* set in sock_map_fd */
 
 /*	*err = -ENOTSOCK;
 	return NULL;
-	*/
+	
 }//sock_from_file
+*/
 
 /**
- * @brief unable to get the proper definition of {rcu_dereference_raw}
+ * @brief unable to get the correct definition of {rcu_dereference_raw()} in the software -- System call
+ * 
+ * Source file -- fdtable.h (line 80)
+ * 
  * The caller must ensure that fd table isn't shared or hold rcu or file lock
  * 
  * @param files 
  * @param fd 
  * @return struct file* 
  */
+/*
 static inline struct file *__fcheck_files(struct files_struct *files, unsigned int fd)
 {
-	/*
 	struct fdtable *fdt = rcu_dereference_raw(files->fdt);
 
 	if (fd < fdt->max_fds)
 		return rcu_dereference_raw(fdt->fd[fd]);
 	return NULL;
-	*/
+	
 }//__fcheck_files
+*/
 
 /**
- * @brief  unable to get the proper definition of {atomic_read, unlikely, FDPUT_FPUT}
+ * @brief  unable to get the correct definition of {current = get_current(), file, atomic_read(), unlikely, FDPUT_FPUT} in the software -- System call
+ * 
+ * Source file -- file.c (line 745)
  * 
  * @param fd 
  * @param mask 
@@ -2680,9 +2924,10 @@ static inline struct file *__fcheck_files(struct files_struct *files, unsigned i
  * The fput_needed flag returned by fget_light should be passed to the
  * corresponding fput_light.
  */
+/*
 static unsigned long __fget_light(unsigned int fd, fmode_t mask)
 {
-	/*
+	
 	struct files_struct *files = current->files;
 	struct file *file;
 
@@ -2697,11 +2942,12 @@ static unsigned long __fget_light(unsigned int fd, fmode_t mask)
 			return 0;
 		return FDPUT_FPUT | (unsigned long)file;
 	}
-	*/
+	
 }//__fget_light
+*/
 
 /**
- * @brief 
+ * @brief Source file -- file.h (line 48)
  * 
  * @param v 
  * @return struct fd 
@@ -2712,7 +2958,7 @@ static inline struct fd __to_fd(unsigned long v)
 }//__to_fd
 
 /**
- * @brief 
+ * @brief Source file -- file.c (line 762)
  * 
  * @param fd 
  * @return unsigned 
@@ -2723,7 +2969,7 @@ unsigned long __fdget(unsigned int fd)
 }//__fdget
 
 /**
- * @brief 
+ * @brief Source file -- file.h (line 53)
  * 
  * @param fd 
  * @return struct fd 
@@ -2734,13 +2980,16 @@ static inline struct fd fdget(unsigned int fd)
 }//fdget
 
 /**
- * @brief unable to get the proper definition of {atomic_long_dec_and_test} -system call
+ * @brief unable to get the correct definition of {struct file, atomic_long_dec_and_test(), llist_add} in the software -- System call
+ * 
+ * Source file -- file_table.c (line 264)
  * 
  * @param file 
  */
+/*
 void fput(struct file *file)
 {
-	/*
+	
 	if (atomic_long_dec_and_test(&file->f_count)) {
 		struct task_struct *task = current;
 
@@ -2758,11 +3007,12 @@ void fput(struct file *file)
 		if (llist_add(&file->f_u.fu_llist, &delayed_fput_list))
 			schedule_delayed_work(&delayed_fput_work, 1);
 	}
-	*/
+	
 }//fput
+*/
 
 /**
- * @brief 
+ * @brief Source file -- file.h (line 36)
  * 
  * @param fd 
  */
@@ -2773,7 +3023,7 @@ static inline void fdput(struct fd fd)
 }//fdput
 
 /**
- * @brief 
+ * @brief Source file -- socket.c (line 449)
  * 
  * @param fd 
  * @param err 
@@ -2799,39 +3049,7 @@ static struct socket *sockfd_lookup_light(int fd, int *err, int *fput_needed)
 }//sockfd_lookup_light
 
 /**
- * @brief 
- * 
- * @param sock 
- * @param level 
- * @param optname 
- * @return int 
- */
-static inline int security_socket_setsockopt(struct socket *sock,
-					     int level, int optname)
-{
-	return 0;
-}//security_socket_setsockopt
-
-/**
- * @brief  pending definition -- unable to get definition -- system parameters
- *	This is meant for all protocols to use and covers goings on
- *	at the socket level. Everything here is generic.
- * 
- * @param sock 
- * @param level 
- * @param optname 
- * @param optval 
- * @param optlen 
- * @return int 
- */
-int sock_setsockopt(struct socket *sock, int level, int optname,
-		    char __user *optval, unsigned int optlen)
-{
-	return 0;
-}//sock_setsockopt
-
-/**
- * @brief 
+ * @brief Source file -- file.h (line 23)
  * 
  * @param file 
  * @param fput_needed 
@@ -2843,22 +3061,26 @@ static inline void fput_light(struct file *file, int fput_needed)
 }//fput_light
 
 /**
- * @brief unable to get definition -- system parameters {CONFIG_NET_NS, &init_net}
+ * @brief unable to get the definition of system parameters {CONFIG_NET_NS, &init_net} in the software -- System call
+ * 
+ * Source file -- net_namespace.h (line 256)
  * 
  * @param pnet 
  * @return struct net* 
  */
+/*
 static inline struct net *read_pnet(const possible_net_t *pnet)
 {
-//#ifdef CONFIG_NET_NS
-	return pnet->net;
-//#else
-//	return &init_net;
-//#endif
+	#ifdef CONFIG_NET_NS
+		return pnet->net;
+	#else
+		return &init_net;
+	#endif
 }//read_pnet
+*/
 
 /**
- * @brief
+ * @brief Source file -- sock.h (line 2089)
  * 
  * @param sk 
  * @return struct net* 
@@ -2872,7 +3094,14 @@ struct net *sock_net(const struct sock *sk)
 /////////////////////////////// END STEP 1 LOOKUP /////////////////////////
 
 
-/** Step 5 */
+/**
+ * @brief Source file -- x_tables.c (line 602)
+ * ============ Step 5 ===============
+ * 
+ * @param t 
+ * @param dstptr 
+ * @param size 
+ */
 void xt_compat_target_from_user(struct xt_entry_target *t, void **dstptr,
 				unsigned int *size)
 {
@@ -2898,26 +3127,226 @@ void xt_compat_target_from_user(struct xt_entry_target *t, void **dstptr,
 	*dstptr += tsize;
 }//xt_compat_target_from_user
 
+/**
+ * @brief Source file -- x_tables.c (line 474)
+ * 
+ * @param af 
+ * @param number 
+ */
 void xt_compat_init_offsets(u_int8_t af, unsigned int number)
 {
 	xt[af].number = number;
 	xt[af].cur = 0;
 }//xt_compat_init_offsets
 
+
+/**
+ * @brief Source file -- compat.h (line 226)
+ * 
+ * @param uptr 
+ * @return void* 
+ */
 /*
  * A pointer passed in from user mode. This should not
  * be used for syscall parameters, just declare them
  * as pointers because the syscall entry code will have
  * appropriately converted them already.
  */
-
 static inline void __user *compat_ptr(compat_uptr_t uptr)
 {
 	return (void __user *)(unsigned long)uptr;
 }//compat_ptr
 
 /**
- * @brief unable to fix due to system calls
+ * @brief Source file -- x_tables.c (line 818)
+ * 
+ * @param table 
+ * @param num_counters 
+ * @param newinfo 
+ * @param error 
+ * @return struct xt_table_info* 
+ */
+struct xt_table_info * xt_replace_table(struct xt_table *table,
+	      unsigned int num_counters,
+	      struct xt_table_info *newinfo,
+	      int *error)
+{
+	struct xt_table_info *private;
+	int ret;
+
+	ret = xt_jumpstack_alloc(newinfo);
+	if (ret < 0) {
+		*error = ret;
+		return NULL;
+	}
+
+	/* Do the substitution. */
+	local_bh_disable();
+	private = table->private;
+
+	/* Check inside lock: is the old number correct? */
+	if (num_counters != private->number) {
+		pr_debug("num_counters != table->private->number (%u/%u)\n",
+			 num_counters, private->number);
+		local_bh_enable();
+		*error = -EAGAIN;
+		return NULL;
+	}
+
+	newinfo->initial_entries = private->initial_entries;
+	/*
+	 * Ensure contents of newinfo are visible before assigning to
+	 * private.
+	 */
+	smp_wmb();
+	table->private = newinfo;
+
+	/*
+	 * Even though table entries have now been swapped, other CPU's
+	 * may still be using the old entries. This is okay, because
+	 * resynchronization happens because of the locking done
+	 * during the get_counters() routine.
+	 */
+	local_bh_enable();
+
+#ifdef CONFIG_AUDIT
+	if (audit_enabled) {
+		struct audit_buffer *ab;
+
+		ab = audit_log_start(current->audit_context, GFP_KERNEL,
+				     AUDIT_NETFILTER_CFG);
+		if (ab) {
+			audit_log_format(ab, "table=%s family=%u entries=%u",
+					 table->name, table->af,
+					 private->number);
+			audit_log_end(ab);
+		}
+	}
+#endif
+
+	return private;
+}//xt_replace_table
+
+/**
+ * @brief Comprehensive definition of per_cpu() not found
+ * 
+ * Source file -- ip_tables.c (line 886)
+ * 
+ * Get the counters object
+ * 
+ * @param t 
+ * @param counters 
+ */
+/*
+static void get_counters(const struct xt_table_info *t,
+	     struct xt_counters counters[])
+{
+	struct ipt_entry *iter;
+	unsigned int cpu;
+	unsigned int i;
+
+	for_each_possible_cpu(cpu) {
+		seqcount_t *s = &per_cpu(xt_recseq, cpu);
+
+		i = 0;
+		xt_entry_foreach(iter, t->entries, t->size) {
+			struct xt_counters *tmp;
+			u64 bcnt, pcnt;
+			unsigned int start;
+
+			tmp = xt_get_per_cpu_counter(&iter->counters, cpu);
+			do {
+				start = read_seqcount_begin(s);
+				bcnt = tmp->bcnt;
+				pcnt = tmp->pcnt;
+			} while (read_seqcount_retry(s, start));
+
+			ADD_COUNTER(counters[i], bcnt, pcnt);
+			++i; /* macro does multi eval of i */
+/*		}
+	}
+}//get_counters
+*/
+
+/**
+ * @brief unable to get the correct definition of {per_cpu()} in the software -- system calls
+ * 
+ * Source file -- ip_tables.c (line 886) 
+ * 
+ * @param t 
+ * @param counters 
+ */
+/*
+static void get_counters(const struct xt_table_info *t,
+	     struct xt_counters counters[])
+{
+	struct ipt_entry *iter;
+	unsigned int cpu;
+	unsigned int i;
+
+	for_each_possible_cpu(cpu) {
+		seqcount_t *s = &per_cpu(xt_recseq, cpu);
+
+		i = 0;
+		xt_entry_foreach(iter, t->entries, t->size) {
+			struct xt_counters *tmp;
+			u64 bcnt, pcnt;
+			unsigned int start;
+
+			tmp = xt_get_per_cpu_counter(&iter->counters, cpu);
+			do {
+				start = read_seqcount_begin(s);
+				bcnt = tmp->bcnt;
+				pcnt = tmp->pcnt;
+			} while (read_seqcount_retry(s, start));
+
+			ADD_COUNTER(counters[i], bcnt, pcnt);
+			++i; /* macro does multi eval of i */
+/*		}
+	}
+}
+*/
+
+/**
+ * @brief unable to get the correct definition of {schedule_work(), __vunmap()} in the software -- system calls
+ * 
+ * Source file -- vmalloc.c (line 1502) 
+ * 
+ * @param addr 
+ */
+/*
+void vfree(const void *addr)
+{
+	BUG_ON(in_nmi());
+
+	kmemleak_free(addr);
+
+	if (!addr)
+		return;
+	if (unlikely(in_interrupt())) {
+		struct vfree_deferred *p = this_cpu_ptr(&vfree_deferred);
+		if (llist_add((struct llist_node *)addr, &p->list))
+			schedule_work(&p->wq);
+	} else
+		__vunmap(addr, 1);
+}//vfree
+*/
+
+/**
+ * @brief unable to get the correct definition of {xt_table_unlock()} in the software -- system calls
+ * 
+ * @param t 
+ */
+/*
+void xt_table_unlock(struct xt_table *t){
+
+}//xt_table_unlock
+*/
+
+/**
+ * @brief unable to get the correct definition of {get_counters(), copy_to_user(), vfree(), xt_table_unlock()} in the software -- system calls
+ * 
+ * Source file -- ip_tables.c (line 1181) 
  * 
  * @param net 
  * @param name 
@@ -2927,13 +3356,12 @@ static inline void __user *compat_ptr(compat_uptr_t uptr)
  * @param counters_ptr 
  * @return int 
  */
-static int
-__do_replace(struct net *net, const char *name, unsigned int valid_hooks,
+static int __do_replace(struct net *net, const char *name, unsigned int valid_hooks,
 	     struct xt_table_info *newinfo, unsigned int num_counters,
 	     void __user *counters_ptr)
 {
 	int ret;
-/*	struct xt_table *t;
+	struct xt_table *t;
 	struct xt_table_info *oldinfo;
 	struct xt_counters *counters;
 	struct ipt_entry *iter;
@@ -2953,7 +3381,7 @@ __do_replace(struct net *net, const char *name, unsigned int valid_hooks,
 	}
 
 	/* You lied! */
-/*	if (valid_hooks != t->valid_hooks) {
+	if (valid_hooks != t->valid_hooks) {
 		printf("Valid hook crap: %08X vs %08X\n",
 			 valid_hooks, t->valid_hooks);
 		ret = -EINVAL;
@@ -2965,7 +3393,7 @@ __do_replace(struct net *net, const char *name, unsigned int valid_hooks,
 		goto put_module;
 
 	/* Update module usage count based on number of rules */
-/*	printf("do_replace: oldnum=%u, initnum=%u, newnum=%u\n",
+	printf("do_replace: oldnum=%u, initnum=%u, newnum=%u\n",
 		oldinfo->number, oldinfo->initial_entries, newinfo->number);
 	if ((oldinfo->number > oldinfo->initial_entries) ||
 	    (newinfo->number <= oldinfo->initial_entries))
@@ -2975,17 +3403,17 @@ __do_replace(struct net *net, const char *name, unsigned int valid_hooks,
 		module_put(t->me);
 
 	/* Get the old counters, and synchronize with replace */
-/*	get_counters(oldinfo, counters);
+	get_counters(oldinfo, counters);
 
 	/* Decrease module usage counts and free resource */
-/*	xt_entry_foreach(iter, oldinfo->entries, oldinfo->size)
+	xt_entry_foreach(iter, oldinfo->entries, oldinfo->size)
 		cleanup_entry(iter, net);
 
 	xt_free_table_info(oldinfo);
 	if (copy_to_user(counters_ptr, counters,
 			 sizeof(struct xt_counters) * num_counters) != 0) {
 		/* Silent error, can't fail, new table is already in place */
-/*		net_warn_ratelimited("iptables: counters copy to user failed while replacing table\n");
+		net_warn_ratelimited("iptables: counters copy to user failed while replacing table\n");
 	}
 	vfree(counters);
 	xt_table_unlock(t);
@@ -2996,12 +3424,23 @@ __do_replace(struct net *net, const char *name, unsigned int valid_hooks,
 	xt_table_unlock(t);
  free_newinfo_counters_untrans:
 	vfree(counters);
- out:*/
+ out: 
 	return ret;
-}
+} //__do_replace
 
 
-/** Step 4 */
+/**
+ * @brief Source file -- ip_tables.c (line 1565)
+ * =========== Step 4 ==============
+ * 
+ * @param e 
+ * @param dstptr 
+ * @param size 
+ * @param name 
+ * @param newinfo 
+ * @param base 
+ * @return int 
+ */
 static int compat_copy_entry_from_user(struct compat_ipt_entry *e, void **dstptr,
 			    unsigned int *size, const char *name,
 			    struct xt_table_info *newinfo, unsigned char *base)
@@ -3042,7 +3481,21 @@ static int compat_copy_entry_from_user(struct compat_ipt_entry *e, void **dstptr
 	return ret;
 }//compat_copy_entry_from_user
 
-/** Step 3 */
+/** Source file -- ip_tables.c (line 1648)
+ * @brief 
+ * ============== Step 3 ===============
+ * 
+ * @param net 
+ * @param name 
+ * @param valid_hooks 
+ * @param pinfo 
+ * @param pentry0 
+ * @param total_size 
+ * @param number 
+ * @param hook_entries 
+ * @param underflows 
+ * @return int 
+ */
 static int translate_compat_table(struct net *net,
 		       const char *name,
 		       unsigned int valid_hooks,
@@ -3196,7 +3649,17 @@ out_unlock:
 
 }//translate_compat_table
 
-/** Step 2 */
+/**
+ * @brief  unable to fix the definition of {copy_from_user()} in the software -- System call
+ * 
+ * Source file -- ip_tables.c (Line 1801)
+ * =============== STEP 2  =================
+ * 
+ * @param net 
+ * @param user 
+ * @param len 
+ * @return int 
+ */
 static int compat_do_replace(struct net *net, void __user *user, unsigned int len)
 {
 	int ret;
@@ -3205,7 +3668,6 @@ static int compat_do_replace(struct net *net, void __user *user, unsigned int le
 	void *loc_cpu_entry;
 	struct ipt_entry *iter;
 
-	/* unable to fix the definition of copy_from_user */
 	if (copy_from_user(&tmp, user, sizeof(tmp)) != 0)
 		return -EFAULT;
 
@@ -3255,9 +3717,18 @@ static int compat_do_replace(struct net *net, void __user *user, unsigned int le
 /** End of Step 2 */
 
 
-/** Step 1 **/
-////////////////////////////////////////////////////////////////////////////
-/** Mock setsockopt call **/
+/**
+ * @brief Mock setsockopt call -- The definition of `setsockopt` was not found in the Linux software (external definition)
+ * ================= Step 1  ===================== 
+ *  
+ * @param fd 
+ * @param level 
+ * @param optname 
+ * @param optval 
+ * @param optlen 
+ * @return int 
+ */
+/*
 int setsockopt(int fd, int level, int optname, const void * optval, socklen_t optlen)
 {
 	int ret, err, fput_needed;
@@ -3272,6 +3743,7 @@ int setsockopt(int fd, int level, int optname, const void * optval, socklen_t op
 	}
 	return ret;
 }
+*/
 
 /** End Mock socket setup Call **/
 
