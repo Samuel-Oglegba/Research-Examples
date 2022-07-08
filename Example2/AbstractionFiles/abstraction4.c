@@ -1,101 +1,54 @@
 //=== Data Structures =====
-struct net *net;
-struct xt_table_info;
-struct xt_table;
-struct xt_counters;
-struct ipt_entry;
+struct xt_entry_target;
+struct xt_target;
+struct compat_xt_entry_target;
 
 /**
  * @brief {
- * modified =>{xt_table, xt_counters, ipt_entry}, 
- * read =>{net, xt_table_info, xt_table, xt_counters, ipt_entry}
- * used =>{
- *          "net          :: used to get data `xt_table` via try_then_request_module operation", 
- *          "xt_table_info:: ", 
- *          "xt_table     :: used to get data `xt_table_info` via xt_replace_table operation", 
- *          "xt_counters  :: ", 
- *          "ipt_entry    :: used for iteration with data `xt_table_info` via xt_entry_foreach operation"
- *    }, 
+ * modified =>{
+ *  	data-structures: {xt_entry_target, xt_target, compat_xt_entry_target},
+ * 	how-it-was-modified: {
+ * 		"xt_entry_target       :: modified by assignment to a void pointer (*dstptr)",
+ * 		"xt_entry_target       :: modified by memcpy(), & memset() operations using data `compat_xt_entry_target` and `xt_target` as parameters respectively",
+ * 		"xt_target             :: modified by assignment to data `xt_entry_target` target element",
+ * 		"compat_xt_entry_target:: modified by assignment via casting of data `xt_entry_target`"
+ * 		} 
+ * }, 
+ * read =>{
+ *     data-structures: {xt_entry_target, xt_target, compat_xt_entry_target},
+ * 	 how-it-was-read: {
+ *	      "xt_entry_target       :: used to set the value of data `xt_target` by assignment", 
+ *          "xt_target             :: used to update data `xt_entry_target` to `compat_xt_entry_target` via target->compat_from_user operation", 
+ *          "compat_xt_entry_target:: sets new values of data `xt_entry_target` via memcpy & target->compat_from_user operation"
+ *         } 
+ * 	} 
  * }
- * unable to fix due to system calls
  * 
- * @param net 
- * @param name 
- * @param valid_hooks 
- * @param newinfo 
- * @param num_counters 
- * @param counters_ptr 
- * @return int 
+ * @param t 
+ * @param dstptr 
+ * @param size 
  */
-static int
-__do_replace(struct net *net, const char *name, unsigned int valid_hooks,
-	     struct xt_table_info *newinfo, unsigned int num_counters,
-	     void __user *counters_ptr)
+void xt_compat_target_from_user(struct xt_entry_target *t, void **dstptr,
+				unsigned int *size)
 {
-	int ret;
-	struct xt_table *t;
-	struct xt_table_info *oldinfo;
-	struct xt_counters *counters;
-	struct ipt_entry *iter;
+	const struct xt_target *target = t->u.kernel.target;
+	struct compat_xt_entry_target *ct = (struct compat_xt_entry_target *)t;
+	int pad, off = xt_compat_target_offset(target);
+	u_int16_t tsize = ct->u.user.target_size;
 
-	ret = 0;
-	counters = vzalloc(num_counters * sizeof(struct xt_counters));
-	if (!counters) {
-		ret = -ENOMEM;
-		goto out;
-	}
+	t = *dstptr;
+	memcpy(t, ct, sizeof(*ct));
+	if (target->compat_from_user)
+		target->compat_from_user(t->data, ct->data);
+	else
+		memcpy(t->data, ct->data, tsize - sizeof(*ct));
+	pad = XT_ALIGN(target->targetsize) - target->targetsize;
+	if (pad > 0)
+		memset(t->data + target->targetsize, 0, pad);
 
-	t = try_then_request_module(xt_find_table_lock(net, AF_INET, name),
-				    "iptable_%s", name);
-	if (IS_ERR_OR_NULL(t)) {
-		ret = t ? PTR_ERR(t) : -ENOENT;
-		goto free_newinfo_counters_untrans;
-	}
+	tsize += off;
+	t->u.user.target_size = tsize;
 
-	/* You lied! */
-	if (valid_hooks != t->valid_hooks) {
-		printf("Valid hook crap: %08X vs %08X\n",
-			 valid_hooks, t->valid_hooks);
-		ret = -EINVAL;
-		goto put_module;
-	}
-
-	oldinfo = xt_replace_table(t, num_counters, newinfo, &ret);
-	if (!oldinfo)
-		goto put_module;
-
-	/* Update module usage count based on number of rules */
-	printf("do_replace: oldnum=%u, initnum=%u, newnum=%u\n",
-		oldinfo->number, oldinfo->initial_entries, newinfo->number);
-	if ((oldinfo->number > oldinfo->initial_entries) ||
-	    (newinfo->number <= oldinfo->initial_entries))
-		module_put(t->me);
-	if ((oldinfo->number > oldinfo->initial_entries) &&
-	    (newinfo->number <= oldinfo->initial_entries))
-		module_put(t->me);
-
-	/* Get the old counters, and synchronize with replace */
-	get_counters(oldinfo, counters);
-
-	/* Decrease module usage counts and free resource */
-	xt_entry_foreach(iter, oldinfo->entries, oldinfo->size)
-		cleanup_entry(iter, net);
-
-	xt_free_table_info(oldinfo);
-	if (copy_to_user(counters_ptr, counters,
-			 sizeof(struct xt_counters) * num_counters) != 0) {
-		/* Silent error, can't fail, new table is already in place */
-		net_warn_ratelimited("iptables: counters copy to user failed while replacing table\n");
-	}
-	vfree(counters);
-	xt_table_unlock(t);
-	return ret;
-
- put_module:
-	module_put(t->me);
-	xt_table_unlock(t);
- free_newinfo_counters_untrans:
-	vfree(counters);
- out:
-	return ret;
-}
+	*size += off;
+	*dstptr += tsize;
+}//xt_compat_target_from_user

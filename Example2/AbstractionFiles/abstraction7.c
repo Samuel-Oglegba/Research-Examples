@@ -1,18 +1,19 @@
 //=== Data Structures =====
 struct ipt_entry;
 struct net;
-struct xt_entry_match;
-struct xt_mtchk_param;
-
+struct xt_entry_target;
+struct xt_tgchk_param;
 /**
- * @brief  * {
- * modified =>{ipt_entry, xt_entry_match, xt_mtchk_param}, 
- * read =>{ipt_entry, net, xt_entry_match, xt_mtchk_param},
+ * @brief unable to get the definition to xt_tgchk_param
+ * {
+ * modified =>{xt_entry_target}, 
+ * read =>{ipt_entry, net, xt_entry_target, xt_tgchk_param},
  * used =>{
- *          "ipt_entry     :: used to set the value of elements in  data `xt_mtchk_param` by assignment", 
- *          "net           :: used to set the the net element of data `xt_mtchk_param` by assignment (mtpar.net = net)", 
- *          "xt_entry_match:: used to iterate over data `ipt_entry` via xt_ematch_foreach operation",
- *          "xt_entry_match:: used with data `xt_mtchk_param` as parameters of check_match operation",
+ *          "ipt_entry      :: used to get the value of data `xt_entry_target` via ipt_get_target operation", 
+ *          "ipt_entry      :: used to set the value of elements of data `xt_tgchk_param` via assignments", 
+ *          "net            :: used to set the value of the net element of data `xt_tgchk_param`", 
+ *          "xt_entry_target:: used to set `xt_tgchk_param` elements (target & targinfo) via assignment",
+ *          "xt_tgchk_param :: used with `xt_entry_target` & `ipt_entry` as parameters to xt_check_target operation",
  *    } 
  * }
  * 
@@ -21,120 +22,64 @@ struct xt_mtchk_param;
  * @param name 
  * @return int 
  */
-static int
-compat_check_entry(struct ipt_entry *e, struct net *net, const char *name)
+static int check_target(struct ipt_entry *e, struct net *net, const char *name)
 {
-	struct xt_entry_match *ematch;
-	struct xt_mtchk_param mtpar;
-	unsigned int j;
-	int ret = 0;
-
-	e->counters.pcnt = xt_percpu_counter_alloc();
-	if (IS_ERR_VALUE(e->counters.pcnt))
-		return -ENOMEM;
-
-	j = 0;
-	mtpar.net	= net;
-	mtpar.table     = name;
-	mtpar.entryinfo = &e->ip;
-	mtpar.hook_mask = e->comefrom;
-	mtpar.family    = NFPROTO_IPV4;
-	xt_ematch_foreach(ematch, e) {
-		ret = check_match(ematch, &mtpar);
-		if (ret != 0)
-			goto cleanup_matches;
-		++j;
-	}
-
-	ret = check_target(e, net, name);
-	if (ret)
-		goto cleanup_matches;
-	return 0;
-
- cleanup_matches:
-	xt_ematch_foreach(ematch, e) {
-		if (j-- == 0)
-			break;
-		cleanup_match(ematch, net);
-	}
-
-	xt_percpu_counter_free(e->counters.pcnt);
-
-	return ret;
-}//compat_check_entry
-
-
-
-//=== Data Structures =====
-struct xt_mtchk_param;
-
-/**
- * @brief unable to find the definition of xt_check_match
- * {
- * modified =>{}, 
- * read =>{xt_mtchk_param},
- * used =>{
- *          "xt_mtchk_param:: ",
- *    } 
- * }
- * 
- * @param par 
- * @param match_size 
- * @param proto 
- * @param invflags 
- * @return int 
- */
-int xt_check_match(struct xt_mtchk_param *par, unsigned short match_size,
-	      unsigned short proto, unsigned char invflags){
-
+	
+	struct xt_entry_target *t = ipt_get_target(e);
+	struct xt_tgchk_param par = {
+		.net       = net,
+		.table     = name,
+		.entryinfo = e,
+		.target    = t->u.kernel.target,
+		.targinfo  = t->data,
+		.hook_mask = e->comefrom,
+		.family    = NFPROTO_IPV4,
+	};
 	int ret;
 
-	if (XT_ALIGN(par->match->matchsize) != size &&
-	    par->match->matchsize != -1) {
-		/*
-		 * ebt_among is exempt from centralized matchsize checking
-		 * because it uses a dynamic-size data set.
-		 */
-		pr_err("%s_tables: %s.%u match: invalid size "
-		       "%u (kernel) != (user) %u\n",
-		       xt_prefix[par->family], par->match->name,
-		       par->match->revision,
-		       XT_ALIGN(par->match->matchsize), size);
-		return -EINVAL;
-	}
-	if (par->match->table != NULL &&
-	    strcmp(par->match->table, par->table) != 0) {
-		pr_err("%s_tables: %s match: only valid in %s table, not %s\n",
-		       xt_prefix[par->family], par->match->name,
-		       par->match->table, par->table);
-		return -EINVAL;
-	}
-	if (par->match->hooks && (par->hook_mask & ~par->match->hooks) != 0) {
-		char used[64], allow[64];
-
-		pr_err("%s_tables: %s match: used from hooks %s, but only "
-		       "valid from %s\n",
-		       xt_prefix[par->family], par->match->name,
-		       textify_hooks(used, sizeof(used), par->hook_mask,
-		                     par->family),
-		       textify_hooks(allow, sizeof(allow), par->match->hooks,
-		                     par->family));
-		return -EINVAL;
-	}
-	if (par->match->proto && (par->match->proto != proto || inv_proto)) {
-		pr_err("%s_tables: %s match: only valid for protocol %u\n",
-		       xt_prefix[par->family], par->match->name,
-		       par->match->proto);
-		return -EINVAL;
-	}
-	if (par->match->checkentry != NULL) {
-		ret = par->match->checkentry(par);
-		if (ret < 0)
-			return ret;
-		else if (ret > 0)
-			/* Flag up potential errors. */
-			return -EIO;
+	ret = xt_check_target(&par, t->u.target_size - sizeof(*t),
+	      e->ip.proto, e->ip.invflags & IPT_INV_PROTO);
+	if (ret < 0) {
+		duprintf("check failed for `%s'.\n",
+			 t->u.kernel.target->name);
+		return ret;
 	}
 	
 	return 0;
-}//xt_check_match
+}//check_target
+
+
+//=== Data Structures =====
+struct ipt_entry;
+struct xt_entry_target;
+
+/**
+ * @brief {
+ * modified =>{xt_entry_target}, 
+ * read =>{ipt_entry, xt_entry_target},
+ * used =>{
+ *          "ipt_entry      :: used to get the value of data `xt_entry_target` via ipt_get_target_c operation", 
+ *          "xt_entry_target:: "
+ *    } 
+ * }
+ * 
+ * @param e 
+ * @return int 
+ */
+static int check_entry(const struct ipt_entry *e)
+{
+	const struct xt_entry_target *t;
+
+	if (!ip_checkentry(&e->ip))
+		return -EINVAL;
+
+	if (e->target_offset + sizeof(struct xt_entry_target) >
+	    e->next_offset)
+		return -EINVAL;
+
+	t = ipt_get_target_c(e);
+	if (e->target_offset + t->u.target_size > e->next_offset)
+		return -EINVAL;
+
+	return 0;
+}//check_entry

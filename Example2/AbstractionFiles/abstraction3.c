@@ -1,222 +1,110 @@
 //=== Data Structures =====
-struct compat_ipt_entry;
+struct net *net;
 struct xt_table_info;
-struct xt_entry_target;
-struct xt_target;
+struct xt_table;
+struct xt_counters;
 struct ipt_entry;
-struct xt_entry_match;
 
 /**
- * @brief  {
- * modified =>{xt_table_info, xt_entry_target, xt_target, ipt_entry, xt_entry_match}, 
- * read =>{compat_ipt_entry, xt_table_info, xt_entry_target, ipt_entry, xt_entry_match},
- * used =>{
- *          "compat_ipt_entry:: the value is copied to data `ipt_entry` via memcpy operation", 
- *          "compat_ipt_entry:: used to iteratively set the value of data `xt_entry_match` via xt_ematch_foreach operation", 
- *          "compat_ipt_entry:: used to get the value of  data `xt_entry_target` via compat_ipt_get_target operation", 
- *          "xt_entry_target :: used to set the value of data `xt_target` by reading it's target element"
- *    }
+ * @brief {
+ * modified =>{
+ * 	data-structures: {xt_table, xt_counters, ipt_entry},
+ * 	how-it-was-modified: {
+ * 		"xt_table   :: modified via try_then_request_module() operation using data `net` as paramenter ",
+ * 		"xt_counters:: modified via vzalloc() & vfree() operation",
+ * 		"ipt_entry  :: modified by xt_entry_foreach() operation"
+ * 		} 
+ * }, 
+ * read =>{
+ *     data-structures: {net, xt_table_info, xt_table, xt_counters, ipt_entry},
+ * 	 how-it-was-read: {
+ *	      "net          :: used to get data `xt_table` via try_then_request_module operation", 
+ *          "xt_table_info:: ", 
+ *          "xt_table     :: used to get data `xt_table_info` via xt_replace_table operation", 
+ *          "xt_counters  :: ", 
+ *          "ipt_entry    :: used for iteration with data `xt_table_info` via xt_entry_foreach operation"
+ *         } 
+ * 	}
  * }
+ * unable to fix due to system calls
  * 
- * @param e 
- * @param dstptr 
- * @param size 
+ * @param net 
  * @param name 
+ * @param valid_hooks 
  * @param newinfo 
- * @param base 
+ * @param num_counters 
+ * @param counters_ptr 
  * @return int 
  */
-static int compat_copy_entry_from_user(struct compat_ipt_entry *e, void **dstptr,
-			    unsigned int *size, const char *name,
-			    struct xt_table_info *newinfo, unsigned char *base)
+static int
+__do_replace(struct net *net, const char *name, unsigned int valid_hooks,
+	     struct xt_table_info *newinfo, unsigned int num_counters,
+	     void __user *counters_ptr)
 {
-	struct xt_entry_target *t;
-	struct xt_target *target;
-	struct ipt_entry *de;
-	unsigned int origsize;
-	int ret, h;
-	struct xt_entry_match *ematch;
+	int ret;
+	struct xt_table *t;
+	struct xt_table_info *oldinfo;
+	struct xt_counters *counters;
+	struct ipt_entry *iter;
 
 	ret = 0;
-	origsize = *size;
-	de = (struct ipt_entry *)*dstptr;
-	memcpy(de, e, sizeof(struct ipt_entry));
-	memcpy(&de->counters, &e->counters, sizeof(e->counters));
-
-	*dstptr += sizeof(struct ipt_entry);
-	*size += sizeof(struct ipt_entry) - sizeof(struct compat_ipt_entry);
-
-	xt_ematch_foreach(ematch, e) {
-		ret = xt_compat_match_from_user(ematch, dstptr, size);
-		if (ret != 0)
-			return ret;
-	}
-	de->target_offset = e->target_offset - (origsize - *size);
-	t = compat_ipt_get_target(e);
-	target = t->u.kernel.target;
-	xt_compat_target_from_user(t, dstptr, size);
-
-	de->next_offset = e->next_offset - (origsize - *size);
-	for (h = 0; h < NF_INET_NUMHOOKS; h++) {
-		if ((unsigned char *)de - base < newinfo->hook_entry[h])
-			newinfo->hook_entry[h] -= origsize - *size;
-		if ((unsigned char *)de - base < newinfo->underflow[h])
-			newinfo->underflow[h] -= origsize - *size;
-	}
-	return ret;
-}//compat_copy_entry_from_user
-
-
-//=== Data Structures =====
-struct compat_ipt_entry;
-struct xt_table_info;
-struct xt_entry_match;
-struct xt_entry_target;
-struct xt_target;
-/**
- * @brief {
- * modified =>{compat_ipt_entry, xt_table_info, xt_entry_match, xt_entry_target, xt_target}, 
- * read =>{compat_ipt_entry, xt_entry_match, xt_entry_target, xt_target},
- * used =>{
- *          "compat_ipt_entry:: the value casted to `ipt_entry` via the check_entry operation", 
- *          "compat_ipt_entry:: used to get data `xt_entry_target` via compat_ipt_get_target operation", 
- *          "compat_ipt_entry:: used to iteratively set the value of data `xt_entry_match` via xt_ematch_foreach operation", 
- *          "xt_entry_match  :: used with data `compat_ipt_entry` as parameters to compat_find_calc_match operation",
- *          "xt_entry_match  :: used as a parameter in module_put operation",
- *          "xt_entry_target :: used to get data `xt_target` via xt_request_find_target operation",
- *          "xt_entry_target :: used as a parameter in module_put operation",
- *          "xt_target       :: used as a parameter to xt_compat_target_offset operation"
- *          "xt_target       :: used to update the value of `xt_entry_target` element via assignment"
- *    }
- * }
- * 
- * @param e 
- * @param newinfo 
- * @param size 
- * @param base 
- * @param limit 
- * @param hook_entries 
- * @param underflows 
- * @param name 
- * @return int 
- */
-static int check_compat_entry_size_and_hooks(struct compat_ipt_entry *e,
-				  struct xt_table_info *newinfo,
-				  unsigned int *size,
-				  const unsigned char *base,
-				  const unsigned char *limit,
-				  const unsigned int *hook_entries,
-				  const unsigned int *underflows,
-				  const char *name)
-{
-	struct xt_entry_match *ematch;
-	struct xt_entry_target *t;
-	struct xt_target *target;
-	unsigned int entry_offset;
-	unsigned int j;
-	int ret, off, h;
-
-	printf("check_compat_entry_size_and_hooks %p\n", e);
-	if ((unsigned long)e % __alignof__(struct compat_ipt_entry) != 0 ||
-	    (unsigned char *)e + sizeof(struct compat_ipt_entry) >= limit ||
-	    (unsigned char *)e + e->next_offset > limit) {
-		printf("Bad offset %p, limit = %p\n", e, limit);
-		return -EINVAL;
-	}
-
-	if (e->next_offset < sizeof(struct compat_ipt_entry) +
-			     sizeof(struct compat_xt_entry_target)) {
-		printf("checking: element %p size %u\n",
-			 e, e->next_offset);
-		return -EINVAL;
-	}
-
-	/* For purposes of check_entry casting the compat entry is fine */
-	ret = check_entry((struct ipt_entry *)e);
-	if (ret)
-		return ret;
-
-	off = sizeof(struct ipt_entry) - sizeof(struct compat_ipt_entry);
-	entry_offset = (void *)e - (void *)base;
-	j = 0;
-	xt_ematch_foreach(ematch, e) {
-		ret = compat_find_calc_match(ematch, name, &e->ip, &off);
-		if (ret != 0)
-			goto release_matches;
-		++j;
-	}
-
-	t = compat_ipt_get_target(e);
-	target = xt_request_find_target(NFPROTO_IPV4, t->u.user.name,
-					t->u.user.revision);
-	if (IS_ERR(target)) {
-		printf("check_compat_entry_size_and_hooks: `%s' not found\n",
-			 t->u.user.name);
-		ret = PTR_ERR(target);
-		goto release_matches;
-	}
-	t->u.kernel.target = target;
-
-	off += xt_compat_target_offset(target);
-	*size += off;
-	ret = xt_compat_add_offset(AF_INET, entry_offset, off);
-	if (ret)
+	counters = vzalloc(num_counters * sizeof(struct xt_counters));
+	if (!counters) {
+		ret = -ENOMEM;
 		goto out;
-
-	/* Check hooks & underflows */
-	for (h = 0; h < NF_INET_NUMHOOKS; h++) {
-		if ((unsigned char *)e - base == hook_entries[h])
-			newinfo->hook_entry[h] = hook_entries[h];
-		if ((unsigned char *)e - base == underflows[h])
-			newinfo->underflow[h] = underflows[h];
 	}
 
-	/* Clear counters and comefrom */
-	memset(&e->counters, 0, sizeof(e->counters));
-	e->comefrom = 0;
-	return 0;
-
-out:
-	module_put(t->u.kernel.target->me);
-release_matches:
-	xt_ematch_foreach(ematch, e) {
-		if (j-- == 0)
-			break;
-		module_put(ematch->u.kernel.match->me);
+	t = try_then_request_module(xt_find_table_lock(net, AF_INET, name),
+				    "iptable_%s", name);
+	if (IS_ERR_OR_NULL(t)) {
+		ret = t ? PTR_ERR(t) : -ENOENT;
+		goto free_newinfo_counters_untrans;
 	}
+
+	/* You lied! */
+	if (valid_hooks != t->valid_hooks) {
+		printf("Valid hook crap: %08X vs %08X\n",
+			 valid_hooks, t->valid_hooks);
+		ret = -EINVAL;
+		goto put_module;
+	}
+
+	oldinfo = xt_replace_table(t, num_counters, newinfo, &ret);
+	if (!oldinfo)
+		goto put_module;
+
+	/* Update module usage count based on number of rules */
+	printf("do_replace: oldnum=%u, initnum=%u, newnum=%u\n",
+		oldinfo->number, oldinfo->initial_entries, newinfo->number);
+	if ((oldinfo->number > oldinfo->initial_entries) ||
+	    (newinfo->number <= oldinfo->initial_entries))
+		module_put(t->me);
+	if ((oldinfo->number > oldinfo->initial_entries) &&
+	    (newinfo->number <= oldinfo->initial_entries))
+		module_put(t->me);
+
+	/* Get the old counters, and synchronize with replace */
+	get_counters(oldinfo, counters);
+
+	/* Decrease module usage counts and free resource */
+	xt_entry_foreach(iter, oldinfo->entries, oldinfo->size)
+		cleanup_entry(iter, net);
+
+	xt_free_table_info(oldinfo);
+	if (copy_to_user(counters_ptr, counters,
+			 sizeof(struct xt_counters) * num_counters) != 0) {
+		/* Silent error, can't fail, new table is already in place */
+		net_warn_ratelimited("iptables: counters copy to user failed while replacing table\n");
+	}
+	vfree(counters);
+	xt_table_unlock(t);
 	return ret;
-}//check_compat_entry_size_and_hooks
 
-
-//=== Data Structures =====
-struct compat_ipt_entry;
-struct xt_entry_target;
-struct xt_entry_match;
-
-/**
- * @brief {
- * modified =>{xt_entry_target, xt_entry_match}, 
- * read =>{compat_ipt_entry, xt_entry_target, xt_entry_match},
- * used =>{
- *          "compat_ipt_entry:: used to iteratively set the value of data `xt_entry_match` via xt_ematch_foreach operation",
- *          "compat_ipt_entry:: used to get the value of  data `xt_entry_target` via compat_ipt_get_target operation",  
- *          "xt_entry_target :: used as a parameter to module_put",
- *          "xt_entry_match  :: the value is used as a parameter to module_put operation"
- *    }
- * }
- * 
- * @param e 
- */
-static void compat_release_entry(struct compat_ipt_entry *e)
-{
-	struct xt_entry_target *t;
-	struct xt_entry_match *ematch;
-
-	/* Cleanup all matches */
-	xt_ematch_foreach(ematch, e)
-		module_put(ematch->u.kernel.match->me);
-	t = compat_ipt_get_target(e);
-	module_put(t->u.kernel.target->me);
-}//compat_release_entry
-
-
+ put_module:
+	module_put(t->me);
+	xt_table_unlock(t);
+ free_newinfo_counters_untrans:
+	vfree(counters);
+ out:
+	return ret;
+}
