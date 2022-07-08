@@ -12,7 +12,7 @@ struct ipt_entry;
  * 	how-it-was-modified: {
  * 		"xt_table   :: modified via try_then_request_module() operation using data `net` as paramenter ",
  * 		"xt_counters:: modified via vzalloc() & vfree() operation",
- * 		"ipt_entry  :: modified by xt_entry_foreach() operation"
+ * 		"ipt_entry  :: modified by xt_entry_foreach() operation using data `xt_table_info` as parameter"
  * 		} 
  * }, 
  * read =>{

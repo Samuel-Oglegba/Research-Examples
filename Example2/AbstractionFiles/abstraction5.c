@@ -6,14 +6,13 @@ struct xt_entry_target;
 struct xt_entry_match;
 
 /**
- * @brief could not find the definition of xt_tgdtor_param
- * {
+ * @brief {
  * modified =>{
  *   	data-structures: {xt_tgdtor_param, xt_entry_target, xt_entry_match},
  * 	how-it-was-modified: {
  * 		"xt_tgdtor_param:: modified by assignment to data `net`, `xt_entry_target`, & a constant",
  * 		"xt_entry_target:: modified via ipt_get_target() operation using data `ipt_entry` as parameter",
- * 		"xt_entry_match :: modified by xt_ematch_foreach() operation"
+ * 		"xt_entry_match :: modified by xt_ematch_foreach() operation using data `ipt_entry` as parameter"
  * 		} 
  * }, 
  * read =>{

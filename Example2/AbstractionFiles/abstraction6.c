@@ -9,9 +9,9 @@ struct xt_mtchk_param;
  * modified =>{
  *    data-structures: {ipt_entry, xt_entry_match, xt_mtchk_param},
  * 	how-it-was-modified: {
- * 		"ipt_entry     :: ",
- * 		"xt_entry_match:: ",
- * 		"xt_mtchk_param:: "
+ * 		"ipt_entry     :: modified by assignment to xt_percpu_counter_alloc() operation",
+ * 		"xt_entry_match:: modified by xt_ematch_foreach() operation using data `ipt_entry` as parameter",
+ * 		"xt_mtchk_param:: modified by assignment to data `net`, `ipt_entry`, & a constant"
  * 		} 
  * }, 
  * read =>{

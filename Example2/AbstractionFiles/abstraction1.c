@@ -12,7 +12,7 @@ struct ipt_entry;
 	* 	how-it-was-modified: {
 	* 		"compat_ipt_replace:: the user-space data is copied to data `compat_ipt_replace` via copy_from_user() operation",
 	* 		"xt_table_info     :: memory size is allocated via xt_alloc_table_info() operation and data `compat_ipt_replace` element as parameter ",
-	*		"ipt_entry         :: modified by xt_entry_foreach() operation"
+	*		"ipt_entry         :: modified by xt_entry_foreach() operation using data `xt_table_info` as parameter"
 	* 		}
 	* 	}, 
 	* read =>{
@@ -99,7 +99,7 @@ struct ipt_entry;
 	* 	data-structures: {xt_table_info, ipt_entry},
 	* 	how-it-was-modified: {
 	* 		"xt_table_info:: modified by assignments to parameters passed into the function ",
-	*		"ipt_entry    :: modified by xt_entry_foreach() operation"
+	*		"ipt_entry    :: modified by xt_entry_foreach() operation using data `xt_table_info` as parameter"
 	* 		}
 	* }, 
 	* read =>{
