@@ -4,17 +4,23 @@ struct net;
 struct xt_entry_target;
 struct xt_tgchk_param;
 /**
- * @brief unable to get the definition to xt_tgchk_param
- * {
- * modified =>{xt_entry_target}, 
- * read =>{ipt_entry, net, xt_entry_target, xt_tgchk_param},
- * used =>{
- *          "ipt_entry      :: used to get the value of data `xt_entry_target` via ipt_get_target operation", 
+ * @brief {
+ * modified =>{
+ *    data-structures: {xt_entry_target},
+ * 	how-it-was-modified: {
+ * 		"xt_entry_target:: modified using ipt_get_target() operation using `ipt_entry` as a parameter",
+ * 		} 
+ * }, 
+ * read =>{
+ *    data-structures: {ipt_entry, net, xt_entry_target, xt_tgchk_param},
+ * 	how-it-was-read: {
+ *    	"ipt_entry      :: used to get the value of data `xt_entry_target` via ipt_get_target operation", 
  *          "ipt_entry      :: used to set the value of elements of data `xt_tgchk_param` via assignments", 
  *          "net            :: used to set the value of the net element of data `xt_tgchk_param`", 
  *          "xt_entry_target:: used to set `xt_tgchk_param` elements (target & targinfo) via assignment",
  *          "xt_tgchk_param :: used with `xt_entry_target` & `ipt_entry` as parameters to xt_check_target operation",
- *    } 
+ *         } 
+ * 	},
  * }
  * 
  * @param e 
@@ -55,12 +61,19 @@ struct xt_entry_target;
 
 /**
  * @brief {
- * modified =>{xt_entry_target}, 
- * read =>{ipt_entry, xt_entry_target},
- * used =>{
- *          "ipt_entry      :: used to get the value of data `xt_entry_target` via ipt_get_target_c operation", 
+ * modified =>{
+ *   	data-structures: {xt_entry_target},
+ * 	how-it-was-modified: {
+ * 		"xt_entry_target:: modified using ipt_get_target_c() operation using `ipt_entry` as a parameter",
+ * 		} 
+ * }, 
+ * read =>{
+ *     data-structures: {ipt_entry, xt_entry_target},
+ * 	 how-it-was-read: {
+ *    	"ipt_entry      :: used to get the value of data `xt_entry_target` via ipt_get_target_c operation", 
  *          "xt_entry_target:: "
- *    } 
+ *         } 
+ * 	},
  * }
  * 
  * @param e 

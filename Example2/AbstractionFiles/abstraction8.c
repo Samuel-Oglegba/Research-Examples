@@ -4,13 +4,21 @@ struct xt_mtchk_param;
 struct ipt_ip;
 /**
  * @brief {
- * modified =>{xt_mtchk_param, ipt_ip}, 
- * read =>{xt_entry_match, xt_mtchk_param, ipt_ip},
- * used =>{
- *          "xt_entry_match:: used to set the value of elements in  data `xt_mtchk_param` (match & matchinfo) by assignment", 
- *          "xt_entry_match:: used with `xt_mtchk_param` & `ipt_ip` as parameters to xt_check_match operation"
- *          "xt_mtchk_param:: used to set the value of data `ipt_ip` by assignment (par->entryinfo)", 
- *    } 
+ * modified =>{
+ *    	data-structures: {xt_mtchk_param, ipt_ip},
+ * 		how-it-was-modified: {
+ * 			"xt_mtchk_param:: modified by assigning its elements (match,matchinfo) to  data `xt_entry_match` elements (m->u.kernel.match & m->data)",
+ * 			"ipt_ip        :: modified by assigning data `xt_mtchk_param` element (par->entryinfo)",
+ * 		} 
+ * }, 
+ * read =>{
+ *   		data-structures: {xt_entry_match, xt_mtchk_param, ipt_ip},
+ * 		how-it-was-read: {
+ *    	 	"xt_entry_match:: used to set the value of elements in  data `xt_mtchk_param` (match & matchinfo) by assignment", 
+ *          	"xt_entry_match:: used with `xt_mtchk_param` & `ipt_ip` as parameters to xt_check_match operation"
+ *          	"xt_mtchk_param:: used to set the value of data `ipt_ip` by assignment (par->entryinfo)", 
+ *         } 
+ *	 },
  * }
  * 
  * @param m 

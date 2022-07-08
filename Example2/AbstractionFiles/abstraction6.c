@@ -80,11 +80,14 @@ struct xt_mtchk_param;
 /**
  * @brief unable to find the definition of xt_check_match
  * {
- * modified =>{}, 
- * read =>{xt_mtchk_param},
- * used =>{
- *          "xt_mtchk_param:: ",
- *    } 
+ * modified =>{
+ *  	data-structures:{xt_mtchk_param},
+ * 	how-it-was-modified: {}
+ * }, 
+ * read =>{
+ * 	data-structures:{xt_mtchk_param},
+ * 	how-it-was-read: {}
+ * 	},
  * }
  * 
  * @param par 
@@ -104,7 +107,7 @@ int xt_check_match(struct xt_mtchk_param *par, unsigned short match_size,
 		 * ebt_among is exempt from centralized matchsize checking
 		 * because it uses a dynamic-size data set.
 		 */
-		pr_err("%s_tables: %s.%u match: invalid size "
+		printf("%s_tables: %s.%u match: invalid size "
 		       "%u (kernel) != (user) %u\n",
 		       xt_prefix[par->family], par->match->name,
 		       par->match->revision,
@@ -113,7 +116,7 @@ int xt_check_match(struct xt_mtchk_param *par, unsigned short match_size,
 	}
 	if (par->match->table != NULL &&
 	    strcmp(par->match->table, par->table) != 0) {
-		pr_err("%s_tables: %s match: only valid in %s table, not %s\n",
+		printf("%s_tables: %s match: only valid in %s table, not %s\n",
 		       xt_prefix[par->family], par->match->name,
 		       par->match->table, par->table);
 		return -EINVAL;
@@ -121,7 +124,7 @@ int xt_check_match(struct xt_mtchk_param *par, unsigned short match_size,
 	if (par->match->hooks && (par->hook_mask & ~par->match->hooks) != 0) {
 		char used[64], allow[64];
 
-		pr_err("%s_tables: %s match: used from hooks %s, but only "
+		printf("%s_tables: %s match: used from hooks %s, but only "
 		       "valid from %s\n",
 		       xt_prefix[par->family], par->match->name,
 		       textify_hooks(used, sizeof(used), par->hook_mask,
@@ -131,7 +134,7 @@ int xt_check_match(struct xt_mtchk_param *par, unsigned short match_size,
 		return -EINVAL;
 	}
 	if (par->match->proto && (par->match->proto != proto || inv_proto)) {
-		pr_err("%s_tables: %s match: only valid for protocol %u\n",
+		printf("%s_tables: %s match: only valid for protocol %u\n",
 		       xt_prefix[par->family], par->match->name,
 		       par->match->proto);
 		return -EINVAL;
