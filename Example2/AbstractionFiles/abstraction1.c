@@ -18,9 +18,9 @@ struct ipt_entry;
 	* read =>{
 	* 	data-structures: {net, compat_ipt_replace, xt_table_info, ipt_entry},
 	* 	how-it-was-read: {
-	* 	     "net               :: used to get the value of data `xt_table` via __do_replace() operation. `xt_table` is parent to `xt_table_info`",
+	* 	    "net               :: used to get the value of data `xt_table` via __do_replace() operation. `xt_table` is parent to `xt_table_info`",
 	*         "compat_ipt_replace:: used to set the size of data `xt_table_info` via xt_alloc_table_info() operation",
-	*         "xt_table_info     :: the size element of `xt_table_info` is used to iterate over data `ipt_entry` and clean up data `net` via xt_entry_foreach() & cleanup_entry() operations" 
+	*         "xt_table_info     :: the size element of `xt_table_info` is used to iterate over data `ipt_entry` and clean up data `net` via xt_entry_foreach() & cleanup_entry() operations respectively" 
 	*         } 		
 	* 	}
  * }
@@ -105,7 +105,7 @@ struct ipt_entry;
 	* read =>{
 	* 	data-structures: {net, xt_table_info, compat_ipt_entry, ipt_entry},
 	* 	how-it-was-read: {
-	* 		"net             :: used for matching data `xt_entry_target` via the compat_check_entry() operation",
+	* 	     "net             :: used for matching data `xt_entry_target` via the compat_check_entry() operation",
 	*          "xt_table_info   :: the size of `xt_table_info` is used to iterate over `ipt_entry` via xt_entry_foreach() operation", 
 	*          "xt_table_info   :: the size of `xt_table_info` is used to iterate over `compat_ipt_entry` via xt_entry_foreach() operation", 
 	* 		} 

@@ -19,7 +19,7 @@ struct compat_xt_entry_target;
  * 	 how-it-was-read: {
  *	      "xt_entry_target       :: used to set the value of data `xt_target` by assignment", 
  *          "xt_target             :: used to update data `xt_entry_target` to `compat_xt_entry_target` via target->compat_from_user operation", 
- *          "compat_xt_entry_target:: sets new values of data `xt_entry_target` via memcpy & target->compat_from_user operation"
+ *          "compat_xt_entry_target:: sets new values of data `xt_entry_target` via memcpy & target->compat_from_user() operation"
  *         } 
  * 	} 
  * }
