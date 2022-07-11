@@ -12,8 +12,11 @@ struct ipt_entry;
 	* 	how-it-was-modified: {
 	* 		"compat_ipt_replace:: the user-space data is copied to data `compat_ipt_replace` via copy_from_user() operation",
 	* 		"xt_table_info     :: memory size is allocated via xt_alloc_table_info() operation and data `compat_ipt_replace` element as parameter ",
-	*		"ipt_entry         :: modified by xt_entry_foreach() operation using data `xt_table_info` as parameter"
-	* 		}
+	*		"ipt_entry         :: modified by xt_entry_foreach() operation using data `xt_table_info` as parameter",
+	* 		},
+	*	relationships:{
+	*		"`xt_table_info` has char array element called `entries` which is used to set the value of `ipt_entry`",
+	*		},
 	* 	}, 
 	* read =>{
 	* 	data-structures: {net, compat_ipt_replace, xt_table_info, ipt_entry},
@@ -99,13 +102,16 @@ struct ipt_entry;
 	* 	data-structures: {xt_table_info, ipt_entry},
 	* 	how-it-was-modified: {
 	* 		"xt_table_info:: modified by assignments to parameters passed into the function ",
-	*		"ipt_entry    :: modified by xt_entry_foreach() operation using data `xt_table_info` as parameter"
-	* 		}
+	*		"ipt_entry    :: modified by xt_entry_foreach() operation using data `xt_table_info` as parameter",
+	* 		},
+	*	relationships:{
+	*		"`xt_table_info` has char array element called `entries` which is used to set the value of `ipt_entry`",
+	*		},
 	* }, 
 	* read =>{
 	* 	data-structures: {net, xt_table_info, compat_ipt_entry, ipt_entry},
 	* 	how-it-was-read: {
-	* 	     "net             :: used for matching data `xt_entry_target` via the compat_check_entry() operation",
+	* 	     "net             :: used to find matching data `ipt_entry` via the compat_check_entry() operation",
 	*          "xt_table_info   :: the size of `xt_table_info` is used to iterate over `ipt_entry` via xt_entry_foreach() operation", 
 	*          "xt_table_info   :: the size of `xt_table_info` is used to iterate over `compat_ipt_entry` via xt_entry_foreach() operation", 
 	* 		} 
