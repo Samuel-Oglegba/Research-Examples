@@ -100,8 +100,10 @@ struct xt_target;
 	* 		"xt_entry_match  :: modified via xt_ematch_foreach() operation using `compat_ipt_entry` as parameter",
 	* 		"xt_entry_target :: modified via compat_ipt_get_target() operation using `compat_ipt_entry` as paramenter",
 	* 		"xt_entry_target :: modified by assigning data `xt_target` to the target element",
+	*		"xt_target       :: "
 	* 		},
 	*	relationships:{
+	*		compat_ipt_entry & xt_entry_target ==> "`compat_ipt_entry` was converted to `xt_entry_target` by casting it to a void pointer and adding a target offset {(void *)e + e->target_offset} in compat_ipt_get_target() operation",
 	*		compat_ipt_entry & xt_entry_match ==> "`compat_ipt_entry` has an element {char elem[]} which was casted to `xt_entry_match` via xt_ematch_foreach() operation"
 	*		},
 	* }, 
@@ -117,7 +119,10 @@ struct xt_target;
 	*           "xt_entry_target :: used as a parameter in module_put() operation",
 	*           "xt_target       :: used as a parameter to xt_compat_target_offset() operation"
 	*           "xt_target       :: used to update the value of `xt_entry_target` element via assignment"
-	*         } 
+	*         },
+	*	relationships:{
+			xt_entry_target & xt_target ==> "`xt_target` is an element in `xt_entry_target` (parent to `xt_target`)"
+			}
 	* 	}
  * }
  * 
@@ -231,7 +236,11 @@ struct xt_entry_match;
 	*    how-it-was-modified: {
 	* 		"xt_entry_target:: modified via compat_ipt_get_target() operation using `compat_ipt_entry` as paramenter",
 	* 		"xt_entry_match :: modified via xt_ematch_foreach() operation using `compat_ipt_entry` as parameter",
-	* 		} 
+	* 		},
+	*	relationships:{
+	*		compat_ipt_entry & xt_entry_target ==> "`compat_ipt_entry` was converted to `xt_entry_target` by casting it to a void pointer and adding a target offset {(void *)e + e->target_offset} in compat_ipt_get_target() operation",
+	*		compat_ipt_entry & xt_entry_match ==> "`compat_ipt_entry` has an element {char elem[]} which was casted to `xt_entry_match` via xt_ematch_foreach() operation"
+	*		},
 	* }, 
 	* read =>{
 	*    data-structures: {compat_ipt_entry, xt_entry_target, xt_entry_match},
