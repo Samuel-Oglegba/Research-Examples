@@ -12,7 +12,11 @@ struct compat_xt_entry_target;
  * 		"xt_entry_target       :: modified by memcpy(), & memset() operations using data `compat_xt_entry_target` and `xt_target` as parameters respectively",
  * 		"xt_target             :: modified by assignment to data `xt_entry_target` target element",
  * 		"compat_xt_entry_target:: modified by assignment via casting of data `xt_entry_target`"
- * 		} 
+ * 		},
+ *   	relationships:{
+ *		xt_entry_target & xt_target ==> "`xt_table` is a child/element of `xt_entry_target`",
+ *		compat_xt_entry_target & xt_entry_target ==> "they both have same elements"
+ *		}, 
  * }, 
  * read =>{
  *     data-structures: {xt_entry_target, xt_target, compat_xt_entry_target},

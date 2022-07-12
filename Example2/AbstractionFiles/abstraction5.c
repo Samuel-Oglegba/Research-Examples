@@ -13,7 +13,12 @@ struct xt_entry_match;
  * 		"xt_tgdtor_param:: modified by assignment to data `net`, `xt_entry_target`, & a constant",
  * 		"xt_entry_target:: modified via ipt_get_target() operation using data `ipt_entry` as parameter",
  * 		"xt_entry_match :: modified by xt_ematch_foreach() operation using data `ipt_entry` as parameter"
- * 		} 
+ * 		},
+ *	relationships:{
+ *		xt_tgdtor_param & net ==> "`xt_tgdtor_param` has `net` as an element",
+ *		xt_entry_target & ipt_entry ==> "`ipt_entry` was casted to `xt_entry_target` in addition to it's offset {(void *)e + e->target_offset}",
+ *		xt_entry_match & ipt_entry ==> "`ipt_entry` has an element {char elems[]} which was casted to `xt_entry_match` via xt_ematch_foreach() operation",
+ *		},  
  * }, 
  * read =>{
  *    data-structures: {ipt_entry, net, xt_tgdtor_param, xt_entry_target, xt_entry_match},

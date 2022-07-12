@@ -13,7 +13,11 @@ struct ipt_entry;
  * 		"xt_table   :: modified via try_then_request_module() operation using data `net` as paramenter ",
  * 		"xt_counters:: modified via vzalloc() & vfree() operation",
  * 		"ipt_entry  :: modified by xt_entry_foreach() operation using data `xt_table_info` as parameter"
- * 		} 
+ * 		},
+ * 	relationships:{
+ *		net & xt_table ==> "`xt_table` has an element table_init() which accepts `net` as input parameter",
+ *		xt_table_info & ipt_entry ==> "`xt_table_info` has an array element called entries which holds data `ipt_entry`"
+ *		}, 
  * }, 
  * read =>{
  *     data-structures: {net, xt_table_info, xt_table, xt_counters, ipt_entry},
