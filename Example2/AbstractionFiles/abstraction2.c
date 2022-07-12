@@ -6,6 +6,7 @@ struct xt_target;
 struct ipt_entry;
 struct xt_entry_match;
 
+
 /**
  * @brief  {
 	* modified =>{
@@ -17,7 +18,11 @@ struct xt_entry_match;
 	* 		"xt_target      :: modified by assigning data `xt_entry_target` target element ",
 	* 		"ipt_entry      :: modified by casting a void pointer ((struct ipt_entry *)*dstptr) & memcpy() operation",
 	* 		"xt_entry_match :: modified via xt_ematch_foreach() operation using `compat_ipt_entry` as parameter",
-	* 		}
+	* 		},
+	*	relationships:{
+	*		compat_ipt_entry & xt_entry_target ==> "`compat_ipt_entry` was converted to `xt_entry_target` by casting it to a void pointer and adding a target offset {(void *)e + e->target_offset} in compat_ipt_get_target() operation",
+	*		compat_ipt_entry & xt_entry_match ==> "`compat_ipt_entry` has an element {char elem[]} which was casted to `xt_entry_match` via xt_ematch_foreach() operation"
+	*		},
 	* }, 
 	* read =>{
 	*    data-structures: {compat_ipt_entry, xt_table_info, xt_entry_target, ipt_entry, xt_entry_match},
@@ -95,7 +100,10 @@ struct xt_target;
 	* 		"xt_entry_match  :: modified via xt_ematch_foreach() operation using `compat_ipt_entry` as parameter",
 	* 		"xt_entry_target :: modified via compat_ipt_get_target() operation using `compat_ipt_entry` as paramenter",
 	* 		"xt_entry_target :: modified by assigning data `xt_target` to the target element",
-	* 		} 
+	* 		},
+	*	relationships:{
+	*		compat_ipt_entry & xt_entry_match ==> "`compat_ipt_entry` has an element {char elem[]} which was casted to `xt_entry_match` via xt_ematch_foreach() operation"
+	*		},
 	* }, 
 	* read =>{
 	*     data-structures: {compat_ipt_entry, xt_entry_match, xt_entry_target, xt_target},

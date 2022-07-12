@@ -15,7 +15,7 @@ struct ipt_entry;
 	*		"ipt_entry         :: modified by xt_entry_foreach() operation using data `xt_table_info` as parameter",
 	* 		},
 	*	relationships:{
-	*		"`xt_table_info` has char array element called `entries` which is used to set the value of `ipt_entry`",
+	*		xt_table_info & ipt_entry ==> "`xt_table_info` has char array element called `entries` which is used to set the value of `ipt_entry`",
 	*		},
 	* 	}, 
 	* read =>{
@@ -105,7 +105,7 @@ struct ipt_entry;
 	*		"ipt_entry    :: modified by xt_entry_foreach() operation using data `xt_table_info` as parameter",
 	* 		},
 	*	relationships:{
-	*		"`xt_table_info` has char array element called `entries` which is used to set the value of `ipt_entry`",
+	*		xt_table_info & ipt_entry ==> "`xt_table_info` has char array element called `entries` which is used to set the value of `ipt_entry`",
 	*		},
 	* }, 
 	* read =>{
