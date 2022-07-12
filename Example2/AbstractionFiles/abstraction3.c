@@ -15,7 +15,7 @@ struct ipt_entry;
  * 		"ipt_entry  :: modified by xt_entry_foreach() operation using data `xt_table_info` as parameter"
  * 		},
  * 	relationships:{
- *		net & xt_table ==> "`xt_table` has an element table_init() which accepts `net` as input parameter",
+ *		net & xt_table ==> "`xt_table` is used to initialize `net` via table_init()",
  *		xt_table_info & ipt_entry ==> "`xt_table_info` has an array element called entries which holds data `ipt_entry`"
  *		}, 
  * }, 

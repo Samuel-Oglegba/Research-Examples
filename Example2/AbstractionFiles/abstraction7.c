@@ -9,7 +9,10 @@ struct xt_tgchk_param;
  *    data-structures: {xt_entry_target},
  * 	how-it-was-modified: {
  * 		"xt_entry_target:: modified using ipt_get_target() operation using `ipt_entry` as a parameter",
- * 		} 
+ * 		},
+ *    relationships:{
+ *		xt_entry_target & ipt_entry ==> "`ipt_entry` was casted to `xt_entry_target` in addition to it's offset {(void *)e + e->target_offset} in ipt_get_target() operation",
+ *		},  
  * }, 
  * read =>{
  *    data-structures: {ipt_entry, net, xt_entry_target, xt_tgchk_param},
@@ -19,7 +22,12 @@ struct xt_tgchk_param;
  *          "net            :: used to set the value of the net element of data `xt_tgchk_param`", 
  *          "xt_entry_target:: used to set `xt_tgchk_param` elements (target & targinfo) via assignment",
  *          "xt_tgchk_param :: used with `xt_entry_target` & `ipt_entry` as parameters to xt_check_target operation",
- *         } 
+ *         },
+ *    relationships:{
+ *		ipt_entry & xt_tgchk_param ==> "`xt_tgchk_param` is used to store `ipt_entry` via entryinfo element",
+ *		net & xt_tgchk_param ==> "`xt_tgchk_param` is used to store `net` via net element",
+ *		xt_entry_target & xt_tgchk_param ==> "`xt_tgchk_param` is used to store elemets of `xt_entry_target` via {target & targetinfo} elements",
+ *		},  
  * 	},
  * }
  * 
@@ -65,7 +73,10 @@ struct xt_entry_target;
  *   	data-structures: {xt_entry_target},
  * 	how-it-was-modified: {
  * 		"xt_entry_target:: modified using ipt_get_target_c() operation using `ipt_entry` as a parameter",
- * 		} 
+ * 		},
+ *	relationships:{
+ *		xt_entry_target & ipt_entry ==> "`ipt_entry` was casted to `xt_entry_target` in addition to it's offset {(void *)e + e->target_offset} in ipt_get_target_c() operation",
+ *		}, 
  * }, 
  * read =>{
  *     data-structures: {ipt_entry, xt_entry_target},

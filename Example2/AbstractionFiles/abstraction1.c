@@ -11,11 +11,11 @@ struct ipt_entry;
 	* 	data-structures: {compat_ipt_replace, xt_table_info,ipt_entry},
 	* 	how-it-was-modified: {
 	* 		"compat_ipt_replace:: the user-space data is copied to data `compat_ipt_replace` via copy_from_user() operation",
-	* 		"xt_table_info     :: memory size is allocated via xt_alloc_table_info() operation and data `compat_ipt_replace` element as parameter ",
+	* 		"xt_table_info     :: memory size is allocated via xt_alloc_table_info() operation and data `compat_ipt_replace` size element as parameter",
 	*		"ipt_entry         :: modified by xt_entry_foreach() operation using data `xt_table_info` as parameter",
 	* 		},
 	*	relationships:{
-	*		xt_table_info & ipt_entry ==> "`xt_table_info` has char array element called `entries` which is used to set the value of `ipt_entry`",
+	*		xt_table_info & ipt_entry ==> "`xt_table_info` has array of `ipt_entry` entries",
 	*		},
 	* 	}, 
 	* read =>{
@@ -105,7 +105,7 @@ struct ipt_entry;
 	*		"ipt_entry    :: modified by xt_entry_foreach() operation using data `xt_table_info` as parameter",
 	* 		},
 	*	relationships:{
-	*		xt_table_info & ipt_entry ==> "`xt_table_info` has char array element called `entries` which is used to set the value of `ipt_entry`",
+	*		xt_table_info & ipt_entry ==> "`xt_table_info` has array of `ipt_entry` entries",
 	*		},
 	* }, 
 	* read =>{

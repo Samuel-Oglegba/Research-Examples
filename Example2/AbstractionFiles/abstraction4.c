@@ -4,6 +4,7 @@ struct xt_target;
 struct compat_xt_entry_target;
 
 /**
+ * 
  * @brief {
  * modified =>{
  *  	data-structures: {xt_entry_target, xt_target, compat_xt_entry_target},
@@ -15,7 +16,7 @@ struct compat_xt_entry_target;
  * 		},
  *   	relationships:{
  *		xt_entry_target & xt_target ==> "`xt_table` is a child/element of `xt_entry_target`",
- *		compat_xt_entry_target & xt_entry_target ==> "they both have same elements"
+ *		compat_xt_entry_target & xt_entry_target ==> "they both have same elements TODO: convertion abtraction:: compat_xt_entry_target may be the 64-bit equivalent of xt_entry_target"
  *		}, 
  * }, 
  * read =>{

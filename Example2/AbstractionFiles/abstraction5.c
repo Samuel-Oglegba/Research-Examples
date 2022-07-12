@@ -16,7 +16,7 @@ struct xt_entry_match;
  * 		},
  *	relationships:{
  *		xt_tgdtor_param & net ==> "`xt_tgdtor_param` has `net` as an element",
- *		xt_entry_target & ipt_entry ==> "`ipt_entry` was casted to `xt_entry_target` in addition to it's offset {(void *)e + e->target_offset}",
+ *		xt_entry_target & ipt_entry ==> "`ipt_entry` was casted to `xt_entry_target` in addition to it's offset {(void *)e + e->target_offset} in ipt_get_target() operation",
  *		xt_entry_match & ipt_entry ==> "`ipt_entry` has an element {char elems[]} which was casted to `xt_entry_match` via xt_ematch_foreach() operation",
  *		},  
  * }, 
