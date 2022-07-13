@@ -1,109 +1,112 @@
 //=== Data Structures =====
-struct ipt_entry;
-struct net;
-struct xt_entry_target;
-struct xt_tgchk_param;
+struct xt_entry_match;
+struct xt_match;
+struct compat_xt_entry_match;
+
 /**
- * @brief {
+ * @brief  {
  * modified =>{
- *    data-structures: {xt_entry_target},
- * 	how-it-was-modified: {
- * 		"xt_entry_target:: modified using ipt_get_target() operation using `ipt_entry` as a parameter",
+ * 		data-structures: {xt_entry_match, xt_match, compat_xt_entry_match},
+ * 		how-it-was-modified: {
+ * 			"xt_entry_match       :: modified by assignment to a void pointer (m = *dstptr), memcpy(), memset(), & re-assignment to a it's origina size ",
+ * 			"xt_match             :: modified by assignment to data `xt_entry_match` match element",
+ * 			"compat_xt_entry_match:: modified by casting data `xt_entry_match`",
  * 		},
- *    relationships:{
- *		xt_entry_target & ipt_entry ==> "`ipt_entry` was casted to `xt_entry_target` in addition to it's offset {(void *)e + e->target_offset} in ipt_get_target() operation",
- *		},  
+ *		relationships:{
+ *			xt_entry_match & xt_match ==> "`xt_entry_match` is parent to `xt_match`",
+ *			compat_xt_entry_match & xt_entry_match ==> "convertion relationship:: `compat_xt_entry_match` has same element as `xt_entry_match` but implemented in kernel COMPAT_MODE",
+ *		},   
  * }, 
  * read =>{
- *    data-structures: {ipt_entry, net, xt_entry_target, xt_tgchk_param},
- * 	how-it-was-read: {
- *    	"ipt_entry      :: used to get the value of data `xt_entry_target` via ipt_get_target operation", 
- *          "ipt_entry      :: used to set the value of elements of data `xt_tgchk_param` via assignments", 
- *          "net            :: used to set the value of the net element of data `xt_tgchk_param`", 
- *          "xt_entry_target:: used to set `xt_tgchk_param` elements (target & targinfo) via assignment",
- *          "xt_tgchk_param :: used with `xt_entry_target` & `ipt_entry` as parameters to xt_check_target operation",
- *         },
- *    relationships:{
- *		ipt_entry & xt_tgchk_param ==> "`xt_tgchk_param` is used to store `ipt_entry` via entryinfo element",
- *		net & xt_tgchk_param ==> "`xt_tgchk_param` is used to store `net` via net element",
- *		xt_entry_target & xt_tgchk_param ==> "`xt_tgchk_param` is used to store elemets of `xt_entry_target` via {target & targetinfo} elements",
- *		},  
- * 	},
+ *    	data-structures: {xt_entry_match, xt_match, compat_xt_entry_match},
+ * 		how-it-was-read: {
+ *    	 	 "xt_entry_match       :: used to get the data `xt_match` via assignment (m->u.kernel.match)", 
+ *          	 "xt_entry_match       :: used to get the data `compat_xt_entry_match` via casting", 
+ *          	 "xt_match             :: used to update the value of `xt_entry_match` elements via compat_from_user, memset, & assignment operations",
+ *          	 "compat_xt_entry_match:: used to update the value of `xt_entry_match` elements via compat_from_user & memset operations", 
+ *         		} 
+ * 	}, 
  * }
  * 
- * @param e 
- * @param net 
- * @param name 
+ * @param m 
+ * @param dstptr 
+ * @param size 
  * @return int 
  */
-static int check_target(struct ipt_entry *e, struct net *net, const char *name)
+int xt_compat_match_from_user(struct xt_entry_match *m, void **dstptr,
+			      unsigned int *size)
 {
-	
-	struct xt_entry_target *t = ipt_get_target(e);
-	struct xt_tgchk_param par = {
-		.net       = net,
-		.table     = name,
-		.entryinfo = e,
-		.target    = t->u.kernel.target,
-		.targinfo  = t->data,
-		.hook_mask = e->comefrom,
-		.family    = NFPROTO_IPV4,
-	};
-	int ret;
+	const struct xt_match *match = m->u.kernel.match;
+	struct compat_xt_entry_match *cm = (struct compat_xt_entry_match *)m;
+	int pad, off = xt_compat_match_offset(match);
+	u_int16_t msize = cm->u.user.match_size;
 
-	ret = xt_check_target(&par, t->u.target_size - sizeof(*t),
-	      e->ip.proto, e->ip.invflags & IPT_INV_PROTO);
-	if (ret < 0) {
-		duprintf("check failed for `%s'.\n",
-			 t->u.kernel.target->name);
-		return ret;
-	}
-	
+	m = *dstptr;
+	memcpy(m, cm, sizeof(*cm));
+	if (match->compat_from_user)
+		match->compat_from_user(m->data, cm->data);
+	else
+		memcpy(m->data, cm->data, msize - sizeof(*cm));
+	pad = XT_ALIGN(match->matchsize) - match->matchsize;
+	if (pad > 0)
+		memset(m->data + match->matchsize, 0, pad);
+
+	msize += off;
+	m->u.user.match_size = msize;
+
+	*size += off;
+	*dstptr += msize;
 	return 0;
-}//check_target
+}//xt_compat_match_from_user
 
 
 //=== Data Structures =====
-struct ipt_entry;
-struct xt_entry_target;
-
+struct xt_entry_match;
+struct xt_match;
 /**
- * @brief {
+ * @brief  {
  * modified =>{
- *   	data-structures: {xt_entry_target},
- * 	how-it-was-modified: {
- * 		"xt_entry_target:: modified using ipt_get_target_c() operation using `ipt_entry` as a parameter",
+ * 		data-structures: {xt_entry_match, xt_match},
+ * 		how-it-was-modified: {
+ * 			"xt_entry_match:: modified by assigning data `xt_match` to it's match element",
+ * 			"xt_match      :: modified via xt_request_find_match() operation using data `xt_entry_match` elements as parameter",
  * 		},
- *	relationships:{
- *		xt_entry_target & ipt_entry ==> "`ipt_entry` was casted to `xt_entry_target` in addition to it's offset {(void *)e + e->target_offset} in ipt_get_target_c() operation",
- *		}, 
+ * 		relationships:{
+ *			xt_entry_match & xt_match ==> "`xt_entry_match` is parent to `xt_match`",
+ *		},   
  * }, 
  * read =>{
- *     data-structures: {ipt_entry, xt_entry_target},
- * 	 how-it-was-read: {
- *    	"ipt_entry      :: used to get the value of data `xt_entry_target` via ipt_get_target_c operation", 
- *          "xt_entry_target:: "
+ * 		data-structures: {xt_entry_match, xt_match},
+ * 		how-it-was-read: {
+ *    	 	"xt_entry_match:: used to get data `xt_match` via xt_request_find_match operation", 
+ *          	"xt_match      :: used to update the value of `xt_entry_match` element by assignment",
  *         } 
  * 	},
  * }
  * 
- * @param e 
+ * @param m 
+ * @param name 
+ * @param ip 
+ * @param size 
  * @return int 
  */
-static int check_entry(const struct ipt_entry *e)
+static int compat_find_calc_match(struct xt_entry_match *m,
+		       const char *name,
+		       const struct ipt_ip *ip,
+		       int *size)
 {
-	const struct xt_entry_target *t;
+	struct xt_match *match;
 
-	if (!ip_checkentry(&e->ip))
-		return -EINVAL;
-
-	if (e->target_offset + sizeof(struct xt_entry_target) >
-	    e->next_offset)
-		return -EINVAL;
-
-	t = ipt_get_target_c(e);
-	if (e->target_offset + t->u.target_size > e->next_offset)
-		return -EINVAL;
-
+	match = xt_request_find_match(NFPROTO_IPV4, m->u.user.name,
+				      m->u.user.revision);
+	if (IS_ERR(match)) {
+		printf("compat_check_calc_match: `%s' not found\n",
+			 m->u.user.name);
+		return PTR_ERR(match);
+	}
+	m->u.kernel.match = match;
+	*size += xt_compat_match_offset(match);
 	return 0;
-}//check_entry
+}// compat_find_calc_match
+
+
