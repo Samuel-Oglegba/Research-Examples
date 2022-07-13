@@ -15,18 +15,18 @@ struct ipt_entry;
  * 		"ipt_entry  :: modified by xt_entry_foreach() operation using data `xt_table_info` as parameter"
  * 		},
  * 	relationships:{
- *		net & xt_table ==> "`xt_table` is used to initialize `net` via table_init()",
+ *		net & xt_table ==> "`xt_table` is used to initialize a table in `net` via table_init(). called when table is needed in the given netns",
  *		xt_table_info & ipt_entry ==> "`xt_table_info` has an array element called entries which holds data `ipt_entry`"
  *		}, 
  * }, 
  * read =>{
  *     data-structures: {net, xt_table_info, xt_table, xt_counters, ipt_entry},
  * 	 how-it-was-read: {
- *	      "net          :: used to get data `xt_table` via try_then_request_module operation", 
+ *	      "net          :: used to get data `xt_table` via try_then_request_module() operation", 
  *          "xt_table_info:: ", 
- *          "xt_table     :: used to get data `xt_table_info` via xt_replace_table operation", 
- *          "xt_counters  :: ", 
- *          "ipt_entry    :: used for iteration with data `xt_table_info` via xt_entry_foreach operation"
+ *          "xt_table     :: used to get data `xt_table_info` via xt_replace_table() operation", 
+ *          "xt_counters  :: used with `xt_table_info` to get old table counters via get_counters() operation", 
+ *          "ipt_entry    :: used for iteration with data `xt_table_info` via xt_entry_foreach() operation"
  *         } 
  * 	}
  * }

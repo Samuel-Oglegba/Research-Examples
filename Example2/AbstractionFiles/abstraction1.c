@@ -11,7 +11,7 @@ struct ipt_entry;
 	* 	data-structures: {compat_ipt_replace, xt_table_info,ipt_entry},
 	* 	how-it-was-modified: {
 	* 		"compat_ipt_replace:: the user-space data is copied to data `compat_ipt_replace` via copy_from_user() operation",
-	* 		"xt_table_info     :: memory size is allocated via xt_alloc_table_info() operation and data `compat_ipt_replace` size element as parameter",
+	* 		"xt_table_info     :: memory size is allocated via xt_alloc_table_info() operation using data `compat_ipt_replace` size element as parameter",
 	*		"ipt_entry         :: modified by xt_entry_foreach() operation using data `xt_table_info` as parameter",
 	* 		},
 	*	relationships:{
@@ -22,7 +22,7 @@ struct ipt_entry;
 	* 	data-structures: {net, compat_ipt_replace, xt_table_info, ipt_entry},
 	* 	how-it-was-read: {
 	* 	    "net               :: used to get the value of data `xt_table` via __do_replace() operation. `xt_table` is parent to `xt_table_info`",
-	*         "compat_ipt_replace:: used to set the size of data `xt_table_info` via xt_alloc_table_info() operation",
+	*         "compat_ipt_replace:: the size element is used to set the size of data `xt_table_info` via xt_alloc_table_info() operation",
 	*         "xt_table_info     :: the size element of `xt_table_info` is used to iterate over data `ipt_entry` and clean up data `net` via xt_entry_foreach() & cleanup_entry() operations respectively" 
 	*         } 		
 	* 	}
