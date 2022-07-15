@@ -9,6 +9,7 @@ struct net;
  * 2). translate_compat_table() then checks all entries for validity and computes the new structure size which is to be allocated by newinfo = xt_alloc_table_info(size).
  * 3). Next, the function translate_compat_table() proceeds to call compat_copy_entry_from_user() with newinfo->entries as the destination
  * 4). Finally, function compat_copy_entry_from_user() converts struct ipt_entry, struct xt_entry_match and struct xt_entry_target entries from 32bit to 64bit
+ *    *** converting xt_entry_target in xt_compat_target_from_user() is where the vulnerability is present
  * 
  * @brief  
  * {
@@ -94,7 +95,7 @@ compat_do_replace(struct net *net, void __user *user, unsigned int len)
 	duprintf("compat_do_replace: Translated table\n");
 
       /**
-       * @brief This function replaces the table entries by swapping the values
+       * @brief This function replaces the table entries by swapping values old with new
        * 
        */
 	ret = __do_replace(net, tmp.name, tmp.valid_hooks, newinfo,
