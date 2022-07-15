@@ -406,6 +406,10 @@ check_compat_entry_size_and_hooks(struct compat_ipt_entry *e,
 	}
 	t->u.kernel.target = target;
 
+      /**
+       * @brief The problem that leads to the vulnerability is that target->targetsize is not taken into account, but only XT_ALIGN(target->targetsize) - COMPAT_XT_ALIGN(target->targetsize) in this function
+       * 
+       */
 	off += xt_compat_target_offset(target);
 	*size += off;
 	ret = xt_compat_add_offset(AF_INET, entry_offset, off);
