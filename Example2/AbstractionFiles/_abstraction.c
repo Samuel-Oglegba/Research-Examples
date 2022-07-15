@@ -73,7 +73,7 @@ compat_do_replace(struct net *net, void __user *user, unsigned int len)
 	}
 
       /**
-       * @brief checks all entries for validity and computes the new structure size in kernel-space
+       * @brief checks all entries for validity and computes the new structure size in kernel-space from 32bit to 64bit
        * 
        */
 	ret = translate_compat_table(net, tmp.name, tmp.valid_hooks,
@@ -209,7 +209,7 @@ translate_compat_table(struct net *net,
 	size = total_size;
 	xt_entry_foreach(iter0, entry0, total_size) {
             /**
-             * @brief this function converts the data structures
+             * @brief this function converts the data structures in kernel space from from 32bit to 64bit
              * 
              */
 		ret = compat_copy_entry_from_user(iter0, &pos, &size,
