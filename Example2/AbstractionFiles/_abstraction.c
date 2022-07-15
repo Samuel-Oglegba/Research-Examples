@@ -102,7 +102,7 @@ compat_do_replace(struct net *net, void __user *user, unsigned int len)
 
 
 /**
- * @brief The function translate_compat_table() then checks all entries for validity and computes the new structure size which is to be allocated by newinfo = xt_alloc_table_info(size)
+ * @brief The function translate_compat_table() checks all entries for validity and computes the new structure size which is to be allocated by newinfo = xt_alloc_table_info(size)
  * 
  * @param net 
  * @param name 
