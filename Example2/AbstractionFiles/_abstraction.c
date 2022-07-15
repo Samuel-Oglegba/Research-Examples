@@ -73,7 +73,7 @@ compat_do_replace(struct net *net, void __user *user, unsigned int len)
 	}
 
       /**
-       * @brief checks all entries for validity and computes the new structure size in kernel-space from 32bit to 64bit
+       * @brief checks all entries for validity and computes the new structure size in kernel-space when converting from 32bit to 64bit
        * 
        */
 	ret = translate_compat_table(net, tmp.name, tmp.valid_hooks,
