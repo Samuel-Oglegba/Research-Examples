@@ -85,6 +85,10 @@ compat_do_replace(struct net *net, void __user *user, unsigned int len)
 
 	duprintf("compat_do_replace: Translated table\n");
 
+      /**
+       * @brief 
+       * 
+       */
 	ret = __do_replace(net, tmp.name, tmp.valid_hooks, newinfo,
 			   tmp.num_counters, compat_ptr(tmp.counters));
 	if (ret)
@@ -210,7 +214,7 @@ translate_compat_table(struct net *net,
 	xt_entry_foreach(iter0, entry0, total_size) {
             /**
              * @brief this function converts the data structures in kernel space from from 32bit to 64bit
-             * === newinfo->entries as destination (&pos == destination) 
+             * === newinfo->entries as destination (&pos = destination) 
              * 
              */
 		ret = compat_copy_entry_from_user(iter0, &pos, &size,
@@ -334,6 +338,7 @@ static int compat_copy_entry_from_user(struct compat_ipt_entry *e, void **dstptr
 
       /**
        * @brief === struct xt_entry_target
+       * This is the vulnerable function that converts structure xt_entry_target in the kernel space fentries from 32bit to 64bit
        * 
        */
 	xt_compat_target_from_user(t, dstptr, size);
