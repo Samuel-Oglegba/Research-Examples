@@ -310,10 +310,20 @@ static int compat_copy_entry_from_user(struct compat_ipt_entry *e, void **dstptr
 	memcpy(de, e, sizeof(struct ipt_entry));
 	memcpy(&de->counters, &e->counters, sizeof(e->counters));
 
+      /**
+       * @brief === struct ipt_entry
+       * the destination pointer is advanced by sizeof(struct ipt_entry)=x bytes. At this point, the destination pointer is at offset biger that x bytes
+       * 
+       */
 	*dstptr += sizeof(struct ipt_entry);
 	*size += sizeof(struct ipt_entry) - sizeof(struct compat_ipt_entry);
 
 	xt_ematch_foreach(ematch, e) {
+            /**
+             * @brief === struct xt_entry_match
+             * this advances the pointer by sizeof(struct xt_entry_match), sizeof(pad), and an additional 4 bytes alignment for struct ipt_icmp, this furter increase the bytes of the destination pointer
+             * 
+             */
 		ret = xt_compat_match_from_user(ematch, dstptr, size);
 		if (ret != 0)
 			return ret;
@@ -321,6 +331,11 @@ static int compat_copy_entry_from_user(struct compat_ipt_entry *e, void **dstptr
 	de->target_offset = e->target_offset - (origsize - *size);
 	t = compat_ipt_get_target(e);
 	target = t->u.kernel.target;
+
+      /**
+       * @brief === struct xt_entry_target
+       * 
+       */
 	xt_compat_target_from_user(t, dstptr, size);
 
 	de->next_offset = e->next_offset - (origsize - *size);
