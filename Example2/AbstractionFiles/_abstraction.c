@@ -13,7 +13,6 @@ struct net;
 	* 	data-structures: {net},
 	* 	how-it-was-read: {
 	* 	    "net:: used with elements of local data `compat_ipt_replace` to check for the validity of the entries and allocate a new memory size to the user space data (via translate_compat_table operation)",
-	* 	    "net:: used to get the value of data `xt_table` via __do_replace() operation. `xt_table` is parent to `xt_table_info`",
 	*         } 		
 	* 	}
  * }
