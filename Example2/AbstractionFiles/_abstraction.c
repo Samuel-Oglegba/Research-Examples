@@ -2,7 +2,15 @@
 struct net;
 
 /**
- * @brief  this function copies the arguments from user-space to kernel-space. Kernel structures need to be converted from 32bit to 64bit.
+ * @brief summary: This function copies the arguments from user-space to kernel-space. Kernel structures need to be converted from 32bit to 64bit. 
+ * The following sequence of events are carried out from fuction compat_do_replace().
+ * 
+ * 1). compat_do_replace() is primarily concerned with copying the user-space data to kernel-space. the function then proceeds to call translate_compat_table()
+ * 2). translate_compat_table() then checks all entries for validity and computes the new structure size which is to be allocated by newinfo = xt_alloc_table_info(size).
+ * 3). Next, the function translate_compat_table() proceeds to call compat_copy_entry_from_user() with newinfo->entries as the destination
+ * 4). Finally, function compat_copy_entry_from_user() converts struct ipt_entry, struct xt_entry_match and struct xt_entry_target entries from 32bit to 64bit
+ * 
+ * @brief  
  * {
 	* modified =>{
 	* 	data-structures: {},
@@ -86,7 +94,7 @@ compat_do_replace(struct net *net, void __user *user, unsigned int len)
 	duprintf("compat_do_replace: Translated table\n");
 
       /**
-       * @brief 
+       * @brief This function replaces the table entries by swapping the values
        * 
        */
 	ret = __do_replace(net, tmp.name, tmp.valid_hooks, newinfo,
@@ -461,7 +469,7 @@ release_matches:
 }
 
 /**
- * @brief 
+ * @brief This function replaces the table entries
  * 
  * @param net 
  * @param name 
@@ -482,12 +490,20 @@ static int __do_replace(struct net *net, const char *name, unsigned int valid_ho
 	struct ipt_entry *iter;
 
 	ret = 0;
+      /**
+       * @brief allocate memory to variable counters
+       * 
+       */
 	counters = vzalloc(num_counters * sizeof(struct xt_counters));
 	if (!counters) {
 		ret = -ENOMEM;
 		goto out;
 	}
 
+      /**
+       * @brief Find table by name in the netns
+       * 
+       */
 	t = try_then_request_module(xt_find_table_lock(net, AF_INET, name),
 				    "iptable_%s", name);
 	if (IS_ERR_OR_NULL(t)) {
@@ -503,6 +519,10 @@ static int __do_replace(struct net *net, const char *name, unsigned int valid_ho
 		goto put_module;
 	}
 
+      /**
+       * @brief swap table entries: swap t and newinfo and return the value of t before swapping
+       * 
+       */
 	oldinfo = xt_replace_table(t, num_counters, newinfo, &ret);
 	if (!oldinfo)
 		goto put_module;
