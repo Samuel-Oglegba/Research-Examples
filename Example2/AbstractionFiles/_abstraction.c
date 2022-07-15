@@ -59,6 +59,7 @@ compat_do_replace(struct net *net, void __user *user, unsigned int len)
 		return -ENOMEM;
 
 	loc_cpu_entry = newinfo->entries;
+
       /*
       * copy_from_user: - Copy a block of data from user space.
       * @loc_cpu_entry:  Destination address, in kernel space.
@@ -72,7 +73,7 @@ compat_do_replace(struct net *net, void __user *user, unsigned int len)
 	}
 
       /**
-       * @brief checks all entries for validity and computes the new structure size 
+       * @brief checks all entries for validity and computes the new structure size in kernel-space
        * 
        */
 	ret = translate_compat_table(net, tmp.name, tmp.valid_hooks,
