@@ -210,7 +210,7 @@ translate_compat_table(struct net *net,
 	xt_entry_foreach(iter0, entry0, total_size) {
             /**
              * @brief this function converts the data structures in kernel space from from 32bit to 64bit
-             * === newinfo->entries as destination
+             * === newinfo->entries as destination (&pos == destination) 
              * 
              */
 		ret = compat_copy_entry_from_user(iter0, &pos, &size,
