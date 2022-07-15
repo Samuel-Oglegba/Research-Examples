@@ -15,7 +15,7 @@ struct ipt_entry;
 	*		"ipt_entry         :: modified by xt_entry_foreach() operation using data `xt_table_info` as parameter",
 	* 		},
 	*	relationships:{
-	*		xt_table_info & ipt_entry ==> "`xt_table_info` has array of `ipt_entry` entries",
+	*		xt_table_info & ipt_entry ==> "`xt_table_info` has an array of `ipt_entry` entries",
 	*		},
 	* 	}, 
 	* read =>{
@@ -41,7 +41,6 @@ static int compat_do_replace(struct net *net, void __user *user, unsigned int le
 	void *loc_cpu_entry;
 	struct ipt_entry *iter;
 
-	/* unable to fix the definition of copy_from_user */
 	if (copy_from_user(&tmp, user, sizeof(tmp)) != 0)
 		return -EFAULT;
 
