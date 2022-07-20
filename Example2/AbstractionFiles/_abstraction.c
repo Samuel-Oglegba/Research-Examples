@@ -6,30 +6,20 @@ struct net;
  * The following sequence of events are carried out from fuction compat_do_replace().
  * 
  * 1). compat_do_replace() is primarily concerned with copying the user-space data to kernel-space. the function then proceeds to call translate_compat_table()
- * 2). translate_compat_table() then checks all entries for validity and computes the new structure size which is to be allocated by newinfo = xt_alloc_table_info(size).
+ * 2). translate_compat_table() then checks all entries for validity and computes the new structure size which is to be allocated 
+ * 	 by newinfo = xt_alloc_table_info(size).
  * 3). Next, the function translate_compat_table() proceeds to call compat_copy_entry_from_user() with newinfo->entries as the destination
  * 4). Finally, function compat_copy_entry_from_user() converts struct ipt_entry, struct xt_entry_match and struct xt_entry_target entries from 32bit to 64bit
  *    *** converting xt_entry_target in xt_compat_target_from_user() is where the vulnerability is present
  * 
  * @brief  
- * {
-	* modified =>{
-	* 	data-structures: {},
-	* 	how-it-was-modified: {},
-	*	relationships:{},
-	* 	}, 
-	* read =>{
-	* 	data-structures: {net},
-	* 	how-it-was-read: {
-	* 	    "net:: used with elements of local data `compat_ipt_replace` to check for the validity of the entries and allocate a new memory size to the user space data (via translate_compat_table operation)",
-	*         } 		
-	* 	}
- * }
+ *Input:	@param net --  Network namespace struct from the socket call. used with elements of local data `compat_ipt_replace` to check for the validity of table 
+ 				   entries and allocate a new memory size to the user space data (via translate_compat_table operation).
+ * 		@param user -- Data supplied from the user-space when setsockopt() was called. This is the data that gets converted from 32bits to 64bit
+ * 		@param len --  was not used in this function implementation
  * 
- * @param net 
- * @param user 
- * @param len 
- * @return int 
+ *Output:	@return int -- returning different error codes, possible output {0 -- default operation, 1 -- for success, negative values for when something goes wrong}. 
+		struct ipt_entry, xt_entry_match, and xt_entry_target stores the converted data structures from 32bit to 64bit
  */
 static int
 compat_do_replace(struct net *net, void __user *user, unsigned int len)
@@ -40,11 +30,12 @@ compat_do_replace(struct net *net, void __user *user, unsigned int len)
 	void *loc_cpu_entry;
 	struct ipt_entry *iter;
 
-      /*
-      * copy_from_user: - Copy a block of data from user space.
-      * @tmp:  Destination address, in kernel space.
-      * @user: Source address, in user space.
-      * @sizeof(tmp): Number of bytes to copy.
+      /**
+      * @brief copy_from_user: - Copy a block of data from user space.
+      * Input	@tmp:  Destination address, in kernel space.
+      * 		@user: Source address, in user space.
+      * 		@sizeof(tmp): Number of bytes to copy.
+	* Output	@return int
       */
 	if (copy_from_user(&tmp, user, sizeof(tmp)) != 0)
 		return -EFAULT;
@@ -69,11 +60,12 @@ compat_do_replace(struct net *net, void __user *user, unsigned int len)
 
 	loc_cpu_entry = newinfo->entries;
 
-      /*
-      * copy_from_user: - Copy a block of data from user space.
-      * @loc_cpu_entry:  Destination address, in kernel space.
-      * @user + sizeof(tmp): Source address, in user space.
-      * @tmp.size: Number of bytes to copy.
+      /**
+      * @brief copy_from_user: - Copy a block of data from user space.
+      * Input	@loc_cpu_entry:  Destination address, in kernel space.
+      * 		@user + sizeof(tmp): Source address, in user space.
+      * 		@tmp.size: Number of bytes to copy.
+	* Output	@return int
       */
 	if (copy_from_user(loc_cpu_entry, user + sizeof(tmp),
 			   tmp.size) != 0) {
@@ -117,16 +109,16 @@ compat_do_replace(struct net *net, void __user *user, unsigned int len)
 /**
  * @brief The function translate_compat_table() checks all entries for validity and computes the new structure size which is to be allocated by newinfo = xt_alloc_table_info(size)
  * 
- * @param net 
- * @param name 
- * @param valid_hooks 
- * @param pinfo 
- * @param pentry0 
- * @param total_size 
- * @param number 
- * @param hook_entries 
- * @param underflows 
- * @return int 
+ * Input:	@param net -- Network namespace struct for the socket call.
+ * 		@param name -- The name of the table entry
+ * 		@param valid_hooks --  Bitmap indicating checks to run. 
+ * 		@param pinfo -- pointer to xt_table_info struct. This is the table itself
+ * 		@param pentry0 -- holds the entries pointer in the table
+ * 		@param total_size -- the size per table
+ * 		@param number -- the number of table entries
+ * 		@param hook_entries -- an array pointer of hook entries. These are the entry points
+ * 		@param underflows -- an array pointer of underflows.
+ * Output:	@return int possible output {0 -- default operation, 1 -- for success, negative values for when something goes wrong}
  */
 static int
 translate_compat_table(struct net *net,
@@ -298,13 +290,13 @@ out_unlock:
 /**
  * @brief this function converts struct ipt_entry, struct xt_entry_match and struct xt_entry_target entries from 32bit to 64bit
  * 
- * @param e 
- * @param dstptr 
- * @param size 
- * @param name 
- * @param newinfo 
- * @param base 
- * @return int 
+ * Input	@param e -- `compat_ipt_entry` struct is the 32-bit equivalent of 64-bit data `ipt_entry`, it holds the entries from the user
+ * 		@param dstptr -- the destination to copy the user data to
+ * 		@param size -- used to calculate the table offset, hook_entries, and overflows
+ * 		@param name -- Not used in the implementation of this function. It is the name of the table entry
+ * 		@param newinfo -- pointer to xt_table_info struct. This is the table itself
+ * 		@param base -- the base destination for table entries, used for verification before calculating the table offset and overflow
+ * Output	@return int -- possible output {0 -- default operation, 1 -- for success, negative values for when something goes wrong}
  */
 static int compat_copy_entry_from_user(struct compat_ipt_entry *e, void **dstptr,
 			    unsigned int *size, const char *name,
@@ -367,15 +359,15 @@ static int compat_copy_entry_from_user(struct compat_ipt_entry *e, void **dstptr
 /**
  * @brief carry out the validation of the size and hooks
  * 
- * @param e 
- * @param newinfo 
- * @param size 
- * @param base check_compat_entry_size_and_hooks
- * @param limit 
- * @param hook_entries 
- * @param underflows 
- * @param name 
- * @return int 
+ * Input	@param e -- `compat_ipt_entry` struct is the 32-bit equivalent of 64-bit data `ipt_entry`, it holds the entries from the user
+ * 		@param newinfo -- pointer to xt_table_info struct. This is the table itself
+ * 		@param size -- the size of the table entries, calculated by adding the offsets
+ * 		@param base -- the base destination for table entries, used for verification 
+ * 		@param limit -- maximum capacity (entry pointer size  + the size per table)
+ * 		@param hook_entries -- an array pointer of hook entries. These are the entry points
+ * 		@param underflows -- an array pointer of underflows.
+ * 		@param name -- It is the name of the table entry
+ * Output	@return int -- possible output {0 -- default operation, 1 -- for success, negative values for when something goes wrong}
  */
 static int
 check_compat_entry_size_and_hooks(struct compat_ipt_entry *e,
@@ -472,13 +464,13 @@ release_matches:
 /**
  * @brief This function replaces the table entries
  * 
- * @param net 
- * @param name 
- * @param valid_hooks 
- * @param newinfo 
- * @param num_counters 
- * @param counters_ptr 
- * @return int 
+ * Input	@param net -- Network namespace struct from the socket call. used with elements of local data `compat_ipt_replace` to check for the validity of table
+ * 		@param name -- It is the name of the table entry
+ * 		@param valid_hooks -- Bitmap indicating checks to run. 
+ * 		@param newinfo -- pointer to xt_table_info struct. This is the table itself
+ * 		@param num_counters -- Packet and byte counters
+ * 		@param counters_ptr -- Pointer used to copy data back to user space
+ * Output	@return int -- possible output {0 -- default operation, 1 -- for success, negative values for when something goes wrong}
  */
 static int __do_replace(struct net *net, const char *name, unsigned int valid_hooks,
 	     struct xt_table_info *newinfo, unsigned int num_counters,
@@ -502,7 +494,7 @@ static int __do_replace(struct net *net, const char *name, unsigned int valid_ho
 	}
 
       /**
-       * @brief Find table by name in the netns
+       * @brief Find table by name in the network namespace
        * 
        */
 	t = try_then_request_module(xt_find_table_lock(net, AF_INET, name),
