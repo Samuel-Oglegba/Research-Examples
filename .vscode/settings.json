@@ -3,7 +3,27 @@
             "ip_tables.h": "c",
             "socket.h": "c",
             "limits": "c",
-            "type_traits": "c"
+            "type_traits": "c",
+            "features.h": "c",
+            "single.h": "c",
+            "icmp.h": "c",
+            "capability.h": "c",
+            "netdevice.h": "c",
+            "module.h": "c",
+            "types.h": "c",
+            "int-ll64.h": "c",
+            "typeinfo": "c",
+            "cassert": "c",
+            "climits": "c",
+            "cmath": "c",
+            "cstdarg": "c",
+            "cstddef": "c",
+            "cstdio": "c",
+            "cstdlib": "c",
+            "*.tcc": "c",
+            "cinttypes": "c",
+            "cstdbool": "c",
+            "cstdint": "c"
       },
       "C_Cpp.errorSquiggles": "Enabled"
 }

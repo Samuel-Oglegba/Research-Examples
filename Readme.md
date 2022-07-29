@@ -1,3 +1,12 @@
+### How to Use Repo 
+*** The references gives more details on the exploit
+*** Each exploit is in a seperate directory
+*** Each directory has more specifics on the exploit example in a Readme.md
+
+
+### How to Access the repo
+
+### References ################
 ######### Example 1 - Extract from JSON parsing Buffer Overfle in Contiki-NG-IoT OS########
 https://github.com/contiki-ng/contiki-ng/issues/601
 https://github.com/contiki-ng/contiki-ng/pull/703/commits/963c2d57aa63fa5421cf30698485bd4ba20e06aa
