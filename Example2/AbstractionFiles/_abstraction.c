@@ -13,8 +13,10 @@ struct net; //(network namespace)
  * 		@param len --  was not used in this function implementation
  * 
  *Output:	@return (int)
- *			  newinfo       -- The network routing table. Not a global variable but the allocated memory exist outside the scope of this function
- *			  loc_cpu_entry -- The routing table entries. Not a global variable but the allocated memory exist outside the scope of this function 
+ *			  newinfo       -- The network routing table, it is keyed by destination IP address. 
+ 						 Not a global variable but the allocated memory exist outside the scope of this function
+ *			  loc_cpu_entry -- The routing table entries, (rows of the table). 
+ 						 Not a global variable but the allocated memory exist outside the scope of this function 
  *			  int           -- returning different error codes, possible output {0 -- default operation, 1 -- for success, negative values for when something goes wrong}. 
  *	
  */
