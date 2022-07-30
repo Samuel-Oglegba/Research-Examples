@@ -12,12 +12,8 @@ struct net; //(network namespace)
  * 
  * 		@param len --  was not used in this function implementation
  * 
- *Output:	@return (int)
- *			  newinfo       -- The network routing table, it is keyed by destination IP address. 
- 						 Not a global variable but the allocated memory exist outside the scope of this function.
- *			  loc_cpu_entry -- The routing table entries, (rows of the table). 
- 						 Not a global variable but the allocated memory exist outside the scope of this function.
- *			  int           -- returning different error codes, possible output {0 -- default operation, 1 -- for success, negative values for when something goes wrong}. 
+ *Output:	@return (int) -- returning different error codes, possible output {0 -- default operation, 1 -- for success, negative values for when something goes wrong}. 
+ *			  (ToDo: loc_cpu_entry, newinfo memory locations was used in other functions but the resources freed at the end of this function, further study needed)
  *	
  */
 static int
@@ -25,8 +21,8 @@ compat_do_replace(struct net *net, void __user *user, unsigned int len)
 {
 	int ret;
 	struct compat_ipt_replace tmp; //set of ip addresses using hooks (which is a way to use callbacks in order to filter packets inside the kernel)
-	struct xt_table_info *newinfo; //routing table
-	void *loc_cpu_entry; //the table entries 
+	struct xt_table_info *newinfo; // The network routing table, it is keyed by destination IP address. 
+	void *loc_cpu_entry; // The routing table entries, (can be likened to the rows of the routing table).
 	struct ipt_entry *iter; //This structure defines each of the firewall rules (ip header, match, target to perform if rule matches)
 
       /**
