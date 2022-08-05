@@ -114,7 +114,7 @@ compat_do_replace(struct net *net, void __user *user, unsigned int len)
  * 
  *Output Parameters:(pinfo, pentry0)
  *			@param pinfo -- The network routing table, it is keyed by destination IP address 
- *			@param pentry0 -- The routing table entries, (can be likened to the rows of the routing table). Used to iterate through all the firewall rules 
+ *			@param pentry0 -- The routing table entries, (can be likened to the rows of the routing table). Used as the starting point to iterate through all the firewall rules 
  *
  *Return Values:	@return (int) -- returning different error codes, possible output {0 -- default operation, 1 -- for success, negative values for when something goes wrong}. 
  */
