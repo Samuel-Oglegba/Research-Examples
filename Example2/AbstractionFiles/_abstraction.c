@@ -27,7 +27,7 @@ compat_do_replace(struct net *net, void __user *user, unsigned int len)
 	int ret;
 	struct compat_ipt_replace tmp; //set of ip addresses using hooks (which is a way to use callbacks in order to filter packets inside the kernel)
 	struct xt_table_info *newinfo; // The network routing table, it is keyed by destination IP address. 
-	void *loc_cpu_entry; // The routing table entries, (can be likened to the rows of the routing table).
+	void *loc_cpu_entry; // The routing table entries, (can be likened to the rows of the routing table). Used as the starting point to iterate through all the firewall rules 
 	struct ipt_entry *iter; //This structure defines each of the firewall rules (ip header, match, target to perform if rule matches)
 
       /**
@@ -106,12 +106,16 @@ compat_do_replace(struct net *net, void __user *user, unsigned int len)
  * 			@param name -- An array of rounting table. The name tells us which table to look at.
  * 			@param valid_hooks -- Which hook entry points are valid: bitmask. Used for verification
  * 			@param pinfo -- The network routing table, it is keyed by destination IP address.
- * 			@param pentry0 -- The routing table entries, (can be likened to the rows of the routing table). Used to iterate through all the firewall rules 
+ * 			@param pentry0 -- The routing table entries, (can be likened to the rows of the routing table). Used as the starting point to iterate through all the firewall rules.
  * 			@param total_size -- Total size of new entries. Used to allocate memory to the routing table
  * 			@param number -- Number of table entries
  * 			@param hook_entries -- Hook entry points.
  * 			@param underflows -- Underflow points.
- *Output Parameters:	
+ * 
+ *Output Parameters:(pinfo, pentry0)
+ *			@param pinfo -- The network routing table, it is keyed by destination IP address 
+ *			@param pentry0 -- The routing table entries, (can be likened to the rows of the routing table). Used to iterate through all the firewall rules 
+ *
  *Return Values:	@return (int) -- returning different error codes, possible output {0 -- default operation, 1 -- for success, negative values for when something goes wrong}. 
  */
 static int translate_compat_table(struct net *net,
