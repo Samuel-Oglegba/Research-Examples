@@ -282,7 +282,9 @@ out_unlock:
  * 			@param hook_entries -- Hook entry points.
  * 			@param underflows -- Underflow points.
  * 			@param name -- The name tells us which table to look at.
- *Output Parameters:	
+ * 
+ *Output Parameters:()
+ *
  *Return Value:	@return (int) -- returning different error codes, possible output {0 -- default operation, 1 -- for success, negative values for when something goes wrong}.  
  */
 static int check_compat_entry_size_and_hooks(struct compat_ipt_entry *e,
@@ -382,7 +384,10 @@ release_matches:
  * 			@param name -- The name tells us which table to look at.
  * 			@param newinfo -- The network routing table, it is keyed by destination IP address.
  * 			@param base -- The routing table entries, (can be likened to the rows of the routing table).
- *Output Parameter:	
+ * 
+ *Output Parameter:(dstptr)
+ *			@param dstptr -- The pointer location of the routing table entries, (can be likened to the rows of the routing table).
+ *	
  *Return Value:	@return (int) -- returning different error codes, possible output {0 -- default operation, 1 -- for success, negative values for when something goes wrong}. 
  */
 static int compat_copy_entry_from_user(struct compat_ipt_entry *e, void **dstptr,
