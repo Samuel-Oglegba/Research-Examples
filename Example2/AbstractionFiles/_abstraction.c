@@ -15,9 +15,9 @@ struct net; //(network namespace)
  * 
  * 			@param len --  was not used in this function implementation
  * 
- *Output Parameter:()	
+ *Output Parameter:(newinfo)	
  *
- *Return Value	: @return (int) -- returning different error codes, possible output {0 -- default operation, 1 -- for success, negative values for when something goes wrong}. 	  
+ *Return Value	: @return (int) -- returning different error codes, possible output {0 -- success, a negative errno code, positive exit code on failure}. 	  
  *	
  */
 
@@ -80,7 +80,7 @@ compat_do_replace(struct net *net, void __user *user, unsigned int len)
 	duprintf("compat_do_replace: Translated table\n");
 
       /**
-       * @brief This function replaces the table entries by swapping values old with new
+       * @brief This function modifies the table entries by swapping values old with new
        * 
        */
 	ret = __do_replace(net, tmp.name, tmp.valid_hooks, newinfo,
@@ -116,7 +116,7 @@ compat_do_replace(struct net *net, void __user *user, unsigned int len)
  *			@param pinfo -- The network routing table, it is keyed by destination IP address 
  *			@param pentry0 -- The routing table entries, (can be likened to the rows of the routing table). Used as the starting point to iterate through all the firewall rules 
  *
- *Return Values:	@return (int) -- returning different error codes, possible output {0 -- default operation, 1 -- for success, negative values for when something goes wrong}. 
+ *Return Values:	@return (int) -- returning different error codes, possible output {0 -- success, a negative errno code, positive exit code on failure}. 
  */
 static int translate_compat_table(struct net *net,
 		       const char *name,
@@ -283,9 +283,9 @@ out_unlock:
  * 			@param underflows -- Underflow points.
  * 			@param name -- The name tells us which table to look at.
  * 
- *Output Parameters:()
+ *Output Parameters:(newinfo)
  *
- *Return Value:	@return (int) -- returning different error codes, possible output {0 -- default operation, 1 -- for success, negative values for when something goes wrong}.  
+ *Return Value:	@return (int) -- returning different error codes, possible output {0 -- success, a negative errno code, positive exit code on failure}. 
  */
 static int check_compat_entry_size_and_hooks(struct compat_ipt_entry *e,
 				  struct xt_table_info *newinfo,
@@ -388,7 +388,7 @@ release_matches:
  *Output Parameter:(dstptr)
  *			@param dstptr -- The pointer location of the routing table entries, (can be likened to the rows of the routing table).
  *	
- *Return Value:	@return (int) -- returning different error codes, possible output {0 -- default operation, 1 -- for success, negative values for when something goes wrong}. 
+ *Return Value:	@return (int) -- returning different error codes, possible output {0 -- success, a negative errno code, positive exit code on failure}. 
  */
 static int compat_copy_entry_from_user(struct compat_ipt_entry *e, void **dstptr,
 			    unsigned int *size, const char *name,
