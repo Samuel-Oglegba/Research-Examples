@@ -916,8 +916,6 @@ int XtTableInfo::compat_table_info(XtTableInfo *info, XtTableInfo *newinfo)
 	const void *loc_cpu_entry;
 	int ret;
 
-	cout << "i came here" << "\n";
-
 	if (!newinfo || !info)
 		return -EINVAL;
 
@@ -929,7 +927,7 @@ int XtTableInfo::compat_table_info(XtTableInfo *info, XtTableInfo *newinfo)
 	xt_compat_init_offsets(AF_INET, info->getNumber());
 
 		xt_entry_foreach(iter, loc_cpu_entry, info->getSize()) {
-			ret = compat_calc_entry(iter, info, loc_cpu_entry, newinfo);
+			ret = info->compat_calc_entry(iter, info, loc_cpu_entry, newinfo);
 			if (ret != 0)
 				return ret;
 		}
