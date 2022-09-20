@@ -783,9 +783,7 @@ int main ()
       ////////////////////////////////	
 	
       loc_cpu_entry = info->entries;
-	//copy_from_user(loc_cpu_entry, user + sizeof(tmp), tmp.size);
-      memcpy(loc_cpu_entry, &data + sizeof(tmp),  tmp.size);
-      
+      //ToDo -- passing accurate data compat_calc_entry       
 
 	///////////// calling function Test function ///////////////////
 	       compat_calc_entry(iter,info, loc_cpu_entry, newinfo);		
