@@ -936,6 +936,7 @@ int main ()
       ////////////////////////////////	
 	
       loc_cpu_entry = info->getEntries();
+      //ToDo -- use of proper test data for both C++ and C codes
       
 
 	///////////// calling function Test function ///////////////////
