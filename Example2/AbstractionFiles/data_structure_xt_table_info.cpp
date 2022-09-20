@@ -679,6 +679,66 @@ compat_ipt_get_target(struct compat_ipt_entry *e)
 	return (struct xt_entry_target *)e + e->target_offset;
 }
 
+/**
+ * @brief original c function 
+ * 
+ * @param e 
+ * @param info 
+ * @param base 
+ * @param newinfo 
+ * @return int 
+ */
+int compat_calc_entry(const struct ipt_entry *e, const xt_table_info *info, const void *base, xt_table_info *newinfo)
+{
+      const struct xt_entry_match *ematch;
+      const struct xt_entry_target *t;
+      unsigned int entry_offset;
+      int off, i, ret;
+
+	//allocate memory to the pointer
+	t = (struct xt_entry_target *)malloc(sizeof(t));	 
+      ematch = (struct xt_entry_match *)malloc(sizeof(ematch));
+
+      off = sizeof(struct ipt_entry) - sizeof(struct compat_ipt_entry);
+      //entry_offset = (void *)e - base; 
+      entry_offset = (int *)e - (int *)base;
+
+      /**
+       * @brief generates segmentation fault 
+       * leading to an infinite loop possible because of the test data supplied 
+       * 
+       */								
+	xt_ematch_foreach(ematch,e){
+		cout << "i came here \n";
+		cout << "ematch->u.kernel.match:: "<< ematch->u.kernel.match <<"\n";
+
+		off += xt_compat_match_offset(ematch->u.kernel.match);
+	}
+	
+      
+      t = ipt_get_target_c(e);
+
+      off += xt_compat_target_offset(t->u.kernel.target);
+
+   
+      newinfo->size -= off;
+      ret = xt_compat_add_offset(AF_INET, entry_offset, off);
+      if (ret)
+            return ret;
+      
+      for (i = 0; i < NF_INET_NUMHOOKS; i++) {       
+            if (info->hook_entry[i] &&
+                  (e < (struct ipt_entry *)(base + info->hook_entry[i])))
+                  newinfo->hook_entry[i] -= off;
+            if (info->underflow[i] &&
+                  (e < (struct ipt_entry *)(base + info->underflow[i])))
+                  newinfo->underflow[i] -= off;
+      }      
+      return 0;
+
+}//original C compat_calc_entry
+
+////////// C++ Abstraction ////////////////////////
 /// @brief //==============================================================================================================
 
 class XtTableInfo
@@ -718,7 +778,6 @@ class XtTableInfo
 		 * @return (int) -- returning different error codes, possible output {0 -- success, a negative errno code, positive exit code on failure}.
 		 */  
 		int compat_calc_entry(const struct ipt_entry *e, const XtTableInfo *info, const void *base, XtTableInfo *newinfo);
-		int compat_calc_entry2(const struct ipt_entry *e, const XtTableInfo *info, const void *base, XtTableInfo *newinfo);
 
       public:
          XtTableInfo();//default constructor
@@ -786,7 +845,6 @@ class XtTableInfo
 
 	  /* End Getters */
 
-	////////// hands-on function //////////////
 	/**
 	 * @brief Set the Entry Offset object
 	 *Input Parameter:(offset, setHooks, e, info, base)
@@ -812,30 +870,6 @@ class XtTableInfo
 	    }//if
 	}
 
-
-	void initHookToImpossibleValues(unsigned int mSize, unsigned int mNumber){
-		unsigned int i;
-		if(mSize > 0){
-			size = mSize;
-		}			
-		number = mNumber;
-		/* Init all hooks to impossible value. */
-		for (i = 0; i < NF_INET_NUMHOOKS; i++) {
-			hook_entry[i] = 0xFFFFFFFF;
-			underflow[i] = 0xFFFFFFFF;
-		}
-	}
-
-	void updateHookAndSize(XtTableInfo *info, unsigned int mNumber){
-		unsigned int i;
-		number = mNumber;
-		for (i = 0; i < NF_INET_NUMHOOKS; i++) {
-			hook_entry[i] = info->hook_entry[i];
-			underflow[i] = info->underflow[i];
-		}
-	}
-
-/////////////// hands-on function ///////////
       /**
        * @brief allocate memory to the XtTableInfo abstraction
        * Input Parameter:(size)
@@ -862,7 +896,6 @@ class XtTableInfo
 
 };
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 
 /**
@@ -893,13 +926,10 @@ int XtTableInfo::compat_table_info(XtTableInfo *info, XtTableInfo *newinfo)
 	newinfo->setInitialEntry(0);
 	loc_cpu_entry = info->getEntries();
 
-	cout << "info->getEntries():: " << info->getEntries() << "\n";
-	cout << "info->getNumber():: " << info->getNumber() << "\n";
-
 	xt_compat_init_offsets(AF_INET, info->getNumber());
 
 		xt_entry_foreach(iter, loc_cpu_entry, info->getSize()) {
-			ret = compat_calc_entry2(iter, info, loc_cpu_entry, newinfo);
+			ret = compat_calc_entry(iter, info, loc_cpu_entry, newinfo);
 			if (ret != 0)
 				return ret;
 		}
@@ -970,74 +1000,8 @@ void XtTableInfo::xt_free_table_info(XtTableInfo *info)
       
 }//xt_free_table_info     
 
-/**
- * @brief 
- * 
- * @param e 
- * @param info 
- * @param base 
- * @param newinfo 
- * @return int 
- */
+////////////////// New function using Abstraction ////////////////////////
 int XtTableInfo::compat_calc_entry(const struct ipt_entry *e, const XtTableInfo *info, const void *base, XtTableInfo *newinfo)
-{
-      const struct xt_entry_match *ematch;
-      const struct xt_entry_target *t;
-      unsigned int entry_offset;
-      int off, i, ret;
-
-	//allocate memory to the pointer
-	t = (struct xt_entry_target *)malloc(sizeof(t));	 
-      ematch = (struct xt_entry_match *)malloc(sizeof(ematch));
-	//========================
-	cout << "\n ========compat_calc_entry ==========" << "\n";
-
-      off = sizeof(struct ipt_entry) - sizeof(struct compat_ipt_entry);
-      //entry_offset = (void *)e - base; 
-      entry_offset = (int *)e - (int *)base;
-
-      /**
-       * @brief generates segmentation fault 
-       * leading to an infinite loop possible because of the test data supplied 
-       * 
-       */								
-	xt_ematch_foreach(ematch,e){
-		cout << "i came here \n";
-		cout << "ematch->u.kernel.match:: "<< ematch->u.kernel.match <<"\n";
-
-		off += xt_compat_match_offset(ematch->u.kernel.match);
-	}
-	
-	cout << "off:: " << off << "\n";
-      
-      t = ipt_get_target_c(e);
-
-	cout << "t->u.kernel.target:: " << t->u.kernel.target << "\n";
-      
-      off += xt_compat_target_offset(t->u.kernel.target);
-
-   
-      newinfo->size -= off;
-      ret = xt_compat_add_offset(AF_INET, entry_offset, off);
-      if (ret)
-            return ret;
-      
-      for (i = 0; i < NF_INET_NUMHOOKS; i++) {       
-            if (info->hook_entry[i] &&
-                  (e < (struct ipt_entry *)(base + info->hook_entry[i])))
-                  newinfo->hook_entry[i] -= off;
-            if (info->underflow[i] &&
-                  (e < (struct ipt_entry *)(base + info->underflow[i])))
-                  newinfo->underflow[i] -= off;
-      }
-
-	cout << "i came to the end \n";
-      
-      return 0;
-}//compat_calc_entry
-
-////////////////// New function ////////////////////////
-int XtTableInfo::compat_calc_entry2(const struct ipt_entry *e, const XtTableInfo *info, const void *base, XtTableInfo *newinfo)
 {
 	const struct xt_entry_match *ematch;
 	const struct xt_entry_target *t;
@@ -1133,7 +1097,6 @@ int main ()
 	
 	//copy_from_user(loc_cpu_entry, user + sizeof(tmp), tmp.size);
 	memcpy(info->getEntries(), &data.entry, tmp.size);
-	//loc_cpu_entry = info->getEntries();	
 
 	///////////// calling function 2 ///////////////////
 		info->compat_table_info(info, newinfo);		
