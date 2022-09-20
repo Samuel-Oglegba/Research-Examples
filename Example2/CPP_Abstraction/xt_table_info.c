@@ -378,11 +378,11 @@ struct compat_xt_counters {
 	compat_u64 pcnt, bcnt;			/* Packet and byte counters */
 };// struct compat_xt_counters
 
-/*
+
 struct in_addr {
 	__be32	s_addr;
 };
-*/
+
 
 struct ipt_ip {
 	/* Source and destination IP addr */
