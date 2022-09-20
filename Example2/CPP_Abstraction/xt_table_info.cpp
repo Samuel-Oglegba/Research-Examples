@@ -1,3 +1,6 @@
+ #include <iostream>
+extern "C"
+{
       #define _GNU_SOURCE
       #include <err.h>
       #include <errno.h>
@@ -21,7 +24,9 @@
       #include <stdbool.h>
 
       #include <asm-generic/int-ll64.h>
+}
 
+using namespace std;
 
 
 typedef struct {
@@ -378,11 +383,11 @@ struct compat_xt_counters {
 	compat_u64 pcnt, bcnt;			/* Packet and byte counters */
 };// struct compat_xt_counters
 
-/*
+
 struct in_addr {
 	__be32	s_addr;
 };
-*/
+
 
 struct ipt_ip {
 	/* Source and destination IP addr */
@@ -527,7 +532,8 @@ struct ipt_replace {
  /* Helper functions */
 static __inline__ struct xt_entry_target *ipt_get_target(struct ipt_entry *e)
 {
-      return (void *)e + e->target_offset;
+      //return (void *)e + e->target_offset;
+      return (struct xt_entry_target *)((void *)e + e->target_offset);
 }
 
  /* for const-correctness */
@@ -544,7 +550,7 @@ int xt_compat_add_offset(u_int8_t af, unsigned int offset, int delta)
 		if (!xp->number)
 			return -EINVAL;
 		//xp->compat_tab = vmalloc(sizeof(struct compat_delta) * xp->number);
-		xp->compat_tab = malloc(sizeof(struct compat_delta) * xp->number);
+		xp->compat_tab = (struct compat_delta *) malloc(sizeof(struct compat_delta) * xp->number);
 		if (!xp->compat_tab)
 			return -ENOMEM;
 		xp->cur = 0;
@@ -581,7 +587,8 @@ int xt_compat_match_offset(const struct xt_match *match)
 /* Mildly perf critical (only if packet tracing is on) */
 static inline bool unconditional(const struct ipt_entry *e)
 {
-	static const struct ipt_ip uncond;
+	//static const struct ipt_ip uncond;
+	struct ipt_ip uncond;
 
 	return e->target_offset == sizeof(struct ipt_entry) &&
 	       memcmp(&e->ip, &uncond, sizeof(uncond)) == 0;
@@ -654,7 +661,8 @@ static inline long __must_check PTR_ERR(__force const void *ptr)
 static inline struct xt_entry_target *
 compat_ipt_get_target(struct compat_ipt_entry *e)
 {
-	return (void *)e + e->target_offset;
+	//return (void *)e + e->target_offset; //compilation error from this casting
+	return (struct xt_entry_target *)e + e->target_offset;
 }
 
 
@@ -668,7 +676,8 @@ static int compat_calc_entry(const struct ipt_entry *e,
 	int off, i, ret;
 
 	off = sizeof(struct ipt_entry) - sizeof(struct compat_ipt_entry);
-	entry_offset = (void *)e - base;
+	//entry_offset = (void *)e - base;
+      entry_offset = (int *)e - (int *)base; //the void cast was through compilation error
 	xt_ematch_foreach(ematch, e)
 		off += xt_compat_match_offset(ematch->u.kernel.match);
 	t = ipt_get_target_c(e);
@@ -703,10 +712,10 @@ struct xt_table_info *xt_alloc_table_info(unsigned int size)
 		return NULL;
 
 	if (sz <= (PAGE_SIZE << PAGE_ALLOC_COSTLY_ORDER))		
-		info = calloc(sz, GFP_KERNEL | __GFP_NOWARN | __GFP_NORETRY); //info = kmalloc(sz, GFP_KERNEL | __GFP_NOWARN | __GFP_NORETRY);
+		info = (xt_table_info *)calloc(sz, GFP_KERNEL | __GFP_NOWARN | __GFP_NORETRY); //info = kmalloc(sz, GFP_KERNEL | __GFP_NOWARN | __GFP_NORETRY);
 	if (!info) {
 		//info = vmalloc(sz);
-		info = malloc(sz);
+		info = (xt_table_info *)malloc(sz);
 		if (!info)
 			return NULL;
 	}
@@ -783,8 +792,6 @@ int main ()
       ////////////////////////////////	
 	
       loc_cpu_entry = info->entries;
-	//copy_from_user(loc_cpu_entry, user + sizeof(tmp), tmp.size);
-      memcpy(loc_cpu_entry, &data + sizeof(tmp),  tmp.size);
       
 
 	///////////// calling function Test function ///////////////////
