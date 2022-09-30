@@ -703,6 +703,12 @@ class XtTableInfo
          void ***jumpstack;
  
          unsigned char entries[0]; //__aligned(8);
+	
+	XtTableInfo *xt_alloc_table_info(unsigned int size);
+
+      void xt_free_table_info(XtTableInfo *info);
+
+	bool valideUserInput(__user void *user);
       
       public:
          XtTableInfo();//default constructor
@@ -737,62 +743,10 @@ class XtTableInfo
        }
 /* End Getters */
 
-/* Setters -- //Fix-Me - add contraint to setter where appropriate */
-	   void setSize(unsigned int mSize){
-		size = mSize;
-	   }
-         
-	   void setInitialEntry(unsigned int mInitial_entries){
-			initial_entries = mInitial_entries;			
-	   }//setInitialEntry
-
-	   void setNumber(unsigned int mNumber){
-		number = mNumber;
-	   }	 
-
-      /**	 
-       * @brief Set the Entry Offset object
-	 *Input Parameter:(offset, setHooks, e, info, base)
-	 * 	@param offset -- used to decrement the value of abstraction.size, abstraction.hook_entry, & abstraction.underflow
-	 * 	@param setHooks -- error check to decide if abstraction.hook_entry, & abstraction.underflow should decrement 
-	 * 	@param e -- pointer to rows of the table
-	 * 	@param info -- the network routing table itself
-	 * 	@param base -- pointer to starting row of the table
-       * 
-	 * Output Parameter:(info)	
-       *    @param info -- the modified table {abstraction.size, and/or (abstraction.hook_entry, & abstraction.underflow)}
-       * 
-       * Constraints{
-       *    "input.offset": "0 <= input.offset < sizeof(struct ipt_entry) <= abstraction.size",
-       *    "input.base": "base-pointer + total-sizeof(struct ipt_entry)  <= abstraction.size",
-       *    "abstraction.hook_entry & abstraction.underflow":  "[(hook_entry or underflow)+ base] <= sizeof(struct ipt_entry)"
-       * }
-       * 
-	 */
-      void setEntryOffset(int offset, int setHooks, const struct ipt_entry *e, const XtTableInfo *info, const void *base){
-          size -= offset;
-	    if(setHooks){
-		unsigned int i;
-		for (i = 0; i < NF_INET_NUMHOOKS; i++) {
-			if (info->hook_entry[i] &&
-			(e < (struct ipt_entry *)(base + info->hook_entry[i])))
-				hook_entry[i] -= offset;
-			if (info->underflow[i] &&
-			(e < (struct ipt_entry *)(base + info->underflow[i])))
-				underflow[i] -= offset;
-		     }//for
-	    }//if
-
-	}//setEntryOffset
-
-/* End Setters */
-
-      //see description in function definition
-      XtTableInfo *xt_alloc_table_info(unsigned int size);
-
-      void xt_free_table_info(XtTableInfo *info);
+    //function copies user data from user-space to kernel-space
+    //ToDo: how do I validate the user input since it is a void pointer?
+    compat_do_replace(void __user *user);
       
-
 };
 ////////// End C++ Abstraction ////////////////////////
 
@@ -806,10 +760,6 @@ class XtTableInfo
  * 
  * @return XtTableInfo* -- new pointer to abstraction class
  * 
- * Constraints{
- *    "input.size": "input.size > 0"
- *    "abstraction.size": "input.size = abstraction.size"
- * }
  */
 XtTableInfo * XtTableInfo::xt_alloc_table_info(unsigned int size)
 {
@@ -855,63 +805,103 @@ void XtTableInfo::xt_free_table_info(XtTableInfo *info)
 	free(info);
 }
 
+/**
+ * @brief Construct a new XtTableInfo::compat_do_replace object
+ * 
+ * @param user -- Holds the data from the user, since it is a void pointer, the user could send any type of data.
+ */
+XtTableInfo::compat_do_replace(void __user *user){
+	struct net *net;
+
+	int ret;
+	struct compat_ipt_replace tmp;
+	//ToDo: Where I am stock now is how to successfully validate this user input first [valideUserInput()]
+	if(valideUserInput(user)){
+		return compat_do_replace(net, user, 0);
+	}
+
+	return -1;
+}
 
 /**
-* @brief Fuction for testing the abstraction -Modified function to use the C++ abstraction
-* 
-* Input Parameter:(e, info, base, newinfo)
-*    @param e - LinkedList used to store the row entries of the routing table 
-*    @param info - The network routing table.
-*    @param base - Pointer to the starting position of the routing table entries and was 
-*                  used with e (struct ipt_entry) to get the next table row. 
-*    @param newinfo - The new network routing table that gets returned as output
-* 
-* Output Parameter:(newinfo)  
-*     @param newinfo - the new table (abstraction.size, abstraction.hook_entry & abstraction.underflow are modified)      
-*         
-* @return (int) -- returning different error codes, possible output {0 -- success, a negative errno code, positive exit code on failure}.
-*/  
-static int compat_calc_entry(const struct ipt_entry *e,
-			     const XtTableInfo *info,
-			     const void *base, XtTableInfo *newinfo)
+ *@brief  
+ *Input Parameter:(net, user, len)
+ *	@param net --A struct of independent logical copy of the host network stack (it has it's own routing table, set of IP addresses, socket listing, etc). 
+ *			Represents the virtual container useful for communication between the application with the physical network devices.
+ *				
+ * 	@param user -- Holds the data from the user, since it is a void pointer, the user could send any type of data.
+ * 
+ * 	@param len --  was not used in this function implementation
+ * 
+ *Output Parameter:(newinfo, iter)	
+ *Constraint{
+ *	net
+ *}
+ *
+ *Return Value	: @return (int) -- error codes (0 for success). 	  
+ *	
+ */
+int compat_do_replace(struct net *net, void __user *user, unsigned int len)
 {
-	const struct xt_entry_match *ematch;
-	const struct xt_entry_target *t;
-	unsigned int entry_offset;
-	int off, i, ret;
+	int ret;
+	struct compat_ipt_replace tmp;
+	struct xt_table_info *newinfo;
+	void *loc_cpu_entry;
+	struct ipt_entry *iter;
 
-	off = sizeof(struct ipt_entry) - sizeof(struct compat_ipt_entry);
-	//entry_offset = (void *)e - base;
-      entry_offset = (int *)e - (int *)base; //the void cast was through compilation error
-	xt_ematch_foreach(ematch, e)
-		off += xt_compat_match_offset(ematch->u.kernel.match);
-	t = ipt_get_target_c(e);
-	off += xt_compat_target_offset(t->u.kernel.target);
-	
-	ret = xt_compat_add_offset(AF_INET, entry_offset, off);
+	if (copy_from_user(&tmp, user, sizeof(tmp)) != 0)
+		return -EFAULT;
 
-      //abstraction API
-	newinfo->setEntryOffset(off, !ret, e, info, base);
+	/* overflow check */
+	if (tmp.size >= INT_MAX / num_possible_cpus())
+		return -ENOMEM;
+	if (tmp.num_counters >= INT_MAX / sizeof(struct xt_counters))
+		return -ENOMEM;
+	if (tmp.num_counters == 0)
+		return -EINVAL;
 
+	tmp.name[sizeof(tmp.name)-1] = 0;
+
+	newinfo = xt_alloc_table_info(tmp.size);
+	if (!newinfo)
+		return -ENOMEM;
+
+	loc_cpu_entry = newinfo->entries;
+	if (copy_from_user(loc_cpu_entry, user + sizeof(tmp),
+			   tmp.size) != 0) {
+		ret = -EFAULT;
+		goto free_newinfo;
+	}
+
+	ret = translate_compat_table(net, tmp.name, tmp.valid_hooks,
+				     &newinfo, &loc_cpu_entry, tmp.size,
+				     tmp.num_entries, tmp.hook_entry,
+				     tmp.underflow);
+	if (ret != 0)
+		goto free_newinfo;
+
+	//duprintf("compat_do_replace: Translated table\n");
+	printf("compat_do_replace: Translated table\n");
+
+	ret = __do_replace(net, tmp.name, tmp.valid_hooks, newinfo,
+			   tmp.num_counters, compat_ptr(tmp.counters));
+	if (ret)
+		goto free_newinfo_untrans;
 	return 0;
 
-}//compat_calc_entry
+ free_newinfo_untrans:
+	xt_entry_foreach(iter, loc_cpu_entry, newinfo->size)
+		cleanup_entry(iter, net);
+ free_newinfo:
+	xt_free_table_info(newinfo);
+	return ret;
+}
 
 
 
 int main ()
 {
-     
-      XtTableInfo *info;
-      XtTableInfo *newinfo;
-      struct ipt_entry *iter;
-      const void *loc_cpu_entry;
-      int ret;
-
-	struct ipt_replace tmp;
-
 	///////////////////////// Exploit Code Data /////////////////////////////////
-
 	struct __attribute__((__packed__)) {
 	struct ipt_replace replace;
 	struct ipt_entry entry;
@@ -939,28 +929,8 @@ int main ()
 	data.target.u.user.revision = 1;
 	////////////////////////// END Exploit Code Data ///////////////////////////////
 
-	//copy user data, similar to copy_from_user
-	memcpy(&tmp, &data, sizeof(tmp));
-
-	tmp.name[sizeof(tmp.name)-1] = 0;
-	
-      ////////////////////////////////
-            info = info->xt_alloc_table_info(tmp.size);
-		info->setNumber(1);
-            newinfo = newinfo->xt_alloc_table_info(sizeof(info));    
-      ////////////////////////////////	
-	
-      loc_cpu_entry = info->getEntries();
-      //ToDo -- use of proper test data for both C++ and C codes
-      
-
-	///////////// calling function Test function ///////////////////
-	       compat_calc_entry(iter,info, loc_cpu_entry, newinfo);		
-	////////////////////////////////	
-	
-	// free up memory
-	newinfo->xt_free_table_info(newinfo);
-	info->xt_free_table_info(info);	
+	//API call illustration
+	new XtTableInfo::compat_do_replace(&data);	
       
       return 0;
 }
