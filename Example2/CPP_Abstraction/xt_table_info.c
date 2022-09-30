@@ -657,7 +657,15 @@ compat_ipt_get_target(struct compat_ipt_entry *e)
 	return (void *)e + e->target_offset;
 }
 
-
+/**
+ * @brief Original C code used for C++ abstraction
+ * 
+ * @param e 
+ * @param info 
+ * @param base 
+ * @param newinfo 
+ * @return int 
+ */
 static int compat_calc_entry(const struct ipt_entry *e,
 			     const struct xt_table_info *info,
 			     const void *base, struct xt_table_info *newinfo)
