@@ -218,6 +218,9 @@ struct _compat_xt_align {
 };
 #define COMPAT_XT_ALIGN(s) __ALIGN_KERNEL((s), __alignof__(struct _compat_xt_align))
 
+#ifndef INT_MAX
+#define INT_MAX 0x7fffffff
+#endif
 
 struct mutex {
 	/* 1: unlocked, 0: locked, negative: locked, possible waiters */
@@ -478,6 +481,18 @@ struct xt_table_info {
 	void ***jumpstack;
 
 	unsigned char entries[0];// __aligned(8);
+};
+
+struct compat_ipt_replace {
+	char			name[XT_TABLE_MAXNAMELEN];
+	u32			valid_hooks;
+	u32			num_entries;
+	u32			size;
+	u32			hook_entry[NF_INET_NUMHOOKS];
+	u32			underflow[NF_INET_NUMHOOKS];
+	u32			num_counters;
+	compat_uptr_t		counters;	/* struct xt_counters * */
+	struct compat_ipt_entry	entries[0];
 };
 
 static struct xt_af *xt;
