@@ -1,3 +1,6 @@
+ #include <iostream>
+extern "C"
+{
       #define _GNU_SOURCE
       #include <err.h>
       #include <errno.h>
@@ -22,6 +25,10 @@
 
       #include <asm-generic/int-ll64.h>
 
+      #include <stddef.h>
+}
+
+using namespace std;
 
 
 typedef struct {
@@ -124,6 +131,8 @@ typedef struct { } arch_spinlock_t;
 
 /* Standard return verdict, or do jump. */
 #define XT_STANDARD_TARGET ""
+/* Error verdict. */
+#define XT_ERROR_TARGET "ERROR"
 #define NF_STOP 5	/* Deprecated, for userspace nf_queue compatibility. */
 #define NF_MAX_VERDICT NF_STOP
 
@@ -213,10 +222,17 @@ struct _compat_xt_align {
 };
 #define COMPAT_XT_ALIGN(s) __ALIGN_KERNEL((s), __alignof__(struct _compat_xt_align))
 
-#ifndef INT_MAX
-#define INT_MAX 0x7fffffff
-#endif
-
+enum {
+	NFPROTO_UNSPEC =  0,
+	NFPROTO_INET   =  1,
+	NFPROTO_IPV4   =  2,
+	NFPROTO_ARP    =  3,
+	NFPROTO_NETDEV =  5,
+	NFPROTO_BRIDGE =  7,
+	NFPROTO_IPV6   = 10,
+	NFPROTO_DECNET = 12,
+	NFPROTO_NUMPROTO,
+};
 
 struct mutex {
 	/* 1: unlocked, 0: locked, negative: locked, possible waiters */
@@ -378,14 +394,25 @@ struct xt_entry_target {
 	unsigned char data[0];
 };
 
+struct compat_xt_entry_target {
+	union {
+		struct {
+			u_int16_t target_size;
+			char name[XT_FUNCTION_MAXNAMELEN - 1];
+			u_int8_t revision;
+		} user;
+		struct {
+			u_int16_t target_size;
+			compat_uptr_t target;
+		} kernel;
+		u_int16_t target_size;
+	} u;
+	unsigned char data[0];
+};
+
 struct compat_xt_counters {
 	compat_u64 pcnt, bcnt;			/* Packet and byte counters */
 };// struct compat_xt_counters
-
-
-struct in_addr {
-	__be32	s_addr;
-};
 
 
 struct ipt_ip {
@@ -479,18 +506,6 @@ struct xt_table_info {
 	unsigned char entries[0];// __aligned(8);
 };
 
-struct compat_ipt_replace {
-	char			name[XT_TABLE_MAXNAMELEN];
-	u32			valid_hooks;
-	u32			num_entries;
-	u32			size;
-	u32			hook_entry[NF_INET_NUMHOOKS];
-	u32			underflow[NF_INET_NUMHOOKS];
-	u32			num_counters;
-	compat_uptr_t		counters;	/* struct xt_counters * */
-	struct compat_ipt_entry	entries[0];
-};
-
 static struct xt_af *xt;
 
 struct xt_standard_target {
@@ -543,7 +558,8 @@ struct ipt_replace {
  /* Helper functions */
 static __inline__ struct xt_entry_target *ipt_get_target(struct ipt_entry *e)
 {
-      return (void *)e + e->target_offset;
+      //return (void *)e + e->target_offset;
+      return (struct xt_entry_target *)((void *)e + e->target_offset);
 }
 
  /* for const-correctness */
@@ -560,7 +576,7 @@ int xt_compat_add_offset(u_int8_t af, unsigned int offset, int delta)
 		if (!xp->number)
 			return -EINVAL;
 		//xp->compat_tab = vmalloc(sizeof(struct compat_delta) * xp->number);
-		xp->compat_tab = malloc(sizeof(struct compat_delta) * xp->number);
+		xp->compat_tab = (struct compat_delta *) malloc(sizeof(struct compat_delta) * xp->number);
 		if (!xp->compat_tab)
 			return -ENOMEM;
 		xp->cur = 0;
@@ -579,8 +595,8 @@ int xt_compat_add_offset(u_int8_t af, unsigned int offset, int delta)
 
 int xt_compat_target_offset(const struct xt_target *target)
 {
-
 	if(target){
+		printf("target->targetsize:: %u\n",target->targetsize);
 		u_int16_t csize = target->compatsize ? : target->targetsize;
 		return XT_ALIGN(target->targetsize) - COMPAT_XT_ALIGN(csize);
 	} 
@@ -590,14 +606,17 @@ int xt_compat_target_offset(const struct xt_target *target)
 int xt_compat_match_offset(const struct xt_match *match)
 {
 	u_int16_t csize = match->compatsize ? : match->matchsize;
+      
 	return XT_ALIGN(match->matchsize) - COMPAT_XT_ALIGN(csize);
+      
 }
 
 /* All zeroes == unconditional rule. */
 /* Mildly perf critical (only if packet tracing is on) */
 static inline bool unconditional(const struct ipt_entry *e)
 {
-	static const struct ipt_ip uncond;
+	//static const struct ipt_ip uncond;
+	struct ipt_ip uncond;
 
 	return e->target_offset == sizeof(struct ipt_entry) &&
 	       memcmp(&e->ip, &uncond, sizeof(uncond)) == 0;
@@ -661,6 +680,11 @@ void xt_compat_init_offsets(u_int8_t af, unsigned int number)
       xt[af].cur = 0;
 }//xt_compat_init_offsets
 
+void xt_compat_lock(u_int8_t af)
+{
+	//mutex_lock(&xt[af].compat_mutex); -- using mutex may be really tricky to implement here
+}
+
 static inline long __must_check PTR_ERR(__force const void *ptr)
 {
 	return (long) ptr;
@@ -670,21 +694,157 @@ static inline long __must_check PTR_ERR(__force const void *ptr)
 static inline struct xt_entry_target *
 compat_ipt_get_target(struct compat_ipt_entry *e)
 {
-	return (void *)e + e->target_offset;
+	//return (void *)e + e->target_offset; //compilation error from this casting
+	return (struct xt_entry_target *)e + e->target_offset;
 }
 
+static int
+compat_find_calc_match(struct xt_entry_match *m,
+		       const char *name,
+		       const struct ipt_ip *ip,
+		       int *size)
+{
+	struct xt_match *match;
+
+	match = xt_request_find_match(NFPROTO_IPV4, m->u.user.name,
+				      m->u.user.revision);
+	if (IS_ERR(match)) {
+		printf("compat_check_calc_match: `%s' not found\n",
+			 m->u.user.name);
+		return PTR_ERR(match);
+	}
+	m->u.kernel.match = match;
+	*size += xt_compat_match_offset(match);
+	return 0;
+}// compat_find_calc_match
+
+
+
+////////// C++ Abstraction Definition ////////////////////////
+class XtTableInfo
+{
+    private:
+        /* Size per table */
+        unsigned int size;
+        /* Number of entries: FIXME. --RR */
+        unsigned int number;
+         /* Initial number of entries. Needed for module usage count */
+        unsigned int initial_entries;
+         /* Entry points and underflows */
+        unsigned int hook_entry[NF_INET_NUMHOOKS];
+        unsigned int underflow[NF_INET_NUMHOOKS];
+         /*
+             * Number of user chains. Since tables cannot have loops, at most
+             * @stacksize jumps (number of user chains) can possibly be made.
+        */
+         unsigned int stacksize;
+         void ***jumpstack;
+ 
+         unsigned char entries[0]; //__aligned(8);
+
+	protected:
+
+		int compat_calc_entry(const struct ipt_entry *e,
+			     const XtTableInfo *info,
+			     const void *base, XtTableInfo *newinfo);
+		
+		//makes the call to the vulnerable function
+		int check_compat_entry_size_and_hooks(struct compat_ipt_entry *e,
+				  XtTableInfo *newinfo,
+				  unsigned int *size,
+				  const unsigned char *base,
+				  const unsigned char *limit,
+				  const unsigned int *hook_entries,
+				  const unsigned int *underflows,
+				  const char *name);
+		
+		int mark_source_chains(const XtTableInfo *newinfo, unsigned int valid_hooks, void *entry0);
+      
+      public:
+         XtTableInfo();//default constructor
+
+	/* Getters */
+         unsigned int getSize(){
+            return size;
+         }
+
+         unsigned int getNumber(){
+            return number;
+         }
+
+         unsigned int getInitialEntries(){
+            return initial_entries;
+         }
+
+         unsigned int getStackSize(){
+            return stacksize;
+         }
+
+        void * getEntries(){
+            return entries;
+        }
+
+	  unsigned int * getHookEntry(){
+            return hook_entry;
+        }
+
+	 unsigned int * getUnderflow(){
+            return underflow;
+       }
+      /* End Getters */
+
+      //allocate memory to the abstraction (xt_table_info)
+      XtTableInfo *xt_alloc_table_info(unsigned int size);
+
+	//free memory from the abstraction (xt_table_info)
+      void xt_free_table_info(XtTableInfo *info);
+
+	/* 
+	getting table info -- compat_do_ipt_get_ctl offspring
+	*/
+	int compat_table_info(const XtTableInfo *info, XtTableInfo *newinfo);
+	
+	/* 
+	setting table info -- compat_do_ipt_set_ctl offspring
+	*/
+	
+	//translate abstraction (xt_table_info) from user-space to kernel-space
+	int translate_compat_table(struct net *net,
+		       const char *name,
+		       unsigned int valid_hooks,
+		       XtTableInfo **pinfo,
+		       void **pentry0,
+		       unsigned int total_size,
+		       unsigned int number,
+		       unsigned int *hook_entries,
+		       unsigned int *underflows);
+	
+      
+
+};
+////////// End C++ Abstraction Definition ////////////////////////
+
+
+///////// PRIVATE/PROTECTED ABSTRACTION METHODS ////////////////////
+
 /**
- * @brief Original C code used for C++ abstraction
- * 
- * @param e 
- * @param info 
- * @param base 
- * @param newinfo 
- * @return int 
- */
-static int compat_calc_entry(const struct ipt_entry *e,
-			     const struct xt_table_info *info,
-			     const void *base, struct xt_table_info *newinfo)
+* @brief private function because it was only used one time within a another function
+* 
+* Input Parameter:(e, info, base, newinfo)
+*    @param e - LinkedList used to store the row entries of the routing table 
+*    @param info - The network routing table.
+*    @param base - Pointer to the starting position of the routing table entries and was 
+*                  used with e (struct ipt_entry) to get the next table row. 
+*    @param newinfo - The new network routing table that gets returned as output
+* 
+* Output Parameter:(newinfo)  
+*     @param newinfo - the new table (abstraction.size, abstraction.hook_entry & abstraction.underflow are modified)      
+*      
+* @return (int) -- returning different error codes, possible output {0 -- success, a negative errno code, positive exit code on failure}.
+*/  
+int XtTableInfo::compat_calc_entry(const struct ipt_entry *e,
+			     const XtTableInfo *info,
+			     const void *base, XtTableInfo *newinfo)
 {
 	const struct xt_entry_match *ematch;
 	const struct xt_entry_target *t;
@@ -692,7 +852,8 @@ static int compat_calc_entry(const struct ipt_entry *e,
 	int off, i, ret;
 
 	off = sizeof(struct ipt_entry) - sizeof(struct compat_ipt_entry);
-	entry_offset = (void *)e - base;
+	//entry_offset = (void *)e - base;
+	entry_offset = (int *)(void *)e - (int *)base;
 	xt_ematch_foreach(ematch, e)
 		off += xt_compat_match_offset(ematch->u.kernel.match);
 	t = ipt_get_target_c(e);
@@ -711,12 +872,120 @@ static int compat_calc_entry(const struct ipt_entry *e,
 			newinfo->underflow[i] -= off;
 	}
 	return 0;
+
+}//compat_calc_entry
+
+int
+XtTableInfo::check_compat_entry_size_and_hooks(struct compat_ipt_entry *e,
+				  XtTableInfo *newinfo,
+				  unsigned int *size,
+				  const unsigned char *base,
+				  const unsigned char *limit,
+				  const unsigned int *hook_entries,
+				  const unsigned int *underflows,
+				  const char *name)
+{
+		struct xt_entry_match *ematch;
+		struct xt_entry_target *t;
+		struct xt_target *target;
+		unsigned int entry_offset;
+		unsigned int j;
+		int ret, off, h;
+
+		printf("check_compat_entry_size_and_hooks %p\n", e);
+		if ((unsigned long)e % __alignof__(struct compat_ipt_entry) != 0 ||
+		(unsigned char *)e + sizeof(struct compat_ipt_entry) >= limit ||
+		(unsigned char *)e + e->next_offset > limit) {
+			printf("Bad offset %p, limit = %p\n", e, limit);
+			return -EINVAL;
+		}
+
+		if (e->next_offset < sizeof(struct compat_ipt_entry) +
+				sizeof(struct compat_xt_entry_target)) {
+			printf("checking: element %p size %u\n",
+				e, e->next_offset);
+			return -EINVAL;
+		}
+
+		/* For purposes of check_entry casting the compat entry is fine */
+		ret = check_entry((struct ipt_entry *)e);
+		if (ret)
+			return ret;
+
+		off = sizeof(struct ipt_entry) - sizeof(struct compat_ipt_entry);
+		//entry_offset = (void *)e - (void *)base;
+		entry_offset = (unsigned int *)(void *)e - (unsigned int *)(void *)base;
+		j = 0;
+		xt_ematch_foreach(ematch, e) {
+			ret = compat_find_calc_match(ematch, name, &e->ip, &off);
+			if (ret != 0)
+				goto release_matches;
+			++j;
+		}
+
+		t = compat_ipt_get_target(e);
+		target = xt_request_find_target(NFPROTO_IPV4, t->u.user.name,
+						t->u.user.revision);
+		if (IS_ERR(target)) {
+			printf("check_compat_entry_size_and_hooks: `%s' not found\n",
+				t->u.user.name);
+			ret = PTR_ERR(target);
+			goto release_matches;
+		}
+		t->u.kernel.target = target;
+
+		off += xt_compat_target_offset(target);
+		*size += off;
+		ret = xt_compat_add_offset(AF_INET, entry_offset, off);
+		if (ret)
+			goto out;
+
+		/* Check hooks & underflows */
+		for (h = 0; h < NF_INET_NUMHOOKS; h++) {
+			if ((unsigned char *)e - base == hook_entries[h])
+				newinfo->hook_entry[h] = hook_entries[h];
+			if ((unsigned char *)e - base == underflows[h])
+				newinfo->underflow[h] = underflows[h];
+		}
+
+		/* Clear counters and comefrom */
+		memset(&e->counters, 0, sizeof(e->counters));
+		e->comefrom = 0;
+		return 0;
+
+	out:
+		module_put(t->u.kernel.target->me);
+	release_matches:
+		xt_ematch_foreach(ematch, e) {
+			if (j-- == 0)
+				break;
+			module_put(ematch->u.kernel.match->me);
+		}
+		return ret;
 }
 
+///////// END PRIVATE/PROTECTED ABSTRACTION METHODS ////////////////////
 
-struct xt_table_info *xt_alloc_table_info(unsigned int size)
+
+///////// PUBLIC ABSTRACTION  METHODS ////////////////////
+/**
+ * @brief allocate memory to the XtTableInfo abstraction
+ * Input Parameter:(size)
+ *    @param size - the size per table (usually size of struct ipt_replace, compat_ipt_replace, arpt_replace, or compat_arpt_replace)
+ * 
+ * Output Parameter:(XtTableInfo*)
+ *    @param XtTableInfo* - pointer to the newly allocated memory address 
+ * 
+ * @return XtTableInfo* -- new pointer to abstraction class
+ * 
+ * Constraints{ // both already enforced in the c-code
+ *    "input.size": "input.size > 0"
+ *    "abstraction.size": "input.size = abstraction.size"
+ * }
+ */
+XtTableInfo * XtTableInfo::xt_alloc_table_info(unsigned int size)
 {
-	struct xt_table_info *info = NULL;
+	XtTableInfo *info = NULL;
 	size_t sz = sizeof(*info) + size;
 
 	if (sz < sizeof(*info))
@@ -727,10 +996,10 @@ struct xt_table_info *xt_alloc_table_info(unsigned int size)
 		return NULL;
 
 	if (sz <= (PAGE_SIZE << PAGE_ALLOC_COSTLY_ORDER))		
-		info = calloc(sz, GFP_KERNEL | __GFP_NOWARN | __GFP_NORETRY); //info = kmalloc(sz, GFP_KERNEL | __GFP_NOWARN | __GFP_NORETRY);
+		info = (XtTableInfo *)calloc(sz, GFP_KERNEL | __GFP_NOWARN | __GFP_NORETRY); //info = kmalloc(sz, GFP_KERNEL | __GFP_NOWARN | __GFP_NORETRY);
 	if (!info) {
 		//info = vmalloc(sz);
-		info = malloc(sz);
+		info = (XtTableInfo *)malloc(sz);
 		if (!info)
 			return NULL;
 	}
@@ -739,7 +1008,12 @@ struct xt_table_info *xt_alloc_table_info(unsigned int size)
 	return info;
 }
 
-void xt_free_table_info(struct xt_table_info *info)
+/**
+ * @brief free the routing table memory
+ * 
+ * @param info 
+ */
+void XtTableInfo::xt_free_table_info(XtTableInfo *info)
 {
 	int cpu;
 
@@ -753,16 +1027,217 @@ void xt_free_table_info(struct xt_table_info *info)
 	free(info);
 }
 
+/**
+ * @brief copy all the abstraction elements to a 
+ * 
+ * @param info 
+ * @param newinfo 
+ * @return int 
+ */
+int XtTableInfo::compat_table_info(const XtTableInfo *info,
+			     XtTableInfo *newinfo)
+{
+	struct ipt_entry *iter;
+	const void *loc_cpu_entry;
+	int ret;
+
+	if (!newinfo || !info)
+		return -EINVAL;
+
+	/* we dont care about newinfo->entries */
+	memcpy(newinfo, info, offsetof(struct xt_table_info, entries));
+	newinfo->initial_entries = 0;
+	loc_cpu_entry = info->entries;
+	xt_compat_init_offsets(AF_INET, info->number);
+	xt_entry_foreach(iter, loc_cpu_entry, info->size) {
+		ret = compat_calc_entry(iter, info, loc_cpu_entry, newinfo);
+		if (ret != 0)
+			return ret;
+	}
+	return 0;
+}//compat_table_info
+
+/**
+ * @brief 
+ * 
+ * @param net 
+ * @param name 
+ * @param valid_hooks 
+ * @param pinfo 
+ * @param pentry0 
+ * @param total_size 
+ * @param number 
+ * @param hook_entries 
+ * @param underflows 
+ * @return int 
+ */
+int XtTableInfo::translate_compat_table(struct net *net,
+		       const char *name,
+		       unsigned int valid_hooks,
+		       XtTableInfo **pinfo,
+		       void **pentry0,
+		       unsigned int total_size,
+		       unsigned int number,
+		       unsigned int *hook_entries,
+		       unsigned int *underflows)
+{
+		unsigned int i, j;
+		XtTableInfo *newinfo, *info;
+		void *pos, *entry0, *entry1;
+		struct compat_ipt_entry *iter0;
+		struct ipt_entry *iter1;
+		unsigned int size;
+		int ret;
+
+		info = *pinfo;
+		entry0 = *pentry0;
+		size = total_size;
+		info->number = number;
+
+		/* Init all hooks to impossible value. */
+		for (i = 0; i < NF_INET_NUMHOOKS; i++) {
+			info->hook_entry[i] = 0xFFFFFFFF;
+			info->underflow[i] = 0xFFFFFFFF;
+		}
+
+		printf("translate_compat_table: size %u\n", info->size);
+		j = 0;
+		xt_compat_lock(AF_INET);
+		xt_compat_init_offsets(AF_INET, number);
+		/* Walk through entries, checking offsets. */
+		xt_entry_foreach(iter0, entry0, total_size) {
+			ret = check_compat_entry_size_and_hooks(iter0, info, &size,
+								entry0,
+								entry0 + total_size,
+								hook_entries,
+								underflows,
+								name);
+			if (ret != 0)
+				goto out_unlock;
+			++j;
+		}
+
+		ret = -EINVAL;
+		if (j != number) {
+			printf("translate_compat_table: %u not %u entries\n",
+				j, number);
+			goto out_unlock;
+		}
+
+		/* Check hooks all assigned */
+		for (i = 0; i < NF_INET_NUMHOOKS; i++) {
+			/* Only hooks which are valid */
+			if (!(valid_hooks & (1 << i)))
+				continue;
+			if (info->hook_entry[i] == 0xFFFFFFFF) {
+				printf("Invalid hook entry %u %u\n",
+					i, hook_entries[i]);
+				goto out_unlock;
+			}
+			if (info->underflow[i] == 0xFFFFFFFF) {
+				printf("Invalid underflow %u %u\n",
+					i, underflows[i]);
+				goto out_unlock;
+			}
+		}
+
+		ret = -ENOMEM;
+		newinfo = xt_alloc_table_info(size);
+		if (!newinfo)
+			goto out_unlock;
+
+		newinfo->number = number;
+		for (i = 0; i < NF_INET_NUMHOOKS; i++) {
+			newinfo->hook_entry[i] = info->hook_entry[i];
+			newinfo->underflow[i] = info->underflow[i];
+		}
+		entry1 = newinfo->entries;
+		pos = entry1;
+		size = total_size;
+		xt_entry_foreach(iter0, entry0, total_size) {
+			ret = compat_copy_entry_from_user(iter0, &pos, &size,
+							name, newinfo, entry1);
+			if (ret != 0)
+				break;
+		}
+		xt_compat_flush_offsets(AF_INET);
+		xt_compat_unlock(AF_INET);
+		if (ret)
+			goto free_newinfo;
+
+		ret = -ELOOP;
+		if (!mark_source_chains(newinfo, valid_hooks, entry1))
+			goto free_newinfo;
+
+		i = 0;
+		xt_entry_foreach(iter1, entry1, newinfo->size) {
+			ret = compat_check_entry(iter1, net, name);
+			if (ret != 0)
+				break;
+			++i;
+			if (strcmp(ipt_get_target(iter1)->u.user.name,
+			XT_ERROR_TARGET) == 0)
+				++newinfo->stacksize;
+		}
+		if (ret) {
+			/*
+			* The first i matches need cleanup_entry (calls ->destroy)
+			* because they had called ->check already. The other j-i
+			* entries need only release.
+			*/
+			int skip = i;
+			j -= i;
+			xt_entry_foreach(iter0, entry0, newinfo->size) {
+				if (skip-- > 0)
+					continue;
+				if (j-- == 0)
+					break;
+				compat_release_entry(iter0);
+			}
+			xt_entry_foreach(iter1, entry1, newinfo->size) {
+				if (i-- == 0)
+					break;
+				cleanup_entry(iter1, net);
+			}
+			xt_free_table_info(newinfo);
+			return ret;
+		}
+
+		*pinfo = newinfo;
+		*pentry0 = entry1;
+		xt_free_table_info(info);
+		return 0;
+
+	free_newinfo:
+		xt_free_table_info(newinfo);
+	out:
+		xt_entry_foreach(iter0, entry0, total_size) {
+			if (j-- == 0)
+				break;
+			compat_release_entry(iter0);
+		}
+		return ret;
+	out_unlock:
+		xt_compat_flush_offsets(AF_INET);
+		xt_compat_unlock(AF_INET);
+		goto out;
+
+}//translate_compat_table
+
+///////// END PUBLIC ABSTRACTION METHODS ////////////////////
 
 
-int main ()
+
+
+int main (int argc, char *argv[])
 {
      
-      struct xt_table_info *info;
-      struct xt_table_info *newinfo;
+      XtTableInfo *info;
+      XtTableInfo *newinfo;
       struct ipt_entry *iter;
       const void *loc_cpu_entry;
       int ret;
+      xt = (struct xt_af *)malloc(sizeof *xt);
 
 	struct ipt_replace tmp;
 
@@ -789,10 +1264,19 @@ int main ()
 	data.match.u.user.match_size = (sizeof(data.match) + sizeof(data.pad));
 	strcpy(data.match.u.user.name, "icmp");
 	data.match.u.user.revision = 0;
+	////////////////////
+	data.match.u.kernel.match_size = (sizeof(data.match) + sizeof(data.pad));
+	data.match.u.kernel.match = (struct xt_match *)malloc(sizeof(data.match.u.kernel.match));
+	////////////////////
 
 	data.target.u.user.target_size = sizeof(data.target);
 	strcpy(data.target.u.user.name, "NFQUEUE");
 	data.target.u.user.revision = 1;
+
+	////////////////////
+	data.target.u.kernel.target_size = sizeof(data.target);
+	data.target.u.kernel.target = (struct xt_target *)malloc(sizeof(data.target.u.kernel.target));
+	////////////////////	
 	////////////////////////// END Exploit Code Data ///////////////////////////////
 
 	//copy user data, similar to copy_from_user
@@ -801,21 +1285,39 @@ int main ()
 	tmp.name[sizeof(tmp.name)-1] = 0;
 	
       ////////////////////////////////
-            info = xt_alloc_table_info(tmp.size);
-		info->number=1;
-            newinfo = xt_alloc_table_info(sizeof(info));    
+            info = info->xt_alloc_table_info(tmp.size);
+			//info->setNumber(1);
+            newinfo = newinfo->xt_alloc_table_info(sizeof(info));    
       ////////////////////////////////	
+	memcpy(info->getEntries(), &data.entry, tmp.size);
+
+      loc_cpu_entry = info->getEntries();
+
+      //ToDo -- use of proper test data for both C++ and C codes
+	memcpy(newinfo, info, offsetof(struct xt_table_info, entries));
 	
-      loc_cpu_entry = info->entries;
-      //ToDo -- passing accurate data compat_calc_entry       
+	//xt_compat_init_offsets(AF_INET, info->getNumber());
+	xt_compat_init_offsets(AF_INET, 1);
+
+	//iter = (struct ipt_entry *)malloc(sizeof(iter)); 
+
+	//memcpy(&iter, &data.entry, sizeof(iter));
 
 	///////////// calling function Test function ///////////////////
-	       compat_calc_entry(iter,info, loc_cpu_entry, newinfo);		
-	////////////////////////////////	
+            xt_entry_foreach(iter, loc_cpu_entry, info->getSize()) {
+                 // ret = newinfo->compat_calc_entry(iter, info, loc_cpu_entry, newinfo);
+                  if (ret != 0)
+                        return ret;
+            }	            
+	////////////////////////////////		
+	////////////////////////////////
+
+	printf("ret:: %d\n",ret);		
+	printf("newinfo->size:: %u\n",newinfo->getSize());
 	
 	// free up memory
-	xt_free_table_info(newinfo);
-	xt_free_table_info(info);	
+	newinfo->xt_free_table_info(newinfo);
+	info->xt_free_table_info(info);	
       
       return 0;
 }

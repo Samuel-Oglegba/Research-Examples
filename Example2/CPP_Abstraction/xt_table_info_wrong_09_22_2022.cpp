@@ -22,6 +22,8 @@
 
       #include <asm-generic/int-ll64.h>
 
+	#include <stddef.h>
+
 
 
 typedef struct {
@@ -213,10 +215,6 @@ struct _compat_xt_align {
 };
 #define COMPAT_XT_ALIGN(s) __ALIGN_KERNEL((s), __alignof__(struct _compat_xt_align))
 
-#ifndef INT_MAX
-#define INT_MAX 0x7fffffff
-#endif
-
 
 struct mutex {
 	/* 1: unlocked, 0: locked, negative: locked, possible waiters */
@@ -383,11 +381,6 @@ struct compat_xt_counters {
 };// struct compat_xt_counters
 
 
-struct in_addr {
-	__be32	s_addr;
-};
-
-
 struct ipt_ip {
 	/* Source and destination IP addr */
 	struct in_addr src, dst;
@@ -479,18 +472,6 @@ struct xt_table_info {
 	unsigned char entries[0];// __aligned(8);
 };
 
-struct compat_ipt_replace {
-	char			name[XT_TABLE_MAXNAMELEN];
-	u32			valid_hooks;
-	u32			num_entries;
-	u32			size;
-	u32			hook_entry[NF_INET_NUMHOOKS];
-	u32			underflow[NF_INET_NUMHOOKS];
-	u32			num_counters;
-	compat_uptr_t		counters;	/* struct xt_counters * */
-	struct compat_ipt_entry	entries[0];
-};
-
 static struct xt_af *xt;
 
 struct xt_standard_target {
@@ -539,11 +520,27 @@ struct ipt_replace {
                                           (pos)->u.match_size))
 
  
- 
+
+#define VERIFY_READ 0
+
+#define __copy_from_user(to, from, n)	(memcpy(to, (void __force *)from, n), 0)
+#define __must_check __attribute__((warn_unused_result))
+#define __range_ok(addr, size)	((void)(addr), 0)
+#define access_ok(type, addr, size)	(__range_ok(addr, size) == 0)
+
+ static inline unsigned long __must_check copy_from_user(void *to, const void __user *from, unsigned long n)
+{
+	if (access_ok(VERIFY_READ, from, n))
+		n = __copy_from_user(to, from, n);
+	else /* security hole - plug it */
+		memset(to, 0, n);
+	return n;
+}
+
  /* Helper functions */
 static __inline__ struct xt_entry_target *ipt_get_target(struct ipt_entry *e)
 {
-      return (void *)e + e->target_offset;
+	 return (void *)e + e->target_offset;
 }
 
  /* for const-correctness */
@@ -555,7 +552,7 @@ static inline const struct xt_entry_target *ipt_get_target_c(const struct ipt_en
 int xt_compat_add_offset(u_int8_t af, unsigned int offset, int delta)
 {
 	struct xt_af *xp = &xt[af];
-
+	
 	if (!xp->compat_tab) {
 		if (!xp->number)
 			return -EINVAL;
@@ -579,8 +576,8 @@ int xt_compat_add_offset(u_int8_t af, unsigned int offset, int delta)
 
 int xt_compat_target_offset(const struct xt_target *target)
 {
-
 	if(target){
+		printf("target->targetsize:: %u\n",target->targetsize);
 		u_int16_t csize = target->compatsize ? : target->targetsize;
 		return XT_ALIGN(target->targetsize) - COMPAT_XT_ALIGN(csize);
 	} 
@@ -589,7 +586,13 @@ int xt_compat_target_offset(const struct xt_target *target)
 
 int xt_compat_match_offset(const struct xt_match *match)
 {
+	//printf("match->compatsize: %u, match->matchsize: %u \n",match->compatsize, match->matchsize);
 	u_int16_t csize = match->compatsize ? : match->matchsize;
+	//printf("csize: %u \n",csize);
+	//printf("COMPAT_XT_ALIGN(csize): %d \n",COMPAT_XT_ALIGN(0));
+	//printf("match->matchsize: %d \n",match->matchsize);
+	//printf("XT_ALIGN(match->matchsize): %d \n",XT_ALIGN(match->matchsize));
+	
 	return XT_ALIGN(match->matchsize) - COMPAT_XT_ALIGN(csize);
 }
 
@@ -690,17 +693,31 @@ static int compat_calc_entry(const struct ipt_entry *e,
 	const struct xt_entry_target *t;
 	unsigned int entry_offset;
 	int off, i, ret;
-
+	
 	off = sizeof(struct ipt_entry) - sizeof(struct compat_ipt_entry);
 	entry_offset = (void *)e - base;
-	xt_ematch_foreach(ematch, e)
+
+	printf("sizeof(struct ipt_entry):: %d\n",sizeof(struct ipt_entry));
+	printf("e->next_offset:: %u\n",e->next_offset);
+	printf("e->target_offset:: %u\n",e->target_offset);
+
+	//printf("off11:: %u\n",off);
+	xt_ematch_foreach(ematch, e){
 		off += xt_compat_match_offset(ematch->u.kernel.match);
+	}
+	//printf("offset:: %d\n",off);
 	t = ipt_get_target_c(e);
+	
 	off += xt_compat_target_offset(t->u.kernel.target);
+
+	off = 4023;
+	printf("offset:: %u\n",off);
+	
 	newinfo->size -= off;
 	ret = xt_compat_add_offset(AF_INET, entry_offset, off);
+
 	if (ret)
-		return ret;
+		return ret;	
 
 	for (i = 0; i < NF_INET_NUMHOOKS; i++) {
 		if (info->hook_entry[i] &&
@@ -710,6 +727,7 @@ static int compat_calc_entry(const struct ipt_entry *e,
 		    (e < (struct ipt_entry *)(base + info->underflow[i])))
 			newinfo->underflow[i] -= off;
 	}
+
 	return 0;
 }
 
@@ -728,6 +746,7 @@ struct xt_table_info *xt_alloc_table_info(unsigned int size)
 
 	if (sz <= (PAGE_SIZE << PAGE_ALLOC_COSTLY_ORDER))		
 		info = calloc(sz, GFP_KERNEL | __GFP_NOWARN | __GFP_NORETRY); //info = kmalloc(sz, GFP_KERNEL | __GFP_NOWARN | __GFP_NORETRY);
+	
 	if (!info) {
 		//info = vmalloc(sz);
 		info = malloc(sz);
@@ -742,20 +761,42 @@ struct xt_table_info *xt_alloc_table_info(unsigned int size)
 void xt_free_table_info(struct xt_table_info *info)
 {
 	int cpu;
-
 	if (info->jumpstack != NULL) {
 		for_each_possible_cpu(cpu)
 			free(info->jumpstack[cpu]); //kvfree(info->jumpstack[cpu]);			
 		free(info->jumpstack); //kvfree(info->jumpstack);
 	}
-
+	
 	//kvfree(info);
 	free(info);
 }
 
+static int compat_table_info(const struct xt_table_info *info,
+			     struct xt_table_info *newinfo)
+{
+	struct ipt_entry *iter;
+	const void *loc_cpu_entry;
+	int ret;
+
+	if (!newinfo || !info)
+		return -EINVAL;
+
+	/* we dont care about newinfo->entries */
+	memcpy(newinfo, info, offsetof(struct xt_table_info, entries));
+	newinfo->initial_entries = 0;
+	loc_cpu_entry = info->entries;
+	xt_compat_init_offsets(AF_INET, info->number);
+	xt_entry_foreach(iter, loc_cpu_entry, info->size) {
+		ret = compat_calc_entry(iter, info, loc_cpu_entry, newinfo);
+		if (ret != 0)
+			return ret;
+	}
+	return 0;
+}
 
 
-int main ()
+
+int main (int argc, char *argv[])
 {
      
       struct xt_table_info *info;
@@ -763,6 +804,7 @@ int main ()
       struct ipt_entry *iter;
       const void *loc_cpu_entry;
       int ret;
+	xt = (struct xt_af *)malloc(sizeof *xt);
 
 	struct ipt_replace tmp;
 
@@ -780,42 +822,95 @@ int main ()
 	data.replace.num_entries = 1;
 	data.replace.size = (sizeof(data.entry) + sizeof(data.match) +
 				sizeof(data.pad) + sizeof(data.target));
-
-	data.entry.next_offset = (sizeof(data.entry) + sizeof(data.match) +
+	
+	data.entry.next_offset = (sizeof(data.entry) + sizeof(data.match) + 
 					sizeof(data.pad) + sizeof(data.target));
+		
 	data.entry.target_offset =
 		(sizeof(data.entry) + sizeof(data.match) + sizeof(data.pad));
 
 	data.match.u.user.match_size = (sizeof(data.match) + sizeof(data.pad));
 	strcpy(data.match.u.user.name, "icmp");
 	data.match.u.user.revision = 0;
+	////////////////////
+	//data.match.u.kernel.match_size = (sizeof(data.match) + sizeof(data.pad));
+	data.match.u.kernel.match = (struct xt_match *)malloc(sizeof(data.match.u.kernel.match));
+	//data.match.u.kernel.match->matchsize = 500*(sizeof(data.match) + sizeof(data.pad));
+	//data.match.u.kernel.match->compatsize = 0;
+	////////////////////
 
 	data.target.u.user.target_size = sizeof(data.target);
 	strcpy(data.target.u.user.name, "NFQUEUE");
 	data.target.u.user.revision = 1;
+	////////////////////
+	 //data.target.u.kernel.target_size = sizeof(data.target);
+	 data.target.u.kernel.target = (struct xt_target *)malloc(sizeof(data.target));
+	 data.target.u.kernel.target->targetsize = 10;
+	 //data.target.u.kernel.target->compatsize = 5000;
+	////////////////////
 	////////////////////////// END Exploit Code Data ///////////////////////////////
-
-	//copy user data, similar to copy_from_user
-	memcpy(&tmp, &data, sizeof(tmp));
-
-	tmp.name[sizeof(tmp.name)-1] = 0;
 	
+	//copy user data, similar to copy_from_user
+	//memcpy(&tmp, &data, sizeof(tmp));
+	//copy_from_user(&tmp, &data, sizeof(tmp));
+      
+	memcpy(&tmp, &data, sizeof(tmp));
+	/*
+	if (copy_from_user(&tmp, &data, sizeof(tmp)) != 0){
+		return -EFAULT;
+	}
+	*/
+      
+	tmp.name[sizeof(tmp.name)-1] = 0;
+	//printf("tmp.num_entries:: %d\n",tmp.num_entries);	//when i print this, things go south, why so?
+	//printf("Just a random print that leads to a strange behavior\n");
       ////////////////////////////////
             info = xt_alloc_table_info(tmp.size);
-		info->number=1;
-            newinfo = xt_alloc_table_info(sizeof(info));    
+			info->number=1;
+            newinfo = xt_alloc_table_info(sizeof(info));  
+		  
       ////////////////////////////////	
+	//memcpy(info->entries, &data.entry, sizeof(info->entries));
+	//memcpy(info->entries, &data.entry, sizeof(data.entry));
+	//memcpy(info->entries, &data.entry, tmp.size);
 	
+	memcpy(newinfo, info, offsetof(struct xt_table_info, entries));
+	//newinfo->initial_entries = 0;
       loc_cpu_entry = info->entries;
-      //ToDo -- passing accurate data compat_calc_entry       
+	
+	memcpy(loc_cpu_entry, &data.entry, tmp.size);
+
+	/*
+	if(copy_from_user(loc_cpu_entry, &data.entry,
+			   tmp.size) != 0)	{
+		printf("e no work oo \n");
+		return -EFAULT;	
+	}
+	*/
+	
+      //ToDo -- passing accurate data compat_calc_entry  		
+		xt_compat_init_offsets(AF_INET, info->number);
+
+		//iter = malloc(sizeof(loc_cpu_entry)); 
+		//memcpy(&iter, &data.entry, sizeof(iter));
+		
+	/////////// end test data //////////////////
 
 	///////////// calling function Test function ///////////////////
-	       compat_calc_entry(iter,info, loc_cpu_entry, newinfo);		
-	////////////////////////////////	
+	xt_entry_foreach(iter, loc_cpu_entry, info->size) {
+		ret = compat_calc_entry(iter, info, loc_cpu_entry, newinfo);
+
+		if (ret != 0)	
+			return ret;				
+	}	
+	////////////////////////////////
+
+	printf("ret:: %d\n",ret);		
+	printf("newinfo->size:: %u\n",newinfo->size);		
 	
 	// free up memory
+	xt_free_table_info(info);
 	xt_free_table_info(newinfo);
-	xt_free_table_info(info);	
       
       return 0;
 }
