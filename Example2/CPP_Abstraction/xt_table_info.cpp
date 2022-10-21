@@ -865,8 +865,11 @@ int main ()
 	////////////////////////// END Exploit Code Data ///////////////////////////////
 
 	//Test call illustration
+	cout << "data.match.u.user.match_size:: " << data.match.u.user.match_size << "\n";
+	cout << "data.target.u.user.target_size:: " << data.target.u.user.target_size << "\n";
 	XtTableInfo * info;
-	info->testConstraint(&data);	
+	//info->testConstraint(&data);	
+	cout << "(sizeof(data.entry) + sizeof(data.match) + sizeof(data.target)):: " << (sizeof(data.entry) + sizeof(data.match) + sizeof(data.target)) << "\n";
       
       return 0;
 }
