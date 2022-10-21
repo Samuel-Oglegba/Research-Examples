@@ -386,11 +386,11 @@ struct compat_xt_counters {
 	compat_u64 pcnt, bcnt;			/* Packet and byte counters */
 };// struct compat_xt_counters
 
-
+/*
 struct in_addr {
 	__be32	s_addr;
 };
-
+*/
 
 struct ipt_ip {
 	/* Source and destination IP addr */
@@ -743,9 +743,35 @@ class XtTableInfo
        }
 /* End Getters */
 
-    //function copies user data from user-space to kernel-space
-    //ToDo: how do I validate the user input since it is a void pointer?
-    compat_do_replace(void __user *user);
+    //for testing constraints
+    int testConstraint(void __user *user){
+		int ret;
+		struct compat_ipt_replace tmp;
+		struct xt_table_info newinfo;
+		void *loc_cpu_entry;
+		struct ipt_entry iter;
+		struct xt_entry_target target;
+		struct xt_entry_match match;
+		
+		__u16 next_offset = sizeof(iter) + sizeof(match) + sizeof(target);
+		__u16 target_size = sizeof(iter) + sizeof(match);
+		
+		memcpy(&tmp, user, sizeof(tmp));
+
+		//constraint 1: entry.next_offset = sizeof(entry) + sizeof(match) + sizeof(target)
+		//constraint 2:  entry.next_offset = tmp.size = struct xt_table_info newinfo.size  (size per table row)
+		if(tmp.size == next_offset){
+			cout << "Correct table row size!::" << next_offset << "\n";
+			return 1;
+		}
+		else{
+			cout << "tmp.size::" << tmp.size << "\n";
+			cout << "next_offset::" << next_offset << "\n";
+			cout << "Invalid table row size!::" << tmp.size-next_offset << "\n";
+		}
+		
+		return -1;
+    }
       
 };
 ////////// End C++ Abstraction ////////////////////////
@@ -805,97 +831,6 @@ void XtTableInfo::xt_free_table_info(XtTableInfo *info)
 	free(info);
 }
 
-/**
- * @brief Construct a new XtTableInfo::compat_do_replace object
- * 
- * @param user -- Holds the data from the user, since it is a void pointer, the user could send any type of data.
- */
-XtTableInfo::compat_do_replace(void __user *user){
-	struct net *net;
-
-	int ret;
-	struct compat_ipt_replace tmp;
-	//ToDo: Where I am stock now is how to successfully validate this user input first [valideUserInput()]
-	if(valideUserInput(user)){
-		return compat_do_replace(net, user, 0);
-	}
-
-	return -1;
-}
-
-/**
- *@brief  
- *Input Parameter:(net, user, len)
- *	@param net --A struct of independent logical copy of the host network stack (it has it's own routing table, set of IP addresses, socket listing, etc). 
- *			Represents the virtual container useful for communication between the application with the physical network devices.
- *				
- * 	@param user -- Holds the data from the user, since it is a void pointer, the user could send any type of data.
- * 
- * 	@param len --  was not used in this function implementation
- * 
- *Output Parameter:(newinfo, iter)	
- *Constraint{
- *	net
- *}
- *
- *Return Value	: @return (int) -- error codes (0 for success). 	  
- *	
- */
-int compat_do_replace(struct net *net, void __user *user, unsigned int len)
-{
-	int ret;
-	struct compat_ipt_replace tmp;
-	struct xt_table_info *newinfo;
-	void *loc_cpu_entry;
-	struct ipt_entry *iter;
-
-	if (copy_from_user(&tmp, user, sizeof(tmp)) != 0)
-		return -EFAULT;
-
-	/* overflow check */
-	if (tmp.size >= INT_MAX / num_possible_cpus())
-		return -ENOMEM;
-	if (tmp.num_counters >= INT_MAX / sizeof(struct xt_counters))
-		return -ENOMEM;
-	if (tmp.num_counters == 0)
-		return -EINVAL;
-
-	tmp.name[sizeof(tmp.name)-1] = 0;
-
-	newinfo = xt_alloc_table_info(tmp.size);
-	if (!newinfo)
-		return -ENOMEM;
-
-	loc_cpu_entry = newinfo->entries;
-	if (copy_from_user(loc_cpu_entry, user + sizeof(tmp),
-			   tmp.size) != 0) {
-		ret = -EFAULT;
-		goto free_newinfo;
-	}
-
-	ret = translate_compat_table(net, tmp.name, tmp.valid_hooks,
-				     &newinfo, &loc_cpu_entry, tmp.size,
-				     tmp.num_entries, tmp.hook_entry,
-				     tmp.underflow);
-	if (ret != 0)
-		goto free_newinfo;
-
-	//duprintf("compat_do_replace: Translated table\n");
-	printf("compat_do_replace: Translated table\n");
-
-	ret = __do_replace(net, tmp.name, tmp.valid_hooks, newinfo,
-			   tmp.num_counters, compat_ptr(tmp.counters));
-	if (ret)
-		goto free_newinfo_untrans;
-	return 0;
-
- free_newinfo_untrans:
-	xt_entry_foreach(iter, loc_cpu_entry, newinfo->size)
-		cleanup_entry(iter, net);
- free_newinfo:
-	xt_free_table_info(newinfo);
-	return ret;
-}
 
 
 
@@ -929,8 +864,12 @@ int main ()
 	data.target.u.user.revision = 1;
 	////////////////////////// END Exploit Code Data ///////////////////////////////
 
-	//API call illustration
-	new XtTableInfo::compat_do_replace(&data);	
+	//Test call illustration
+	cout << "data.match.u.user.match_size:: " << data.match.u.user.match_size << "\n";
+	cout << "data.target.u.user.target_size:: " << data.target.u.user.target_size << "\n";
+	XtTableInfo * info;
+	//info->testConstraint(&data);	
+	cout << "(sizeof(data.entry) + sizeof(data.match) + sizeof(data.target)):: " << (sizeof(data.entry) + sizeof(data.match) + sizeof(data.target)) << "\n";
       
       return 0;
 }
