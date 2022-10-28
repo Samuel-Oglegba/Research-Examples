@@ -539,6 +539,19 @@ struct xt_standard_target {
 	int verdict;
 };
 
+struct xt_error_target {
+	struct xt_entry_target target;
+	char errorname[XT_FUNCTION_MAXNAMELEN];
+};
+
+
+/* ICMP matching stuff */
+struct ipt_icmp {
+	__u8 type;				/* type to match */
+	__u8 code[2];				/* range of code */
+	__u8 invflags;				/* Inverse flags */
+};
+
 /**
  * struct xt_mtchk_param - parameters for match extensions'
  * checkentry functions
@@ -1723,6 +1736,17 @@ out_unlock:
 
 }//translate_compat_table
 
+/* Standard entry. */
+struct ipt_standard {
+	struct ipt_entry entry;
+	struct xt_standard_target target;
+};
+
+struct ipt_error {
+	struct ipt_entry entry;
+	struct xt_error_target target;
+};
+
 static int
 compat_do_replace(struct net *net, void __user *user, unsigned int len)
 {
@@ -1732,14 +1756,16 @@ compat_do_replace(struct net *net, void __user *user, unsigned int len)
 	void *loc_cpu_entry;
 	struct ipt_entry *iter;
 
+	//assert(tmp.size==newinfo->size);	  
 	if (copy_from_user(&tmp, user, sizeof(tmp)) != 0)
 		return -EFAULT;
 
-      //assert(tmp.size==newinfo->size);
+	/* Testing if constraint 1 holds all the time */
+      assert(tmp.size==newinfo->size);
       printf("tmp.size:: %u\n",tmp.size);
       printf("sizeof(tmp):: %u\n",sizeof(tmp));
       printf("sizeof(newinfo):: %u\n",sizeof(newinfo));
-	
+
       if(!newinfo){
             printf("newinfo is null\n"); 
       }
@@ -1757,7 +1783,7 @@ compat_do_replace(struct net *net, void __user *user, unsigned int len)
 	newinfo = xt_alloc_table_info(tmp.size);
 	if (!newinfo)
 		return -ENOMEM;
-	
+	/* testing constraint1 after xt_alloc_table_info()*/
 	assert(tmp.size==newinfo->size);
 
 	loc_cpu_entry = newinfo->entries;
@@ -1805,7 +1831,6 @@ int main ()
 	xt = (struct xt_af *)malloc(sizeof *xt);
 
 	///////////////////////// Test Case 1 /////////////////////////////////
-
 	struct __attribute__((__packed__)) {
 	struct ipt_replace replace;
 	struct ipt_entry entry;
@@ -1813,6 +1838,15 @@ int main ()
 	char pad[0x108 + PRIMARY_SIZE - 0x200 - 0x2];
 	struct xt_entry_target target;
 	} data = {0};
+
+	printf("sizeof(int): %u\n", sizeof(int));
+	printf("sizeof(struct ipt_entry): %u\n", sizeof(struct ipt_entry));
+	printf("sizeof(struct ipt_standard): %u\n", sizeof(struct ipt_standard));
+	printf("sizeof(struct ipt_error): %u\n", sizeof(struct ipt_error));
+	printf("sizeof(struct ipt_standard) + sizeof(struct ipt_error): %u\n", sizeof(struct ipt_standard) + sizeof(struct ipt_error));
+	printf("3*sizeof(struct ipt_standard) + sizeof(struct ipt_error): %u\n", 3*sizeof(struct ipt_standard) + sizeof(struct ipt_error));
+	printf("sizeof(data.replace): %u\n", sizeof(data.replace) );
+	printf("sizeof(struct ipt_icmp): %u\n", sizeof(struct ipt_icmp) );
 
 	data.replace.num_counters = 1;
 	data.replace.num_entries = 1;
