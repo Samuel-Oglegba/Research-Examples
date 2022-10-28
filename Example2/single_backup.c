@@ -1958,6 +1958,33 @@ static int check_entry(const struct ipt_entry *e)
 	return 0;
 }//check_entry
 
+/* Find match, grabs ref.  Returns ERR_PTR() on error. */
+struct xt_match *xt_find_match(u8 af, const char *name, u8 revision)
+{
+	struct xt_match *m;
+	int err = -ENOENT;
+
+	mutex_lock(&xt[af].mutex);
+	list_for_each_entry(m, &xt[af].match, list) {
+		if (strcmp(m->name, name) == 0) {
+			if (m->revision == revision) {
+				if (try_module_get(m->me)) {
+					mutex_unlock(&xt[af].mutex);
+					return m;
+				}
+			} else
+				err = -EPROTOTYPE; /* Found something. */
+		}
+	}
+	mutex_unlock(&xt[af].mutex);
+
+	if (af != NFPROTO_UNSPEC)
+		/* Try searching again in the family-independent list */
+		return xt_find_match(NFPROTO_UNSPEC, name, revision);
+
+	return ERR_PTR(err);
+}
+
 /**
  * @brief system calls - uable to complete definition due to system call
  * 

