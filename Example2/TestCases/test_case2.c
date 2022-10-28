@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
   if (unshare(CLONE_NEWNET) != 0) err(1, "unshare(CLONE_NEWNET)");
 
   if ((s = socket(AF_INET, SOCK_STREAM, 0)) < 0) err(1, "socket");
-
+/////////// REMOVE REPLACE ////////////////////
   struct {
     struct ipt_entry entry;
     struct xt_entry_match match;
