@@ -28,3 +28,7 @@ https://www.cvedetails.com/cve-details.php?t=1&cve_id=CVE-2021-22555
 #### the exploit ####
 https://github.com/google/security-research/security/advisories/GHSA-xxx5-8mvq-3528
 
+#### explanations netfilter ###
+https://programmer.ink/think/netfilter-analysis-2-table-initialization.html
+
+

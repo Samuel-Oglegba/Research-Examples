@@ -23,7 +23,11 @@
             "*.tcc": "c",
             "cinttypes": "c",
             "cstdbool": "c",
-            "cstdint": "c"
+            "cstdint": "c",
+            "tuple": "c",
+            "errno.h": "c",
+            "fcntl.h": "c",
+            "err.h": "c"
       },
       "C_Cpp.errorSquiggles": "Enabled"
 }
