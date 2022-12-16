@@ -20,12 +20,12 @@ compat_do_replace(struct net *net, void __user *user, unsigned int len)
 
 	newinfo = xt_alloc_table_info(tmp.size);
 
+	if (!newinfo)
+		return -ENOMEM;
+
 	///////////// constraint1 //////
 	BUG_ON(tmp.size!=newinfo->size);
 	/////////////
-
-	if (!newinfo)
-		return -ENOMEM;
 
 	loc_cpu_entry = newinfo->entries;
 	if (copy_from_user(loc_cpu_entry, user + sizeof(tmp),
@@ -33,9 +33,7 @@ compat_do_replace(struct net *net, void __user *user, unsigned int len)
 		ret = -EFAULT;
 		goto free_newinfo;
 	}
-	///////////// constraint1 //////
-	WARN_ON(tmp.size!=newinfo->size);
-	/////////////
+
 	
 	ret = translate_compat_table(net, &newinfo, &loc_cpu_entry, &tmp);
 
