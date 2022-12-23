@@ -67,7 +67,7 @@ digraph callgraph {
 "struct xt_table_info newinfo" -> "data 7{net,  newinfo, entry0, repl}" 
 "void *entry0" -> "data 7{net,  newinfo, entry0, repl}" 
 "struct ipt_replace repl" -> "data 7{net,  newinfo, entry0, repl}" 
-"data 7{net,  newinfo, entry0, repl}" -> "Task H (translateIptableSize)" [label="data 7", style=dotted];
+"data 7{net,  newinfo, entry0, repl}" -> "Task H (translateIptable)" [label="data 7", style=dotted];
 
 "data 8{net,  name, valid_hooks, newinfo, num_counters, counters_ptr}" [style=dotted];
 "char *name" [color=blue];
@@ -75,7 +75,7 @@ digraph callgraph {
 "int num_counters" [color=blue];
 "void __user *counters_ptr" [color=blue];
 
-"Task H (translateIptableSize)" -> "data 8{net,  name, valid_hooks, newinfo, num_counters, counters_ptr}"  [label="struct xt_table_info newinfo"];
+"Task H (translateIptable)" -> "data 8{net,  name, valid_hooks, newinfo, num_counters, counters_ptr}"  [label="struct xt_table_info newinfo"];
 "char *name" -> "data 8{net,  name, valid_hooks, newinfo, num_counters, counters_ptr}" ;
 "int valid_hooks"-> "data 8{net,  name, valid_hooks, newinfo, num_counters, counters_ptr}" ;
 "int num_counters" -> "data 8{net,  name, valid_hooks, newinfo, num_counters, counters_ptr}";
