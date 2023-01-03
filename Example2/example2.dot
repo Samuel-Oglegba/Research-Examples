@@ -95,7 +95,7 @@ digraph callgraph {
 "data 7{net,  newinfo, entry0, repl}"  -> "data 8{net,  name, valid_hooks, newinfo, num_counters, counters_ptr}" [label="struct net", style=dotted];
 
 "Task I (replaceRuleTableAndModule)" [fontsize=20, width=0.5];
-"data 8{net,  name, valid_hooks, newinfo, num_counters, counters_ptr}" -> "Task I (replaceRuleTableAndModule)" [fontsize=1, width=0.5];
+"data 8{net,  name, valid_hooks, newinfo, num_counters, counters_ptr}" -> "Task I (replaceRuleTableAndModule)" [label="data 8",style=dotted];
 }
 
 
