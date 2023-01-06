@@ -1,101 +1,90 @@
 digraph callgraph {
-"int fd" [color=blue, fontsize=14, width=0.5];
-"int *err" [color=blue, fontsize=14, width=0.5];
-"int *fput_needed" [color=blue, fontsize=14, width=0.5];
-"data 1{fd, *err, *fput_needed}"[style=dotted, fontsize=16, width=0.5];
-
-"int fd" -> "data 1{fd, *err, *fput_needed}";
-"int *err" -> "data 1{fd, *err, *fput_needed}";
-"int *fput_needed" -> "data 1{fd, *err, *fput_needed}";
-
-"data 1{fd, *err, *fput_needed}"->"Task A (convertSocketFromIntToStruct)"  [label="data 1", style=dotted];
-
-
-"int level" [color=blue, fontsize=14, width=0.5];
-"int optname" [color=blue, fontsize=14, width=0.5];
-"void *optval" [color=blue, fontsize=14, width=0.5];
-"int optlen" [color=blue, fontsize=14, width=0.5];
-"data 2{socket, level, optname, *optval, optlen}" [style=dotted, fontsize=16, width=0.5];
-
-"Task A (convertSocketFromIntToStruct)" [fontsize=20, width=0.5];
-"Task A (convertSocketFromIntToStruct)" -> "data 2{socket, level, optname, *optval, optlen}"  [label="struct socket"];
-"int level" -> "data 2{socket, level, optname, *optval, optlen}";
-"int optname" -> "data 2{socket, level, optname, *optval, optlen}";
-"void *optval" -> "data 2{socket, level, optname, *optval, optlen}";
-"int optlen" -> "data 2{socket, level, optname, *optval, optlen}";
-
-"Task B (checkProtocolDependency)"  [fontsize=20, width=0.5];
-"data 2{socket, level, optname, *optval, optlen}" -> "Task B (checkProtocolDependency)"  [label="data 2", style=dotted];
+    
+"SocketCreation" [fontcolor=red,fontsize=30, width=0.5];
+"ConfigureSocketParameters" [fontcolor=red, fontsize=30, width=0.5];
+"ConfigureSocketParametersBySocketType" [fontcolor=red,fontsize=30, width=0.5];
+"ConfigureSocket_IP_FamilyParameters" [fontcolor=red, fontsize=30, width=0.5];
+"Implement_IP_FamilyParameters" [fontcolor=red, fontsize=30, width=0.5];
+"CopySocketOptionsFromUserToKernel" [fontcolor=red, fontsize=30, width=0.5];
+"ValidateNew_IP_TableRules" [fontcolor=red, fontsize=24, width=0.5];
+"SaveNew_IP_TableRules" [fontcolor=red, fontsize=30, width=0.5];
 
 
-"Task C (doProtocolDependentOperations)" [fontsize=20, width=0.5];
-"data 3{socket->sock, level, optname, *optval, optlen}" [style=dotted, fontsize=16, width=0.5];
-"Task B (checkProtocolDependency)" -> "data 3{socket->sock, level, optname, *optval, optlen}"  [label="struct socket->sock"];
-"int level" -> "data 3{socket->sock, level, optname, *optval, optlen}";
-"int optname" -> "data 3{socket->sock, level, optname, *optval, optlen}";
-"void *optval" -> "data 3{socket->sock, level, optname, *optval, optlen}";
-"int optlen" -> "data 3{socket->sock, level, optname, *optval, optlen}";
-"data 3{socket->sock, level, optname, *optval, optlen}" -> "Task C (doProtocolDependentOperations)" [label="data 3", style=dotted];
-
-"Task D (ipSocketLevelOperation)" [fontsize=20, width=0.5];
-"data 3{socket->sock, level, optname, *optval, optlen}" -> "Task D (ipSocketLevelOperation)" [label="data 3", style=dotted];
+"int level" [color=blue, fontsize=24, width=0.5];
+"int optname" [color=blue, fontsize=24, width=0.5];
+"void *optval" [color=blue, fontsize=24, width=0.5];
+"int optlen" [color=blue, fontsize=24, width=0.5];
+"data 1{fd, level, optname, optval, optlen}"[style=dotted, fontsize=24, width=0.5];
 
 
-"Task E (callGetSetOpt)" [fontsize=20, width=0.5];
-"data 4{socket->sock, optname, *optval, optlen}" [style=dotted, fontsize=16, width=0.5];
-"Task D (ipSocketLevelOperation)" -> "data 4{socket->sock, optname, *optval, optlen}" [label="socket->sock"];
-"int optname" -> "data 4{socket->sock, optname, *optval, optlen}";
-"void *optval" -> "data 4{socket->sock, optname, *optval, optlen}";
-"int optlen" -> "data 4{socket->sock, optname, *optval, optlen}";
-"data 4{socket->sock, optname, *optval, optlen}" -> "Task E (callGetSetOpt)" [label="socket->sock"];
+"SocketCreation" -> "data 1{fd, level, optname, optval, optlen}"  [label="int fd", fontsize=24];
+"int level" -> "data 1{fd, level, optname, optval, optlen}" [label="int level", fontsize=24];
+"int optname" -> "data 1{fd, level, optname, optval, optlen}" [label="int optname", fontsize=24];
+"void *optval" -> "data 1{fd, level, optname, optval, optlen}" [label="void * optval", fontsize=24];
+"int optlen" -> "data 1{fd, level, optname, optval, optlen}" [label="int optlen", fontsize=24];
+
+"data 1{fd, level, optname, optval, optlen}"->"ConfigureSocketParameters"  [label="data 1", style=dotted, fontsize=24];
+"data 1{fd, level, optname, optval, optlen}"->"ConfigureSocketParametersBySocketType"  [label="data 1", style=dotted, fontsize=24];
 
 
-"Task F (copyDataFromUserToKernel)" [fontsize=20, width=0.5];
-"data 5{net,  *optval (user), optlen (len)}" [style=dotted, fontsize=16, width=0.5];
-"Task E (callGetSetOpt)" -> "data 5{net,  *optval (user), optlen (len)}"  [label="struct net"];
-"void *optval" -> "data 5{net,  *optval (user), optlen (len)}"
-"int optlen" -> "data 5{net,  *optval (user), optlen (len)}"
-"data 5{net,  *optval (user), optlen (len)}"-> "Task F (copyDataFromUserToKernel)" [label="data 5", style=dotted];
+"data 2{socket->sock, level, optname, optval, optlen}"[style=dotted, fontsize=24, width=0.5];
+"ConfigureSocketParametersBySocketType" -> "data 2{socket->sock, level, optname, optval, optlen}" [label="struct socket->sock", fontsize=24];
+"int level" -> "data 2{socket->sock, level, optname, optval, optlen}" [label="int level", fontsize=24];
+"int optname" -> "data 2{socket->sock, level, optname, optval, optlen}" [label="int optname", fontsize=24];
+"void *optval" -> "data 2{socket->sock, level, optname, optval, optlen}" [label="void * optval", fontsize=24];
+"int optlen" -> "data 2{socket->sock, level, optname, optval, optlen}" [label="int optlen", fontsize=24];
 
 
-"data 6{net,  *optval (user), optlen (len), compat}" [style=dotted, fontsize=16, width=0.5];
-"int compat"[color=blue, fontsize=14, width=0.5];
-"int compat" -> "data 6{net,  *optval (user), optlen (len), compat}";
-"void *optval" -> "data 6{net,  *optval (user), optlen (len), compat}";
-"int optlen" -> "data 6{net,  *optval (user), optlen (len), compat}";
-"data 5{net,  *optval (user), optlen (len)}" -> "data 6{net,  *optval (user), optlen (len), compat}" [label="struct net", style=dotted];
+"data 2{socket->sock, level, optname, optval, optlen}"->"ConfigureSocket_IP_FamilyParameters"  [label="data 2", style=dotted, fontsize=24];
 
-"Task G (doAddcounter)" [fontsize=20, width=0.5];
-"data 6{net,  *optval (user), optlen (len), compat}" -> "Task G (doAddcounter)" [label="data 6",style=dotted];
 
-"data 7{net,  newinfo, entry0, repl}"[style=dotted, fontsize=16, width=0.5];
-"struct xt_table_info newinfo" [color=blue, fontsize=14, width=0.5];
-"void *entry0" [color=blue, fontsize=14, width=0.5];
-"struct ipt_replace repl" [color=blue, fontsize=14, width=0.5];
-"Task F (copyDataFromUserToKernel)" -> "data 7{net,  newinfo, entry0, repl}" [label="struct net"];
-"struct xt_table_info newinfo" -> "data 7{net,  newinfo, entry0, repl}" 
-"void *entry0" -> "data 7{net,  newinfo, entry0, repl}" 
-"struct ipt_replace repl" -> "data 7{net,  newinfo, entry0, repl}" 
+"data 3{socket->sock, cmd, user, len}"[style=dotted, fontsize=24, width=0.5];
+"ConfigureSocket_IP_FamilyParameters" -> "data 3{socket->sock, cmd, user, len}" [label="struct socket->sock", fontsize=24];
+"int optname" -> "data 3{socket->sock, cmd, user, len}" [label="int cmd", fontsize=24];
+"void *optval" -> "data 3{socket->sock, cmd, user, len}" [label="void * _user user", fontsize=24];
+"int optlen" -> "data 3{socket->sock, cmd, user, len}" [label="int len", fontsize=24];
 
-"Task H (translateIptable)" [fontsize=20, width=0.5];
-"data 7{net,  newinfo, entry0, repl}" -> "Task H (translateIptable)" [label="data 7", style=dotted];
 
-"data 8{net,  name, valid_hooks, newinfo, num_counters, counters_ptr}" [style=dotted, fontsize=16, width=0.5];
-"char *name" [color=blue, fontsize=14, width=0.5];
-"int valid_hooks" [color=blue, fontsize=14, width=0.5];
-"int num_counters" [color=blue, fontsize=14, width=0.5];
-"void __user *counters_ptr" [color=blue, fontsize=14, width=0.5];
+"data 3{socket->sock, cmd, user, len}" -> "Implement_IP_FamilyParameters" [label="data 3", style=dotted, fontsize=24];
 
-"data 8{net,  name, valid_hooks, newinfo, num_counters, counters_ptr}" [style=dotted, fontsize=16, width=0.5];
-"Task H (translateIptable)" -> "data 8{net,  name, valid_hooks, newinfo, num_counters, counters_ptr}"  [label="struct xt_table_info newinfo"];
-"char *name" -> "data 8{net,  name, valid_hooks, newinfo, num_counters, counters_ptr}" ;
-"int valid_hooks"-> "data 8{net,  name, valid_hooks, newinfo, num_counters, counters_ptr}" ;
-"int num_counters" -> "data 8{net,  name, valid_hooks, newinfo, num_counters, counters_ptr}";
-"void __user *counters_ptr" -> "data 8{net,  name, valid_hooks, newinfo, num_counters, counters_ptr}";
-"data 7{net,  newinfo, entry0, repl}"  -> "data 8{net,  name, valid_hooks, newinfo, num_counters, counters_ptr}" [label="struct net", style=dotted];
+"data 4{net, user, len}"[style=dotted, fontsize=24, width=0.5];
+"Implement_IP_FamilyParameters" -> "data 4{net, user, len}" [label="struct net", fontsize=24];
+"void *optval" -> "data 4{net, user, len}" [label="void * _user user", fontsize=24];
+"int optlen" -> "data 4{net, user, len}" [label="int len", fontsize=24];
 
-"Task I (replaceRuleTableAndModule)" [fontsize=20, width=0.5];
-"data 8{net,  name, valid_hooks, newinfo, num_counters, counters_ptr}" -> "Task I (replaceRuleTableAndModule)" [label="data 8",style=dotted];
+"data 4{net, user, len}" -> "CopySocketOptionsFromUserToKernel" [label="data 4", style=dotted, fontsize=24];
+
+
+"struct newinfo" [color=blue, fontsize=24, width=0.5];
+"void *entry0" [color=blue, fontsize=24, width=0.5];
+"struct  repl" [color=blue, fontsize=24, width=0.5];
+"data 5{net, newinfo, entry0, repl}"[style=dotted, fontsize=24, width=0.5];
+
+"CopySocketOptionsFromUserToKernel"->"data 5{net, newinfo, entry0, repl}" [label="struct net", fontsize=24];
+"struct newinfo"->"data 5{net, newinfo, entry0, repl}" [label="struct newinfo", fontsize=24];
+"void *entry0"->"data 5{net, newinfo, entry0, repl}" [label="void *entry0", fontsize=24];
+"struct  repl"->"data 5{net, newinfo, entry0, repl}" [label="struct  repl", fontsize=24];
+
+"data 5{net, newinfo, entry0, repl}" -> "ValidateNew_IP_TableRules" [label="data 5", style=dotted];
+
+"char name" [color=blue, fontsize=24, width=0.5];
+"int valid_hooks" [color=blue, fontsize=24, width=0.5];
+"int  num_counters" [color=blue, fontsize=24, width=0.5];
+"void __user * counters_ptr" [color=blue, fontsize=24, width=0.5];
+"data 6{net, name, valid_hooks, newinfo, num_counters, counters_ptr}"[style=dotted, fontsize=24, width=0.5];
+
+"ValidateNew_IP_TableRules"->"data 6{net, name, valid_hooks, newinfo, num_counters, counters_ptr}" [label="struct newinfo", fontsize=24];
+"char name" -> "data 6{net, name, valid_hooks, newinfo, num_counters, counters_ptr}" [label="char name", fontsize=24];
+"int valid_hooks" -> "data 6{net, name, valid_hooks, newinfo, num_counters, counters_ptr}" [label="int valid_hooks", fontsize=24];
+"int  num_counters" -> "data 6{net, name, valid_hooks, newinfo, num_counters, counters_ptr}" [label="int  num_counters", fontsize=24];
+"void __user * counters_ptr" -> "data 6{net, name, valid_hooks, newinfo, num_counters, counters_ptr}" [label="void __user * counters_ptr", fontsize=24];
+"data 5{net, newinfo, entry0, repl}" -> "data 6{net, name, valid_hooks, newinfo, num_counters, counters_ptr}" [label="struct net", fontsize=24];
+
+"data 6{net, name, valid_hooks, newinfo, num_counters, counters_ptr}"->"SaveNew_IP_TableRules" [label="data 6", style=dotted];
+
+
+
+
 }
 
 
