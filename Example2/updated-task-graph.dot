@@ -1,0 +1,76 @@
+digraph G {
+
+  subgraph cluster_0 {
+    node [style=filled];
+    input1->CreateSocket->output1-> ConfigureSocket;
+    input2->ConfigureSocket->"output2(struct socket)";
+    label = "level #0";
+    color=blue
+  }
+  
+subgraph cluster_1 {
+    style=filled;
+    color=lightgrey;
+    node [style=filled,color=white];
+    VerifyPermission -> "level == SOL_SOCKET" [label=true];
+    "level == SOL_SOCKET" -> ConfigureProtocolSpecificParameters [label=false]
+    "l1_input2" -> ConfigureProtocolSpecificParameters -> "l1_output2"
+    "level == SOL_SOCKET" -> ConfigureGenericSocketParameters [label=true]
+    "l1_input1" -> ConfigureGenericSocketParameters -> "l1_output1"
+    
+    label = "level #1";
+  }
+  
+ subgraph cluster_2 {
+    style=filled;
+    color=lightgrey;
+    node [style=filled,color=white];
+    "level == SOL_IP" -> ConfigureIPSocketLevel [label=true];
+    "level == SOL_IP" -> ReplaceNetworkFirewallRules [label=false];
+    "l2_input1" -> ConfigureIPSocketLevel -> "l2_output1"
+    "l2_input2" -> ReplaceNetworkFirewallRules -> "l2_output2"
+    label = "level #2";
+  }
+  
+ subgraph cluster_3 {
+    style=filled;
+    color=lightgrey;
+    node [style=filled,color=white];
+    "l3_input1" -> CopyDataFromUser -> "l3_output1" -> ValidateNewNetworkFirewareRule -> "l3_output2" -> SaveAndFreeNetworkResources -> "l3_output3"
+    label = "level #3";
+  }
+  
+#connect level0 to level1
+ConfigureSocket->VerifyPermission;
+VerifyPermission -> exit [label=false];
+
+#connect level1 to level2
+ConfigureProtocolSpecificParameters -> "level == SOL_IP"
+
+#connect level2 to level3
+ReplaceNetworkFirewallRules -> CopyDataFromUser
+"l3_output3"->end
+
+#level 0
+CreateSocket [shape=rectangle];
+ConfigureSocket [shape=rectangle];
+
+#level 1
+VerifyPermission [shape=diamond]
+exit [shape=Msquare,height=0.5]
+"level == SOL_SOCKET" [shape=diamond];
+ConfigureGenericSocketParameters [shape=rectangle];
+ConfigureProtocolSpecificParameters [shape=rectangle];
+
+#level 2
+"level == SOL_IP" [shape=diamond];
+ConfigureIPSocketLevel [shape=rectangle];
+ReplaceNetworkFirewallRules [shape=rectangle];
+
+#level 3
+CopyDataFromUser [shape=rectangle];
+ValidateNewNetworkFirewareRule [shape=rectangle];
+SaveAndFreeNetworkResources [shape=rectangle];
+end [shape=Msquare,height=0.5]
+  
+}

