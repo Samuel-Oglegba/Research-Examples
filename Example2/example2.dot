@@ -1,7 +1,7 @@
 digraph G {
-   node [style=filled,  color="#D5E8D4", fontsize=30];
-   #edge [penwidth = 10, arrowsize=0.1, fontsize=20, color="#9675A6"];
-   edge [penwidth = 7.5, fontsize=20, color="#9675A6"];
+   node [style=filled,  color="#D5E8D4", fontsize=30, shape=box];
+   #edge [penwidth = 10, arrowsize=0.1, fontsize=20, color="#C2DFFF"];
+   edge [penwidth = 7.5, fontsize=20, color="#E1D5E7"];
    compound=true;
    fontsize=35;
    labeljust=l;
@@ -29,8 +29,8 @@ digraph G {
     }
     #end CheckProtocolRange
     
-    a0 [label="CreateTheSocket", shape=box ]
-    a1 [label="MapSocketToFileDescriptor", shape=box ]
+    a0 [label="CreateTheSocket"]
+    a1 [label="MapSocketToFileDescriptor"]
     point0 -> a0 [label="SocketSpec", ltail="cluster_0_1"];
     a0 -> a1 [label="Socket"];
   }
@@ -50,7 +50,7 @@ digraph G {
         label="VerifySocketPermission*";
         
         point1 -> b0 [label=" SocketAndSocketOptionIdentifier", penwidth = 12]
-        b0 [label="ComputeSocketSecurity*", shape=box ]
+        b0 [label="ComputeSocketSecurity*"]
         decision2 [label="ret ==0", shape=diamond, color="#FFF2CC"]
         
         b0 -> decision2 [label="ret (dynamic pointer output)", fontcolor=red];
@@ -61,7 +61,7 @@ digraph G {
     decision3 [label="level == SOL_SOCKET", shape=diamond, color="#FFF2CC"];
     decision2 -> decision3 [label="True", style=dotted, penwidth = 5, color=black, arrowsize=1];
      
-    b1 [shape=box, label="ConfigureProtocolSpecificParameters"]
+    b1 [label="ConfigureProtocolSpecificParameters"]
     
     decision3 -> b1 [label="False", style=dotted, penwidth = 5, color=black, arrowsize=1];
     
@@ -74,7 +74,7 @@ digraph G {
         label="ReplaceNetworkFirewallRules";
         
         point7 [shape=point,width=0.5];
-        b4 [shape=box, label="CopyDataFromUser"];
+        b4 [label="CopyDataFromUser"];
         point7 -> b4 [label=" SocketOption"];
       
         #ValidateNewNetworkFirewallRule
@@ -82,9 +82,9 @@ digraph G {
             label="ValidateNewNetworkFirewallRule";
             
             point8 [shape=point,width=0.5];
-            b6 [shape=box, label="CheckIptableEntrySizeAndHook"]
-            b7 [shape=box, label="IptableEntryHooksSourceOfRules"]
-            b8 [shape=box, label="CheckNewIptableEntryMatchesAndTarget"];
+            b6 [label="CheckIptableEntrySizeAndHook"]
+            b7 [label="IptableEntryHooksSourceOfRules"]
+            b8 [label="CheckNewIptableEntryMatchesAndTarget"];
             
             point8 -> b6 [label="NetworknamespaceAndSocketIptableRule", penwidth = 12];
             b6->b7 [label="NetworknamespaceAndSocketIptableRule", penwidth = 12];
@@ -96,7 +96,7 @@ digraph G {
         point7->point8 [label="SocketNetworkNamespace"];#lhead="cluster_1_2_1"];
         
         b8->b9 [label="NetworknamespaceAndSocketIptableRule", penwidth = 12];
-        b9 [shape=box, label="SaveAndFreeNetworkResources"];
+        b9 [label="SaveAndFreeNetworkResources"];
     }
     #end ReplaceNetworkFirewallRules
     
@@ -105,10 +105,10 @@ digraph G {
         label="ConfigureGenericSocketParameters";
         
         point3 [shape=point, width=0.5];
-        b2 [shape=box, label="ConfigureSocketOptionWithoutArguments"];
-        b10 [shape=box, label="copyDataFromUser"];
-        b11 [shape=box, label="SetOrResetSocketFlag"];
-        b12 [shape=box, label="UpdateOtherSocketElements"];
+        b2 [label="ConfigureSocketOptionWithoutArguments"];
+        b10 [label="copyDataFromUser"];
+        b11 [label="SetOrResetSocketFlag"];
+        b12 [label="UpdateOtherSocketElements"];
         
         decision5 [label="optname == SO_BINDTODEVICE", shape=diamond, color="#FFF2CC"];
         decision6 [label="optlen < sizeof(int)", shape=diamond, color="#FFF2CC"];
@@ -146,12 +146,12 @@ digraph G {
         label="ConfigureIPSocketLevel";
         
         point5 [shape=point, width=0.5];
-        b5 [shape=box, label="CopyDataFromUser"];
+        b5 [label="CopyDataFromUser"];
         decision8 [label="optname >= MRT_BASE \n&& optname <= MRT_MAX", shape=diamond, color="#FFF2CC"];
-        b13 [shape=box, label="ConfigureVirtualSockOption"];
-        b14 [shape=box, label="LockSocket"];
-        b15 [shape=box, label="ModifySocketElements"];
-        b16 [shape=box, label="ReleaseSocket"];
+        b13 [label="ConfigureVirtualSockOption"];
+        b14 [label="LockSocket"];
+        b15 [label="ModifySocketElements"];
+        b16 [label="ReleaseSocket"];
         point6 [shape=point, width=0.5];
         
         point5 -> b5 [label="SocketOption", ltail=cluster_1_4];
