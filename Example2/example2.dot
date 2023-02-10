@@ -1,7 +1,7 @@
 digraph G {
    node [style=filled,  color="#D5E8D4", fontsize=30];
-   #edge [penwidth = 10, arrowsize=0.1, fontsize=20, color="#C2DFFF"];
-   edge [penwidth = 7.5, fontsize=20, color="#C2DFFF"];
+   #edge [penwidth = 10, arrowsize=0.1, fontsize=20, color="#9675A6"];
+   edge [penwidth = 7.5, fontsize=20, color="#9675A6"];
    compound=true;
    fontsize=35;
    labeljust=l;
