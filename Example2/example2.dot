@@ -1,10 +1,13 @@
 digraph G {
    node [style=filled,  color="#D5E8D4", fontsize=30];
-   edge [penwidth = 15, arrowsize=0.1, fontsize=20, color="#9675A6"]
+   #edge [penwidth = 10, arrowsize=0.1, fontsize=20, color="#9675A6"];
+   edge [penwidth = 7.5, fontsize=20, color="#9675A6"];
    compound=true;
    fontsize=35;
    labeljust=l;
    color="red";
+   nodesep=2;
+   rankdir="TD";
 
  #CreateSocket
   subgraph cluster_0 {
@@ -46,7 +49,7 @@ digraph G {
  
         label="VerifySocketPermission*";
         
-        point1 -> b0 [label=" SocketAndOptionIdentifier"]
+        point1 -> b0 [label=" SocketAndSocketOptionIdentifier", penwidth = 12]
         b0 [label="ComputeSocketSecurity*", shape=box ]
         decision2 [label="ret ==0", shape=diamond, color="#FFF2CC"]
         
@@ -61,7 +64,6 @@ digraph G {
     b1 [shape=box, label="ConfigureProtocolSpecificParameters"]
     
     decision3 -> b1 [label="False", style=dotted, penwidth = 5, color=black, arrowsize=1];
-    decision3 -> b2 [label="True", style=dotted, lhead="cluster_1_3", penwidth = 5, color=black, arrowsize=1];
     
     decision4 [label="level == SOL_IP", shape=diamond, color="#FFF2CC"];
     
@@ -71,23 +73,29 @@ digraph G {
     subgraph cluster_1_2 {
         label="ReplaceNetworkFirewallRules";
         
+        point7 [shape=point,width=0.5];
         b4 [shape=box, label="CopyDataFromUser"];
-        b4->b6 [label="SocketIPtableRule",lhead="cluster_1_2_1"];
-        
+        point7 -> b4 [label=" SocketOption"];
+      
         #ValidateNewNetworkFirewallRule
          subgraph cluster_1_2_1 {
             label="ValidateNewNetworkFirewallRule";
             
+            point8 [shape=point,width=0.5];
             b6 [shape=box, label="CheckIptableEntrySizeAndHook"]
             b7 [shape=box, label="IptableEntryHooksSourceOfRules"]
             b8 [shape=box, label="CheckNewIptableEntryMatchesAndTarget"];
             
-            b6->b7 [label="SocketIptableRule"];
-            b7->b8 [label="SocketIptableRule"];
+            point8 -> b6 [label="NetworknamespaceAndSocketIptableRule", penwidth = 12];
+            b6->b7 [label="NetworknamespaceAndSocketIptableRule", penwidth = 12];
+            b7->b8 [label="NetworknamespaceAndSocketIptableRule", penwidth = 12];
          }
         #end ValidateNewNetworkFirewallRule
         
-        b8->b9 [label="SocketNetworkFirewallRules"];
+        b4->point8 [label="SocketIPtableRule"];#lhead="cluster_1_2_1"];
+        point7->point8 [label="SocketNetworkNamespace"];#lhead="cluster_1_2_1"];
+        
+        b8->b9 [label="NetworknamespaceAndSocketIptableRule", penwidth = 12];
         b9 [shape=box, label="SaveAndFreeNetworkResources"];
     }
     #end ReplaceNetworkFirewallRules
@@ -96,75 +104,89 @@ digraph G {
     subgraph cluster_1_3 {
         label="ConfigureGenericSocketParameters";
         
+        point3 [shape=point, width=0.5];
         b2 [shape=box, label="ConfigureSocketOptionWithoutArguments"];
-        b10 [shape=box, label="GetUserData"];
-        b11 [shape=box, label="SetOResetSocketFlag"];
+        b10 [shape=box, label="copyDataFromUser"];
+        b11 [shape=box, label="SetOrResetSocketFlag"];
         b12 [shape=box, label="UpdateOtherSocketElements"];
         
         decision5 [label="optname == SO_BINDTODEVICE", shape=diamond, color="#FFF2CC"];
         decision6 [label="optlen < sizeof(int)", shape=diamond, color="#FFF2CC"];
         decision7 [label="switch (optname)", shape=diamond, color="#FFF2CC"];
         
+        point3 -> decision5 [label="SocketOptionName", penwidth = 5];
         decision5 -> b2 [label="True", style=dotted, penwidth = 5, color=black, arrowsize=1];
         decision5 -> decision6 [label="False", style=dotted, penwidth = 5, color=black, arrowsize=1];
         
         decision6 -> b10 [label="False", style=dotted, penwidth = 5, color=black, arrowsize=1];
-        b10 -> decision7 [label="SocketOptionValue"];
-        b10 -> b11 [label="SocketOptionValue"];
-        b10 -> b12 [label="SocketOptionValue"];
+        b10 -> decision7 [label="SocketOptionValue", penwidth = 5];
+        b10 -> b11 [label="SocketOption"];
+        b10 -> b12 [label="SocketOptionValue", penwidth = 5];
         
         decision7 -> b11  [label="SO_DEBUG,SO_KEEPALIVE,...", style=dotted, penwidth = 5, color=black, arrowsize=1];
         decision7 -> b12  [label="SO_REUSEADDR, SO_REUSEPORT, ...  ", style=dotted, penwidth = 5, color=black, arrowsize=1];
         
-        point3 [shape=point, width=0.5]
+        point3 -> b2 [label="SocketAndSocketOption", penwidth = 15];
+        point3 -> b10 [label="SocketOption"];
+        point3 -> b11 [label="Socket"];
+        point3 -> b12 [label="Socket"];
         
-        b11 -> point3 [label="Socket"];
-        b12 -> point3 [label="Socket"];
-        b2 -> point3 [label="Socket"];
+        
+        point4 [shape=point, width=0.5];
+        
+        b11 -> point4 [label="Socket", penwidth = 10];
+        b12 -> point4 [label="Socket", penwidth = 10];
+        b2 -> point4 [label="Socket", penwidth = 15];
         
     }
     #end ConfigureGenericSocketParameters
     
+    # ConfigureIPSocketLevel
      subgraph cluster_1_4 {
         label="ConfigureIPSocketLevel";
         
-        point4 [shape=point, width=0.5];
+        point5 [shape=point, width=0.5];
         b5 [shape=box, label="CopyDataFromUser"];
         decision8 [label="optname >= MRT_BASE \n&& optname <= MRT_MAX", shape=diamond, color="#FFF2CC"];
         b13 [shape=box, label="ConfigureVirtualSockOption"];
         b14 [shape=box, label="LockSocket"];
         b15 [shape=box, label="ModifySocketElements"];
         b16 [shape=box, label="ReleaseSocket"];
-        point5 [shape=point, width=0.5];
+        point6 [shape=point, width=0.5];
         
-        point4 -> b5 [label="SocketOption", ltail=cluster_1_4];
+        point5 -> b5 [label="SocketOption", ltail=cluster_1_4];
         b5 -> decision8 [label="SocketOption"]
         decision8 -> b13 [label="True", style=dotted, penwidth = 5, color=black, arrowsize=1];
         decision8 -> b14 [label="False", style=dotted, penwidth = 5, color=black, arrowsize=1];
-        point4 -> b13 [label="Socket"];
-        point4 -> b14 [label="Socket"];
+        point5 -> b13 [label="Socket"];
+        point5 -> b14 [label="Socket"];
         
         b14 -> b15 [label="Socket"];
         b15 -> b16 [label="Socket"];
-        b13 -> point5 [label="Socket"];
-        b16 -> point5 [label="Socket"];
+        b13 -> point6 [label="Socket", penwidth = 10];
+        b16 -> point6 [label="Socket", penwidth = 10];
      }
     
-    b1 -> decision4 [label="SocketOptionLevel"];
-    b1 -> point4 [label="SocketNetworkLayerAndSocketOption"];
-    b1 -> b4 [label="SocketNetworkLayerAndSocketOption", lhead="cluster_1_2"];
-    point1 -> b1 [label="SocketAndSocketOption"];
+    b1 -> decision4 [label="SocketOptionLevel", penwidth = 5];
+    b1 -> point5 [label="SocketNetworkLayerAndSocketOption", penwidth = 12];
+    b1 -> point7 [label="SocketNetworkLayerAndSocketOption", penwidth = 12]#lhead="cluster_1_2"];
+    point1 -> b1 [label="SocketAndSocketOption", penwidth = 15];
+    b5 -> b13 [label="SocketOptionValue", penwidth = 5];
+    b5 -> b15 [label="SocketOptionValue", penwidth = 5];
     
-    point1 -> decision5 [label="SocketAndSocketOption", ltail=cluster_1_1, lhead="cluster_1_3"];
+    #point1 -> point3 [label="SocketAndSocketOption", ltail=cluster_1_1, lhead="cluster_1_3"];
+    point1 -> point3 [label="SocketAndSocketOption", penwidth = 15];
+    decision3 -> point3 [label="True", style=dotted, penwidth = 5, color=black, arrowsize=1];
     
-    decision4 -> point4 [label="True", style=dotted, penwidth = 5, color=black, arrowsize=1];
-    decision4 -> b4 [label="False", style=dotted, penwidth = 5, color=black, arrowsize=1];
+    decision4 -> point5 [label="True", style=dotted, penwidth = 5, color=black, arrowsize=1];
+    decision4 -> point7 [label="False", style=dotted, penwidth = 5, color=black, arrowsize=1];
     
   }
+  # end ConfigureIPSocketLevel
   
   user -> decision0 [label="SocketSpec(family, type, protocol)", lhead=cluster_0_1];
 
-  a1->point1 [label="Socket", lhead=cluster_1_1];
+  a1->point1 [label="Socket"];
   user -> point1 [label="SocketOption(level, optname, optval, optlen)"];
  
  
@@ -181,9 +203,9 @@ digraph G {
   decision6 -> exit2 [label="True", style=dotted, penwidth = 5, color=black, arrowsize=1];
   decision7 -> exit5 [label="DEFAULT", style=dotted, penwidth = 5, color=black, arrowsize=1];
   
-  point5 -> end [label="Socket"];
-  b9 -> end [label=" SocketNetworkfirewallRules"];
+  point6 -> end [label="Socket",penwidth = 15];
+  b9 -> end [label=" SocketNetworkfirewallRules", penwidth = 15];
   decision2 -> end [label="False", style=dotted, penwidth = 5, color=black, arrowsize=1];
-  point3 -> end [label="Socket"];
+  point4 -> end [label="Socket",ltail=cluster_1_3, penwidth = 15];
   
 }
