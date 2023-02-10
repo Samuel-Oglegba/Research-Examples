@@ -106,7 +106,7 @@ digraph G {
         
         point3 [shape=point, width=0.5];
         b2 [label="ConfigureSocketOptionWithoutArguments"];
-        b10 [label="copyDataFromUser"];
+        b10 [label="CopyDataFromUser"];
         b11 [label="SetOrResetSocketFlag"];
         b12 [label="UpdateOtherSocketElements"];
         
