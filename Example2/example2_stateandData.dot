@@ -15,7 +15,7 @@ digraph G {
     #color=lightgrey;
     label = "CreateValidSocket";
     
-    point0 [shape="point",width=0.5];
+    #point0 [shape="point",width=0.5];
     #CreateTheSocket    
     subgraph cluster_0_1 {
          #color=blue;
@@ -25,7 +25,7 @@ digraph G {
         subgraph cluster_0_2 {
             #color=lightgrey;
             label="CheckProtocolRange";
-            labeljust=r;
+        
             
             decision0 [label="family < 0 || family >= NPROTO", shape=diamond, color="#FFF2CC"]
             decision1 [label="type < 0 || type >= SOCK_MAX", shape=diamond, color="#FFF2CC"]
@@ -33,7 +33,7 @@ digraph G {
             decision0 -> decision1 [label="False", style=dotted, penwidth = 5, color=black, arrowsize=1];
             
             
-            point0 -> decision0 [label="[data1] non-empty : SocketSpec"];
+            #point0 -> decision0 [label="[data1] non-empty : SocketSpec"];
             decision0 -> decision1 [label="[data1] non-empty : SocketSpec"];
         }
         #end CheckProtocolRange
@@ -91,7 +91,7 @@ digraph G {
   
   
 
-  user -> point0 [label="[data1] non-empty : SocketSpec(family, type, protocol)"];
+  user -> decision0 [label="[data1] non-empty : SocketSpec(family, type, protocol)"];
  
   #point0 -> a6 [label="[data1] non-empty : SocketSpec"];
 
@@ -111,5 +111,7 @@ digraph G {
   decision0 -> exit1 [label="True", style=dotted, penwidth = 5, color=black, arrowsize=1];
   decision1 -> exit2 [label="True", style=dotted, penwidth = 5, color=black, arrowsize=1];
   decision3 -> exit3 [label="True", style=dotted, penwidth = 5, color=black, arrowsize=1];
+
+  
 
 }
