@@ -1,0 +1,18 @@
+digraph G {
+  #Socket data-structure
+  rankdir="tb";
+  
+  start [shape=point, color=white];
+  a0 [label="empty : Socket {null}"];
+  a1 [label="working : Socket {state, type, file, ..., wait-queue}"];
+  a2 [label="working : Socket{Socket->type = SocketSpecType,...}"];
+  a3 [label="working : Socket{Socket->file = new_file,...}"];
+  error [label="-ENFILE"];
+ 
+ start -> a0;
+ a0 -> a1 [label="AllocateSocket"];
+ a1 -> a1 [label="UpdateSocketType"];
+ a1 -> a3 [nojustify=true, label="MapSocketToFileDescriptor"];
+ a1 -> error [label="!Socket"];
+
+}
