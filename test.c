@@ -38,30 +38,35 @@ enum __socket_type
 
 int main(int argc, char *argv[]) {
 
-int type = SOCK_RAW;
+int type = SOCK_STREAM;
 int flags;
 
+//goto testing;
+
 printf("***type:: %d\n",type);
+printf("***type==flags:: %d\n",type==type);
 printf("===type:: %x\n",type);
 printf("===SOCK_TYPE_MASK:: %d\n",~SOCK_TYPE_MASK);
       
-      flags = type & ~SOCK_TYPE_MASK;
+  flags = type & ~SOCK_TYPE_MASK;
 	if (flags & ~(SOCK_CLOEXEC | SOCK_NONBLOCK))
 		printf("flags & ~(SOCK_CLOEXEC | SOCK_NONBLOCK):: %d\n",flags & ~(SOCK_CLOEXEC | SOCK_NONBLOCK));
 	type &= SOCK_TYPE_MASK;
+
+
 
 printf("***flags:: %d\n",flags);
 printf("===flags:: %x\n",flags);
 	if (SOCK_NONBLOCK != O_NONBLOCK && (flags & SOCK_NONBLOCK))
 		flags = (flags & ~SOCK_NONBLOCK) | O_NONBLOCK;
 
-
-printf("type:: %d\n",type);
-printf("flags & SOCK_NONBLOCK:: %d\n",flags & SOCK_NONBLOCK);
-printf("flags:: %d\n",flags);
-printf("flags:: %x\n",flags);
-printf("flags:: %X\n",flags);
-printf("~SOCK_TYPE_MASK:: %x\n",~SOCK_TYPE_MASK);
-printf("SOCK_TYPE_MASK:: %d\n",SOCK_TYPE_MASK);
+testing:
+    printf("type:: %d\n",type);
+    printf("flags & SOCK_NONBLOCK:: %d\n",flags & SOCK_NONBLOCK);
+    printf("flags:: %d\n",flags);
+    printf("flags:: %x\n",flags);
+    printf("flags:: %X\n",flags);
+    printf("~SOCK_TYPE_MASK:: %x\n",~SOCK_TYPE_MASK);
+    printf("SOCK_TYPE_MASK:: %d\n",SOCK_TYPE_MASK);
 
 }
