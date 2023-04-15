@@ -1,0 +1,4682 @@
+[ 5138.799831] /// CONSTANTS ///////
+[ 5138.799836] family: 1
+[ 5138.799840] type: 524290
+[ 5138.799842] protocol: 0
+[ 5138.799844] SOCK_CLOEXEC: 524288
+[ 5138.799846] O_CLOEXEC: 524288
+[ 5138.799848] SOCK_MAX: 11
+[ 5138.799850] SOCK_TYPE_MASK: 15
+[ 5138.799852] sock: 0
+[ 5138.799854] /// END CONSTANTS ///////
+[ 5138.799855] /// CONSTANTS 2 ///////
+[ 5138.799857] flags: 524288
+[ 5138.799859] type: 2
+[ 5138.799861] /// END CONSTANTS 2 ///////
+[ 5138.799863] /// CONSTANTS 3 ///////
+[ 5138.799864] flags: 524288
+[ 5138.799866] /// END CONSTANTS 3 ///////
+[ 5138.799883] /// CREATE SOCKET ///////
+[ 5138.799884] Connect1-socket is not NULL
+[ 5138.799886] sock->state: 1
+[ 5138.799888] sock->type: 2
+[ 5138.799890] sock->flags: 0
+[ 5138.799892] sock->wq: 0
+[ 5138.799894] sock->file: 1
+[ 5138.799896] sock->sk: 0
+[ 5138.799897] sock->ops: 0
+[ 5138.799899] Create:: socket->sk is not NULL
+[ 5138.799901] sk->sk_state: 7
+[ 5138.799903] sk->sk_type: 2
+[ 5138.799905] sk->sk_err: 0
+[ 5138.799907] sk->sk_shutdown: 0
+[ 5138.799909] sk->sk_lock->slock: 0
+[ 5138.799910] sk->sk_rcv_saddr: 0
+[ 5138.799912] sk->sk_daddr: 0
+[ 5138.799914] sk->sk_family: 1
+[ 5138.799916] sk->sk_sndbuf: 212992
+[ 5138.799918] sk->sk_rcvbuf: 212992
+[ 5138.799920] sk->sk_write_space: 0
+[ 5138.799922] sk->sk_data_ready: 0
+[ 5138.799923] /// END CREATE SOCKET ///////
+[ 5138.799937] /// MAP SOCKET ///////
+[ 5138.799939] After Map:: socket is not NULL
+[ 5138.799941] sock->state: 1
+[ 5138.799943] sock->type: 2
+[ 5138.799945] sock->flags: 0
+[ 5138.799946] sock->wq: 0
+[ 5138.799948] sock->file: 0
+[ 5138.799950] sock->sk: 0
+[ 5138.799952] sock->ops: 0
+[ 5138.799954] Map:: sk is not NULL
+[ 5138.799955] sk->sk_state: 7
+[ 5138.799957] sk->sk_type: 2
+[ 5138.799959] sk->sk_err: 0
+[ 5138.799961] sk->sk_shutdown: 0
+[ 5138.799963] sk->sk_lock->slock: 0
+[ 5138.799965] sk->sk_rcv_saddr: 0
+[ 5138.799967] sk->sk_daddr: 0
+[ 5138.799969] sk->sk_family: 1
+[ 5138.799971] sk->sk_sndbuf: 212992
+[ 5138.799973] sk->sk_rcvbuf: 212992
+[ 5138.799974] sk->sk_write_space: 0
+[ 5138.799976] sk->sk_data_ready: 0
+[ 5138.799978] /// END MAP SOCKET ///////
+[ 5138.800004] ///////////////////////
+[ 5138.800005] @@@@socket is not NULL
+[ 5138.800007] sock->state: 1
+[ 5138.800009] sock->type: 2
+[ 5138.800011] sock->flags: 0
+[ 5138.800013] sock->wq: 0
+[ 5138.800015] sock->file: 0
+[ 5138.800016] sock->sk: 0
+[ 5138.800018] sock->ops: 0
+[ 5138.800020] socket->sk is not NULL
+[ 5138.800022] sk->sk_state: 7
+[ 5138.800024] sk->sk_type: 2
+[ 5138.800025] sk->sk_err: 0
+[ 5138.800027] sk->sk_shutdown: 0
+[ 5138.800029] sk->sk_lock->slock: 0
+[ 5138.800031] sk->sk_rcv_saddr: 0
+[ 5138.800033] sk->sk_daddr: 0
+[ 5138.800035] sk->sk_family: 1
+[ 5138.800037] sk->sk_sndbuf: 212992
+[ 5138.800039] sk->sk_rcvbuf: 212992
+[ 5138.800041] sk->sk_write_space: 0
+[ 5138.800043] sk->sk_data_ready: 0
+[ 5138.800044] ///////////////////////
+[ 5138.800046] ///////////////////////
+[ 5138.800048] ====after setsockopt security check - socket is not NULL
+[ 5138.800050] sock->state: 1
+[ 5138.800051] sock->type: 2
+[ 5138.800053] sock->flags: 0
+[ 5138.800055] sock->wq: 0
+[ 5138.800057] sock->file: 0
+[ 5138.800059] sock->sk: 0
+[ 5138.800061] sock->ops: 0
+[ 5138.800062] socket->sk is not NULL
+[ 5138.800064] sk->sk_state: 7
+[ 5138.800066] sk->sk_type: 2
+[ 5138.800068] sk->sk_err: 0
+[ 5138.800069] sk->sk_shutdown: 0
+[ 5138.800071] sk->sk_lock->slock: 0
+[ 5138.800073] sk->sk_rcv_saddr: 0
+[ 5138.800075] sk->sk_daddr: 0
+[ 5138.800077] sk->sk_family: 1
+[ 5138.800079] sk->sk_sndbuf: 212992
+[ 5138.800081] sk->sk_rcvbuf: 212992
+[ 5138.800083] sk->sk_write_space: 0
+[ 5138.800085] sk->sk_data_ready: 0
+[ 5138.800086] ///////////////////////
+[ 5138.800088] /// sock_setsockopt ////////
+[ 5138.800090] sock_setsockopt:: socket is not NULL
+[ 5138.800092] sock->state: 1
+[ 5138.800094] sock->type: 2
+[ 5138.800096] sock->flags: 0
+[ 5138.800098] sock->wq: 0
+[ 5138.800099] sock->file: 0
+[ 5138.800101] sock->sk: 0
+[ 5138.800103] sock->ops: 0
+[ 5138.800105] sock_setsockopt:: socket->sk is not NULL
+[ 5138.800106] sk->sk_state: 7
+[ 5138.800108] sk->sk_type: 2
+[ 5138.800110] sk->sk_err: 0
+[ 5138.800112] sk->sk_shutdown: 0
+[ 5138.800114] sk->sk_lock->slock: 0
+[ 5138.800116] sk->sk_rcv_saddr: 0
+[ 5138.800118] sk->sk_daddr: 0
+[ 5138.800119] sk->sk_family: 1
+[ 5138.800121] sk->sk_sndbuf: 212992
+[ 5138.800123] sk->sk_rcvbuf: 212992
+[ 5138.800125] sk->sk_write_space: 0
+[ 5138.800127] sk->sk_data_ready: 0
+[ 5138.800129] ///////////////////////
+[ 5138.800133] /// SO_BINDTODEVICE false ////////
+[ 5138.800135] SO_BINDTODEVICE false:: socket is not NULL
+[ 5138.800137] sock->state: 1
+[ 5138.800139] sock->type: 2
+[ 5138.800141] sock->flags: 0
+[ 5138.800142] sock->wq: 0
+[ 5138.800144] sock->file: 0
+[ 5138.800146] sock->sk: 0
+[ 5138.800148] sock->ops: 0
+[ 5138.800149] SO_BINDTODEVICE false:: socket->sk is not NULL
+[ 5138.800151] sk->sk_state: 7
+[ 5138.800153] sk->sk_type: 2
+[ 5138.800155] sk->sk_err: 0
+[ 5138.800157] sk->sk_shutdown: 0
+[ 5138.800159] sk->sk_lock->slock: 0
+[ 5138.800161] sk->sk_rcv_saddr: 0
+[ 5138.800162] sk->sk_daddr: 0
+[ 5138.800164] sk->sk_family: 1
+[ 5138.800166] sk->sk_sndbuf: 16777216
+[ 5138.800168] sk->sk_rcvbuf: 212992
+[ 5138.800170] sk->sk_write_space: 0
+[ 5138.800172] sk->sk_data_ready: 0
+[ 5138.800174] ///////////////////////
+[ 5138.800176] ///sock_setsockopt:: after release_sock() ////////
+[ 5138.800178] after release_sock:: socket is not NULL
+[ 5138.800180] sock->state: 1
+[ 5138.800181] sock->type: 2
+[ 5138.800183] sock->flags: 0
+[ 5138.800185] sock->wq: 0
+[ 5138.800187] sock->file: 0
+[ 5138.800189] sock->sk: 0
+[ 5138.800191] sock->ops: 0
+[ 5138.800192] after release_sock:: socket->sk is not NULL
+[ 5138.800194] sk->sk_state: 7
+[ 5138.800196] sk->sk_type: 2
+[ 5138.800198] sk->sk_err: 0
+[ 5138.800200] sk->sk_shutdown: 0
+[ 5138.800201] sk->sk_lock->slock: 0
+[ 5138.800203] sk->sk_rcv_saddr: 0
+[ 5138.800205] sk->sk_daddr: 0
+[ 5138.800207] sk->sk_family: 1
+[ 5138.800209] sk->sk_sndbuf: 16777216
+[ 5138.800211] sk->sk_rcvbuf: 212992
+[ 5138.800213] sk->sk_write_space: 0
+[ 5138.800215] sk->sk_data_ready: 0
+[ 5138.800217] ///////////////////////
+[ 5138.800218] ///////////////////////
+[ 5138.800220] ****after generic or protoclspecific - socket is not NULL
+[ 5138.800222] sock->state: 1
+[ 5138.800224] sock->type: 2
+[ 5138.800225] sock->flags: 0
+[ 5138.800227] sock->wq: 0
+[ 5138.800229] sock->file: 0
+[ 5138.800231] sock->sk: 0
+[ 5138.800233] sock->ops: 0
+[ 5138.800234] socket->sk is not NULL
+[ 5138.800236] sk->sk_state: 7
+[ 5138.800238] sk->sk_type: 2
+[ 5138.800240] sk->sk_err: 0
+[ 5138.800242] sk->sk_shutdown: 0
+[ 5138.800244] sk->sk_lock->slock: 0
+[ 5138.800245] sk->sk_rcv_saddr: 0
+[ 5138.800247] sk->sk_daddr: 0
+[ 5138.800249] sk->sk_family: 1
+[ 5138.800251] sk->sk_sndbuf: 16777216
+[ 5138.800253] sk->sk_rcvbuf: 212992
+[ 5138.800255] sk->sk_write_space: 0
+[ 5138.800257] sk->sk_data_ready: 0
+[ 5138.800259] ///////////////////////
+[ 5138.800260] /////// After out_put: /////////
+[ 5138.800262] !!!! After out_put: socket is not NULL
+[ 5138.800264] sock->state: 1
+[ 5138.800266] sock->type: 2
+[ 5138.800268] sock->flags: 0
+[ 5138.800269] sock->wq: 0
+[ 5138.800271] sock->file: 0
+[ 5138.800273] sock->sk: 0
+[ 5138.800275] sock->ops: 0
+[ 5138.800277] socket->sk is not NULL
+[ 5138.800278] sk->sk_state: 7
+[ 5138.800280] sk->sk_type: 2
+[ 5138.800282] sk->sk_err: 0
+[ 5138.800284] sk->sk_shutdown: 0
+[ 5138.800286] sk->sk_lock->slock: 0
+[ 5138.800288] sk->sk_rcv_saddr: 0
+[ 5138.800290] sk->sk_daddr: 0
+[ 5138.800291] sk->sk_family: 1
+[ 5138.800293] sk->sk_sndbuf: 16777216
+[ 5138.800295] sk->sk_rcvbuf: 212992
+[ 5138.800297] sk->sk_write_space: 0
+[ 5138.800299] sk->sk_data_ready: 0
+[ 5138.800301] ///////////////////////
+[ 5138.800302] /////// after setSockopt fput_light /////////
+[ 5138.800304] &&&& fput_light: socket is not NULL
+[ 5138.800306] sock->state: 1
+[ 5138.800308] sock->type: 2
+[ 5138.800310] sock->flags: 0
+[ 5138.800311] sock->wq: 0
+[ 5138.800313] sock->file: 0
+[ 5138.800315] sock->sk: 0
+[ 5138.800317] sock->ops: 0
+[ 5138.800318] socket->sk is not NULL
+[ 5138.800320] sk->sk_state: 7
+[ 5138.800322] sk->sk_type: 2
+[ 5138.800324] sk->sk_err: 0
+[ 5138.800326] sk->sk_shutdown: 0
+[ 5138.800328] sk->sk_lock->slock: 0
+[ 5138.800330] sk->sk_rcv_saddr: 0
+[ 5138.800331] sk->sk_daddr: 0
+[ 5138.800333] sk->sk_family: 1
+[ 5138.800335] sk->sk_sndbuf: 16777216
+[ 5138.800337] sk->sk_rcvbuf: 212992
+[ 5138.800339] sk->sk_write_space: 0
+[ 5138.800341] sk->sk_data_ready: 0
+[ 5138.800343] ///////////////////////
+[ 5138.800575] /// CONSTANTS ///////
+[ 5138.800578] family: 1
+[ 5138.800580] type: 524290
+[ 5138.800582] protocol: 0
+[ 5138.800584] SOCK_CLOEXEC: 524288
+[ 5138.800586] O_CLOEXEC: 524288
+[ 5138.800587] SOCK_MAX: 11
+[ 5138.800589] SOCK_TYPE_MASK: 15
+[ 5138.800591] sock: 0
+[ 5138.800593] /// END CONSTANTS ///////
+[ 5138.800595] /// CONSTANTS 2 ///////
+[ 5138.800596] flags: 524288
+[ 5138.800598] type: 2
+[ 5138.800600] /// END CONSTANTS 2 ///////
+[ 5138.800601] /// CONSTANTS 3 ///////
+[ 5138.800603] flags: 524288
+[ 5138.800605] /// END CONSTANTS 3 ///////
+[ 5138.800612] /// CREATE SOCKET ///////
+[ 5138.800613] Connect1-socket is not NULL
+[ 5138.800615] sock->state: 1
+[ 5138.800617] sock->type: 2
+[ 5138.800619] sock->flags: 0
+[ 5138.800621] sock->wq: 0
+[ 5138.800623] sock->file: 1
+[ 5138.800624] sock->sk: 0
+[ 5138.800626] sock->ops: 0
+[ 5138.800628] Create:: socket->sk is not NULL
+[ 5138.800630] sk->sk_state: 7
+[ 5138.800632] sk->sk_type: 2
+[ 5138.800633] sk->sk_err: 0
+[ 5138.800635] sk->sk_shutdown: 0
+[ 5138.800637] sk->sk_lock->slock: 0
+[ 5138.800639] sk->sk_rcv_saddr: 0
+[ 5138.800641] sk->sk_daddr: 0
+[ 5138.800643] sk->sk_family: 1
+[ 5138.800645] sk->sk_sndbuf: 212992
+[ 5138.800647] sk->sk_rcvbuf: 212992
+[ 5138.800648] sk->sk_write_space: 0
+[ 5138.800650] sk->sk_data_ready: 0
+[ 5138.800652] /// END CREATE SOCKET ///////
+[ 5138.800657] /// MAP SOCKET ///////
+[ 5138.800658] After Map:: socket is not NULL
+[ 5138.800660] sock->state: 1
+[ 5138.800662] sock->type: 2
+[ 5138.800664] sock->flags: 0
+[ 5138.800665] sock->wq: 0
+[ 5138.800667] sock->file: 0
+[ 5138.800669] sock->sk: 0
+[ 5138.800671] sock->ops: 0
+[ 5138.800673] Map:: sk is not NULL
+[ 5138.800674] sk->sk_state: 7
+[ 5138.800676] sk->sk_type: 2
+[ 5138.800678] sk->sk_err: 0
+[ 5138.800680] sk->sk_shutdown: 0
+[ 5138.800682] sk->sk_lock->slock: 0
+[ 5138.800684] sk->sk_rcv_saddr: 0
+[ 5138.800686] sk->sk_daddr: 0
+[ 5138.800687] sk->sk_family: 1
+[ 5138.800689] sk->sk_sndbuf: 212992
+[ 5138.800691] sk->sk_rcvbuf: 212992
+[ 5138.800693] sk->sk_write_space: 0
+[ 5138.800695] sk->sk_data_ready: 0
+[ 5138.800697] /// END MAP SOCKET ///////
+[ 5138.800728] ///////////////////////
+[ 5138.800730] @@@@socket is not NULL
+[ 5138.800732] sock->state: 1
+[ 5138.800734] sock->type: 2
+[ 5138.800735] sock->flags: 0
+[ 5138.800737] sock->wq: 0
+[ 5138.800739] sock->file: 0
+[ 5138.800741] sock->sk: 0
+[ 5138.800743] sock->ops: 0
+[ 5138.800744] socket->sk is not NULL
+[ 5138.800746] sk->sk_state: 7
+[ 5138.800748] sk->sk_type: 2
+[ 5138.800749] sk->sk_err: 0
+[ 5138.800751] sk->sk_shutdown: 0
+[ 5138.800753] sk->sk_lock->slock: 0
+[ 5138.800755] sk->sk_rcv_saddr: 0
+[ 5138.800757] sk->sk_daddr: 0
+[ 5138.800759] sk->sk_family: 1
+[ 5138.800761] sk->sk_sndbuf: 212992
+[ 5138.800763] sk->sk_rcvbuf: 212992
+[ 5138.800765] sk->sk_write_space: 0
+[ 5138.800766] sk->sk_data_ready: 0
+[ 5138.800768] ///////////////////////
+[ 5138.800770] ///////////////////////
+[ 5138.800771] ====after setsockopt security check - socket is not NULL
+[ 5138.800773] sock->state: 1
+[ 5138.800775] sock->type: 2
+[ 5138.800777] sock->flags: 0
+[ 5138.800779] sock->wq: 0
+[ 5138.800780] sock->file: 0
+[ 5138.800782] sock->sk: 0
+[ 5138.800784] sock->ops: 0
+[ 5138.800786] socket->sk is not NULL
+[ 5138.800787] sk->sk_state: 7
+[ 5138.800789] sk->sk_type: 2
+[ 5138.800791] sk->sk_err: 0
+[ 5138.800793] sk->sk_shutdown: 0
+[ 5138.800795] sk->sk_lock->slock: 0
+[ 5138.800797] sk->sk_rcv_saddr: 0
+[ 5138.800798] sk->sk_daddr: 0
+[ 5138.800800] sk->sk_family: 1
+[ 5138.800802] sk->sk_sndbuf: 212992
+[ 5138.800804] sk->sk_rcvbuf: 212992
+[ 5138.800806] sk->sk_write_space: 0
+[ 5138.800808] sk->sk_data_ready: 0
+[ 5138.800809] ///////////////////////
+[ 5138.800811] /// sock_setsockopt ////////
+[ 5138.800813] sock_setsockopt:: socket is not NULL
+[ 5138.800815] sock->state: 1
+[ 5138.800816] sock->type: 2
+[ 5138.800818] sock->flags: 0
+[ 5138.800820] sock->wq: 0
+[ 5138.800822] sock->file: 0
+[ 5138.800824] sock->sk: 0
+[ 5138.800825] sock->ops: 0
+[ 5138.800827] sock_setsockopt:: socket->sk is not NULL
+[ 5138.800829] sk->sk_state: 7
+[ 5138.800831] sk->sk_type: 2
+[ 5138.800833] sk->sk_err: 0
+[ 5138.800834] sk->sk_shutdown: 0
+[ 5138.800836] sk->sk_lock->slock: 0
+[ 5138.800838] sk->sk_rcv_saddr: 0
+[ 5138.800840] sk->sk_daddr: 0
+[ 5138.800842] sk->sk_family: 1
+[ 5138.800844] sk->sk_sndbuf: 212992
+[ 5138.800846] sk->sk_rcvbuf: 212992
+[ 5138.800848] sk->sk_write_space: 0
+[ 5138.800849] sk->sk_data_ready: 0
+[ 5138.800851] ///////////////////////
+[ 5138.800854] /// SO_BINDTODEVICE false ////////
+[ 5138.800855] SO_BINDTODEVICE false:: socket is not NULL
+[ 5138.800857] sock->state: 1
+[ 5138.800859] sock->type: 2
+[ 5138.800861] sock->flags: 0
+[ 5138.800862] sock->wq: 0
+[ 5138.800864] sock->file: 0
+[ 5138.800866] sock->sk: 0
+[ 5138.800868] sock->ops: 0
+[ 5138.800870] SO_BINDTODEVICE false:: socket->sk is not NULL
+[ 5138.800871] sk->sk_state: 7
+[ 5138.800873] sk->sk_type: 2
+[ 5138.800875] sk->sk_err: 0
+[ 5138.800877] sk->sk_shutdown: 0
+[ 5138.800879] sk->sk_lock->slock: 0
+[ 5138.800881] sk->sk_rcv_saddr: 0
+[ 5138.800882] sk->sk_daddr: 0
+[ 5138.800884] sk->sk_family: 1
+[ 5138.800886] sk->sk_sndbuf: 212992
+[ 5138.800888] sk->sk_rcvbuf: 212992
+[ 5138.800890] sk->sk_write_space: 0
+[ 5138.800892] sk->sk_data_ready: 0
+[ 5138.800893] ///////////////////////
+[ 5138.800895] ///sock_setsockopt:: after release_sock() ////////
+[ 5138.800897] after release_sock:: socket is not NULL
+[ 5138.800899] sock->state: 1
+[ 5138.800901] sock->type: 2
+[ 5138.800902] sock->flags: 0
+[ 5138.800904] sock->wq: 0
+[ 5138.800906] sock->file: 0
+[ 5138.800908] sock->sk: 0
+[ 5138.800910] sock->ops: 0
+[ 5138.800911] after release_sock:: socket->sk is not NULL
+[ 5138.800913] sk->sk_state: 7
+[ 5138.800915] sk->sk_type: 2
+[ 5138.800917] sk->sk_err: 0
+[ 5138.800919] sk->sk_shutdown: 0
+[ 5138.800921] sk->sk_lock->slock: 0
+[ 5138.800922] sk->sk_rcv_saddr: 0
+[ 5138.800924] sk->sk_daddr: 0
+[ 5138.800926] sk->sk_family: 1
+[ 5138.800928] sk->sk_sndbuf: 212992
+[ 5138.800930] sk->sk_rcvbuf: 212992
+[ 5138.800932] sk->sk_write_space: 0
+[ 5138.800934] sk->sk_data_ready: 0
+[ 5138.800935] ///////////////////////
+[ 5138.800937] ///////////////////////
+[ 5138.800939] ****after generic or protoclspecific - socket is not NULL
+[ 5138.800940] sock->state: 1
+[ 5138.800942] sock->type: 2
+[ 5138.800944] sock->flags: 0
+[ 5138.800946] sock->wq: 0
+[ 5138.800948] sock->file: 0
+[ 5138.800949] sock->sk: 0
+[ 5138.800951] sock->ops: 0
+[ 5138.800953] socket->sk is not NULL
+[ 5138.800955] sk->sk_state: 7
+[ 5138.800956] sk->sk_type: 2
+[ 5138.800958] sk->sk_err: 0
+[ 5138.800960] sk->sk_shutdown: 0
+[ 5138.800962] sk->sk_lock->slock: 0
+[ 5138.800964] sk->sk_rcv_saddr: 0
+[ 5138.800965] sk->sk_daddr: 0
+[ 5138.800967] sk->sk_family: 1
+[ 5138.800969] sk->sk_sndbuf: 212992
+[ 5138.800971] sk->sk_rcvbuf: 212992
+[ 5138.800973] sk->sk_write_space: 0
+[ 5138.800975] sk->sk_data_ready: 0
+[ 5138.800976] ///////////////////////
+[ 5138.800978] /////// After out_put: /////////
+[ 5138.800980] !!!! After out_put: socket is not NULL
+[ 5138.800981] sock->state: 1
+[ 5138.800983] sock->type: 2
+[ 5138.800985] sock->flags: 0
+[ 5138.800987] sock->wq: 0
+[ 5138.800989] sock->file: 0
+[ 5138.800991] sock->sk: 0
+[ 5138.800992] sock->ops: 0
+[ 5138.800994] socket->sk is not NULL
+[ 5138.800996] sk->sk_state: 7
+[ 5138.800998] sk->sk_type: 2
+[ 5138.801000] sk->sk_err: 0
+[ 5138.801001] sk->sk_shutdown: 0
+[ 5138.801003] sk->sk_lock->slock: 0
+[ 5138.801005] sk->sk_rcv_saddr: 0
+[ 5138.801007] sk->sk_daddr: 0
+[ 5138.801009] sk->sk_family: 1
+[ 5138.801011] sk->sk_sndbuf: 212992
+[ 5138.801013] sk->sk_rcvbuf: 212992
+[ 5138.801014] sk->sk_write_space: 0
+[ 5138.801016] sk->sk_data_ready: 0
+[ 5138.801018] ///////////////////////
+[ 5138.801019] /////// after setSockopt fput_light /////////
+[ 5138.801021] &&&& fput_light: socket is not NULL
+[ 5138.801023] sock->state: 1
+[ 5138.801025] sock->type: 2
+[ 5138.801027] sock->flags: 0
+[ 5138.801028] sock->wq: 0
+[ 5138.801030] sock->file: 0
+[ 5138.801032] sock->sk: 0
+[ 5138.801034] sock->ops: 0
+[ 5138.801035] socket->sk is not NULL
+[ 5138.801037] sk->sk_state: 7
+[ 5138.801039] sk->sk_type: 2
+[ 5138.801041] sk->sk_err: 0
+[ 5138.801043] sk->sk_shutdown: 0
+[ 5138.801045] sk->sk_lock->slock: 0
+[ 5138.801046] sk->sk_rcv_saddr: 0
+[ 5138.801048] sk->sk_daddr: 0
+[ 5138.801050] sk->sk_family: 1
+[ 5138.801052] sk->sk_sndbuf: 212992
+[ 5138.801054] sk->sk_rcvbuf: 212992
+[ 5138.801056] sk->sk_write_space: 0
+[ 5138.801058] sk->sk_data_ready: 0
+[ 5138.801059] ///////////////////////
+[ 5138.801075] ///////////////////////
+[ 5138.801076] @@@@socket is not NULL
+[ 5138.801078] sock->state: 1
+[ 5138.801080] sock->type: 2
+[ 5138.801081] sock->flags: 0
+[ 5138.801083] sock->wq: 0
+[ 5138.801085] sock->file: 0
+[ 5138.801087] sock->sk: 0
+[ 5138.801089] sock->ops: 0
+[ 5138.801090] socket->sk is not NULL
+[ 5138.801092] sk->sk_state: 7
+[ 5138.801094] sk->sk_type: 2
+[ 5138.801095] sk->sk_err: 0
+[ 5138.801097] sk->sk_shutdown: 0
+[ 5138.801099] sk->sk_lock->slock: 0
+[ 5138.801101] sk->sk_rcv_saddr: 0
+[ 5138.801103] sk->sk_daddr: 0
+[ 5138.801105] sk->sk_family: 1
+[ 5138.801107] sk->sk_sndbuf: 212992
+[ 5138.801108] sk->sk_rcvbuf: 212992
+[ 5138.801110] sk->sk_write_space: 0
+[ 5138.801112] sk->sk_data_ready: 0
+[ 5138.801114] ///////////////////////
+[ 5138.801115] ///////////////////////
+[ 5138.801117] ====after setsockopt security check - socket is not NULL
+[ 5138.801119] sock->state: 1
+[ 5138.801120] sock->type: 2
+[ 5138.801122] sock->flags: 0
+[ 5138.801124] sock->wq: 0
+[ 5138.801126] sock->file: 0
+[ 5138.801128] sock->sk: 0
+[ 5138.801130] sock->ops: 0
+[ 5138.801131] socket->sk is not NULL
+[ 5138.801133] sk->sk_state: 7
+[ 5138.801135] sk->sk_type: 2
+[ 5138.801136] sk->sk_err: 0
+[ 5138.801138] sk->sk_shutdown: 0
+[ 5138.801140] sk->sk_lock->slock: 0
+[ 5138.801142] sk->sk_rcv_saddr: 0
+[ 5138.801144] sk->sk_daddr: 0
+[ 5138.801146] sk->sk_family: 1
+[ 5138.801148] sk->sk_sndbuf: 212992
+[ 5138.801150] sk->sk_rcvbuf: 212992
+[ 5138.801151] sk->sk_write_space: 0
+[ 5138.801153] sk->sk_data_ready: 0
+[ 5138.801155] ///////////////////////
+[ 5138.801156] /// sock_setsockopt ////////
+[ 5138.801158] sock_setsockopt:: socket is not NULL
+[ 5138.801159] sock->state: 1
+[ 5138.801161] sock->type: 2
+[ 5138.801163] sock->flags: 0
+[ 5138.801165] sock->wq: 0
+[ 5138.801167] sock->file: 0
+[ 5138.801168] sock->sk: 0
+[ 5138.801170] sock->ops: 0
+[ 5138.801172] sock_setsockopt:: socket->sk is not NULL
+[ 5138.801174] sk->sk_state: 7
+[ 5138.801175] sk->sk_type: 2
+[ 5138.801177] sk->sk_err: 0
+[ 5138.801179] sk->sk_shutdown: 0
+[ 5138.801181] sk->sk_lock->slock: 0
+[ 5138.801183] sk->sk_rcv_saddr: 0
+[ 5138.801184] sk->sk_daddr: 0
+[ 5138.801186] sk->sk_family: 1
+[ 5138.801188] sk->sk_sndbuf: 212992
+[ 5138.801190] sk->sk_rcvbuf: 212992
+[ 5138.801192] sk->sk_write_space: 0
+[ 5138.801194] sk->sk_data_ready: 0
+[ 5138.801195] ///////////////////////
+[ 5138.801198] /// SO_BINDTODEVICE false ////////
+[ 5138.801199] SO_BINDTODEVICE false:: socket is not NULL
+[ 5138.801201] sock->state: 1
+[ 5138.801203] sock->type: 2
+[ 5138.801205] sock->flags: 0
+[ 5138.801206] sock->wq: 0
+[ 5138.801208] sock->file: 0
+[ 5138.801210] sock->sk: 0
+[ 5138.801212] sock->ops: 0
+[ 5138.801213] SO_BINDTODEVICE false:: socket->sk is not NULL
+[ 5138.801215] sk->sk_state: 7
+[ 5138.801217] sk->sk_type: 2
+[ 5138.801219] sk->sk_err: 0
+[ 5138.801221] sk->sk_shutdown: 0
+[ 5138.801223] sk->sk_lock->slock: 0
+[ 5138.801224] sk->sk_rcv_saddr: 0
+[ 5138.801226] sk->sk_daddr: 0
+[ 5138.801228] sk->sk_family: 1
+[ 5138.801230] sk->sk_sndbuf: 425984
+[ 5138.801232] sk->sk_rcvbuf: 212992
+[ 5138.801234] sk->sk_write_space: 0
+[ 5138.801235] sk->sk_data_ready: 0
+[ 5138.801237] ///////////////////////
+[ 5138.801239] ///sock_setsockopt:: after release_sock() ////////
+[ 5138.801240] after release_sock:: socket is not NULL
+[ 5138.801242] sock->state: 1
+[ 5138.801244] sock->type: 2
+[ 5138.801246] sock->flags: 0
+[ 5138.801247] sock->wq: 0
+[ 5138.801249] sock->file: 0
+[ 5138.801251] sock->sk: 0
+[ 5138.801253] sock->ops: 0
+[ 5138.801255] after release_sock:: socket->sk is not NULL
+[ 5138.801256] sk->sk_state: 7
+[ 5138.801258] sk->sk_type: 2
+[ 5138.801260] sk->sk_err: 0
+[ 5138.801262] sk->sk_shutdown: 0
+[ 5138.801264] sk->sk_lock->slock: 0
+[ 5138.801266] sk->sk_rcv_saddr: 0
+[ 5138.801267] sk->sk_daddr: 0
+[ 5138.801269] sk->sk_family: 1
+[ 5138.801271] sk->sk_sndbuf: 425984
+[ 5138.801273] sk->sk_rcvbuf: 212992
+[ 5138.801275] sk->sk_write_space: 0
+[ 5138.801277] sk->sk_data_ready: 0
+[ 5138.801279] ///////////////////////
+[ 5138.801280] ///////////////////////
+[ 5138.801282] ****after generic or protoclspecific - socket is not NULL
+[ 5138.801284] sock->state: 1
+[ 5138.801285] sock->type: 2
+[ 5138.801287] sock->flags: 0
+[ 5138.801289] sock->wq: 0
+[ 5138.801291] sock->file: 0
+[ 5138.801293] sock->sk: 0
+[ 5138.801294] sock->ops: 0
+[ 5138.801296] socket->sk is not NULL
+[ 5138.801298] sk->sk_state: 7
+[ 5138.801299] sk->sk_type: 2
+[ 5138.801301] sk->sk_err: 0
+[ 5138.801303] sk->sk_shutdown: 0
+[ 5138.801305] sk->sk_lock->slock: 0
+[ 5138.801307] sk->sk_rcv_saddr: 0
+[ 5138.801308] sk->sk_daddr: 0
+[ 5138.801310] sk->sk_family: 1
+[ 5138.801312] sk->sk_sndbuf: 425984
+[ 5138.801314] sk->sk_rcvbuf: 212992
+[ 5138.801316] sk->sk_write_space: 0
+[ 5138.801318] sk->sk_data_ready: 0
+[ 5138.801319] ///////////////////////
+[ 5138.801321] /////// After out_put: /////////
+[ 5138.801322] !!!! After out_put: socket is not NULL
+[ 5138.801324] sock->state: 1
+[ 5138.801326] sock->type: 2
+[ 5138.801328] sock->flags: 0
+[ 5138.801330] sock->wq: 0
+[ 5138.801331] sock->file: 0
+[ 5138.801333] sock->sk: 0
+[ 5138.801335] sock->ops: 0
+[ 5138.801337] socket->sk is not NULL
+[ 5138.801338] sk->sk_state: 7
+[ 5138.801340] sk->sk_type: 2
+[ 5138.801342] sk->sk_err: 0
+[ 5138.801344] sk->sk_shutdown: 0
+[ 5138.801346] sk->sk_lock->slock: 0
+[ 5138.801348] sk->sk_rcv_saddr: 0
+[ 5138.801349] sk->sk_daddr: 0
+[ 5138.801351] sk->sk_family: 1
+[ 5138.801353] sk->sk_sndbuf: 425984
+[ 5138.801355] sk->sk_rcvbuf: 212992
+[ 5138.801357] sk->sk_write_space: 0
+[ 5138.801359] sk->sk_data_ready: 0
+[ 5138.801360] ///////////////////////
+[ 5138.801362] /////// after setSockopt fput_light /////////
+[ 5138.801364] &&&& fput_light: socket is not NULL
+[ 5138.801365] sock->state: 1
+[ 5138.801367] sock->type: 2
+[ 5138.801369] sock->flags: 0
+[ 5138.801371] sock->wq: 0
+[ 5138.801373] sock->file: 0
+[ 5138.801375] sock->sk: 0
+[ 5138.801376] sock->ops: 0
+[ 5138.801378] socket->sk is not NULL
+[ 5138.801380] sk->sk_state: 7
+[ 5138.801381] sk->sk_type: 2
+[ 5138.801383] sk->sk_err: 0
+[ 5138.801385] sk->sk_shutdown: 0
+[ 5138.801387] sk->sk_lock->slock: 0
+[ 5138.801389] sk->sk_rcv_saddr: 0
+[ 5138.801390] sk->sk_daddr: 0
+[ 5138.801392] sk->sk_family: 1
+[ 5138.801394] sk->sk_sndbuf: 425984
+[ 5138.801396] sk->sk_rcvbuf: 212992
+[ 5138.801398] sk->sk_write_space: 0
+[ 5138.801400] sk->sk_data_ready: 0
+[ 5138.801401] ///////////////////////
+[ 5198.798093] /// CONSTANTS ///////
+[ 5198.798095] family: 1
+[ 5198.798096] type: 524290
+[ 5198.798097] protocol: 0
+[ 5198.798098] SOCK_CLOEXEC: 524288
+[ 5198.798099] O_CLOEXEC: 524288
+[ 5198.798099] SOCK_MAX: 11
+[ 5198.798100] SOCK_TYPE_MASK: 15
+[ 5198.798100] sock: 0
+[ 5198.798101] /// END CONSTANTS ///////
+[ 5198.798102] /// CONSTANTS 2 ///////
+[ 5198.798102] flags: 524288
+[ 5198.798103] type: 2
+[ 5198.798103] /// END CONSTANTS 2 ///////
+[ 5198.798104] /// CONSTANTS 3 ///////
+[ 5198.798104] flags: 524288
+[ 5198.798105] /// END CONSTANTS 3 ///////
+[ 5198.798111] /// CREATE SOCKET ///////
+[ 5198.798111] Connect1-socket is not NULL
+[ 5198.798112] sock->state: 1
+[ 5198.798113] sock->type: 2
+[ 5198.798113] sock->flags: 0
+[ 5198.798114] sock->wq: 0
+[ 5198.798115] sock->file: 1
+[ 5198.798115] sock->sk: 0
+[ 5198.798116] sock->ops: 0
+[ 5198.798117] Create:: socket->sk is not NULL
+[ 5198.798117] sk->sk_state: 7
+[ 5198.798118] sk->sk_type: 2
+[ 5198.798118] sk->sk_err: 0
+[ 5198.798119] sk->sk_shutdown: 0
+[ 5198.798119] sk->sk_lock->slock: 0
+[ 5198.798121] sk->sk_rcv_saddr: 0
+[ 5198.798121] sk->sk_daddr: 0
+[ 5198.798122] sk->sk_family: 1
+[ 5198.798122] sk->sk_sndbuf: 212992
+[ 5198.798123] sk->sk_rcvbuf: 212992
+[ 5198.798124] sk->sk_write_space: 0
+[ 5198.798124] sk->sk_data_ready: 0
+[ 5198.798125] /// END CREATE SOCKET ///////
+[ 5198.798130] /// MAP SOCKET ///////
+[ 5198.798130] After Map:: socket is not NULL
+[ 5198.798131] sock->state: 1
+[ 5198.798131] sock->type: 2
+[ 5198.798132] sock->flags: 0
+[ 5198.798132] sock->wq: 0
+[ 5198.798133] sock->file: 0
+[ 5198.798133] sock->sk: 0
+[ 5198.798134] sock->ops: 0
+[ 5198.798135] Map:: sk is not NULL
+[ 5198.798135] sk->sk_state: 7
+[ 5198.798136] sk->sk_type: 2
+[ 5198.798136] sk->sk_err: 0
+[ 5198.798137] sk->sk_shutdown: 0
+[ 5198.798138] sk->sk_lock->slock: 0
+[ 5198.798138] sk->sk_rcv_saddr: 0
+[ 5198.798139] sk->sk_daddr: 0
+[ 5198.798139] sk->sk_family: 1
+[ 5198.798140] sk->sk_sndbuf: 212992
+[ 5198.798141] sk->sk_rcvbuf: 212992
+[ 5198.798141] sk->sk_write_space: 0
+[ 5198.798142] sk->sk_data_ready: 0
+[ 5198.798142] /// END MAP SOCKET ///////
+[ 5198.798156] ///////////////////////
+[ 5198.798157] @@@@socket is not NULL
+[ 5198.798157] sock->state: 1
+[ 5198.798158] sock->type: 2
+[ 5198.798159] sock->flags: 0
+[ 5198.798159] sock->wq: 0
+[ 5198.798160] sock->file: 0
+[ 5198.798161] sock->sk: 0
+[ 5198.798161] sock->ops: 0
+[ 5198.798162] socket->sk is not NULL
+[ 5198.798162] sk->sk_state: 7
+[ 5198.798163] sk->sk_type: 2
+[ 5198.798164] sk->sk_err: 0
+[ 5198.798164] sk->sk_shutdown: 0
+[ 5198.798165] sk->sk_lock->slock: 0
+[ 5198.798166] sk->sk_rcv_saddr: 0
+[ 5198.798166] sk->sk_daddr: 0
+[ 5198.798167] sk->sk_family: 1
+[ 5198.798168] sk->sk_sndbuf: 212992
+[ 5198.798168] sk->sk_rcvbuf: 212992
+[ 5198.798169] sk->sk_write_space: 0
+[ 5198.798170] sk->sk_data_ready: 0
+[ 5198.798170] ///////////////////////
+[ 5198.798171] ///////////////////////
+[ 5198.798172] ====after setsockopt security check - socket is not NULL
+[ 5198.798172] sock->state: 1
+[ 5198.798173] sock->type: 2
+[ 5198.798173] sock->flags: 0
+[ 5198.798174] sock->wq: 0
+[ 5198.798174] sock->file: 0
+[ 5198.798175] sock->sk: 0
+[ 5198.798175] sock->ops: 0
+[ 5198.798176] socket->sk is not NULL
+[ 5198.798176] sk->sk_state: 7
+[ 5198.798177] sk->sk_type: 2
+[ 5198.798178] sk->sk_err: 0
+[ 5198.798178] sk->sk_shutdown: 0
+[ 5198.798179] sk->sk_lock->slock: 0
+[ 5198.798179] sk->sk_rcv_saddr: 0
+[ 5198.798180] sk->sk_daddr: 0
+[ 5198.798181] sk->sk_family: 1
+[ 5198.798181] sk->sk_sndbuf: 212992
+[ 5198.798182] sk->sk_rcvbuf: 212992
+[ 5198.798182] sk->sk_write_space: 0
+[ 5198.798183] sk->sk_data_ready: 0
+[ 5198.798184] ///////////////////////
+[ 5198.798184] /// sock_setsockopt ////////
+[ 5198.798185] sock_setsockopt:: socket is not NULL
+[ 5198.798186] sock->state: 1
+[ 5198.798186] sock->type: 2
+[ 5198.798187] sock->flags: 0
+[ 5198.798188] sock->wq: 0
+[ 5198.798188] sock->file: 0
+[ 5198.798189] sock->sk: 0
+[ 5198.798189] sock->ops: 0
+[ 5198.798190] sock_setsockopt:: socket->sk is not NULL
+[ 5198.798191] sk->sk_state: 7
+[ 5198.798191] sk->sk_type: 2
+[ 5198.798192] sk->sk_err: 0
+[ 5198.798193] sk->sk_shutdown: 0
+[ 5198.798193] sk->sk_lock->slock: 0
+[ 5198.798194] sk->sk_rcv_saddr: 0
+[ 5198.798194] sk->sk_daddr: 0
+[ 5198.798195] sk->sk_family: 1
+[ 5198.798196] sk->sk_sndbuf: 212992
+[ 5198.798196] sk->sk_rcvbuf: 212992
+[ 5198.798197] sk->sk_write_space: 0
+[ 5198.798198] sk->sk_data_ready: 0
+[ 5198.798198] ///////////////////////
+[ 5198.798199] /// SO_BINDTODEVICE false ////////
+[ 5198.798200] SO_BINDTODEVICE false:: socket is not NULL
+[ 5198.798201] sock->state: 1
+[ 5198.798201] sock->type: 2
+[ 5198.798202] sock->flags: 0
+[ 5198.798203] sock->wq: 0
+[ 5198.798203] sock->file: 0
+[ 5198.798204] sock->sk: 0
+[ 5198.798204] sock->ops: 0
+[ 5198.798205] SO_BINDTODEVICE false:: socket->sk is not NULL
+[ 5198.798206] sk->sk_state: 7
+[ 5198.798206] sk->sk_type: 2
+[ 5198.798207] sk->sk_err: 0
+[ 5198.798207] sk->sk_shutdown: 0
+[ 5198.798208] sk->sk_lock->slock: 0
+[ 5198.798209] sk->sk_rcv_saddr: 0
+[ 5198.798209] sk->sk_daddr: 0
+[ 5198.798210] sk->sk_family: 1
+[ 5198.798211] sk->sk_sndbuf: 212992
+[ 5198.798211] sk->sk_rcvbuf: 212992
+[ 5198.798212] sk->sk_write_space: 0
+[ 5198.798213] sk->sk_data_ready: 0
+[ 5198.798213] ///////////////////////
+[ 5198.798214] ///sock_setsockopt:: after release_sock() ////////
+[ 5198.798215] after release_sock:: socket is not NULL
+[ 5198.798215] sock->state: 1
+[ 5198.798216] sock->type: 2
+[ 5198.798216] sock->flags: 0
+[ 5198.798217] sock->wq: 0
+[ 5198.798218] sock->file: 0
+[ 5198.798218] sock->sk: 0
+[ 5198.798219] sock->ops: 0
+[ 5198.798220] after release_sock:: socket->sk is not NULL
+[ 5198.798220] sk->sk_state: 7
+[ 5198.798221] sk->sk_type: 2
+[ 5198.798222] sk->sk_err: 0
+[ 5198.798222] sk->sk_shutdown: 0
+[ 5198.798223] sk->sk_lock->slock: 0
+[ 5198.798223] sk->sk_rcv_saddr: 0
+[ 5198.798224] sk->sk_daddr: 0
+[ 5198.798225] sk->sk_family: 1
+[ 5198.798225] sk->sk_sndbuf: 212992
+[ 5198.798226] sk->sk_rcvbuf: 212992
+[ 5198.798227] sk->sk_write_space: 0
+[ 5198.798227] sk->sk_data_ready: 0
+[ 5198.798228] ///////////////////////
+[ 5198.798228] ///////////////////////
+[ 5198.798229] ****after generic or protoclspecific - socket is not NULL
+[ 5198.798230] sock->state: 1
+[ 5198.798230] sock->type: 2
+[ 5198.798231] sock->flags: 0
+[ 5198.798232] sock->wq: 0
+[ 5198.798232] sock->file: 0
+[ 5198.798233] sock->sk: 0
+[ 5198.798234] sock->ops: 0
+[ 5198.798234] socket->sk is not NULL
+[ 5198.798235] sk->sk_state: 7
+[ 5198.798235] sk->sk_type: 2
+[ 5198.798236] sk->sk_err: 0
+[ 5198.798236] sk->sk_shutdown: 0
+[ 5198.798237] sk->sk_lock->slock: 0
+[ 5198.798238] sk->sk_rcv_saddr: 0
+[ 5198.798239] sk->sk_daddr: 0
+[ 5198.798239] sk->sk_family: 1
+[ 5198.798240] sk->sk_sndbuf: 212992
+[ 5198.798241] sk->sk_rcvbuf: 212992
+[ 5198.798241] sk->sk_write_space: 0
+[ 5198.798242] sk->sk_data_ready: 0
+[ 5198.798242] ///////////////////////
+[ 5198.798243] /////// After out_put: /////////
+[ 5198.798244] !!!! After out_put: socket is not NULL
+[ 5198.798244] sock->state: 1
+[ 5198.798245] sock->type: 2
+[ 5198.798245] sock->flags: 0
+[ 5198.798246] sock->wq: 0
+[ 5198.798247] sock->file: 0
+[ 5198.798247] sock->sk: 0
+[ 5198.798248] sock->ops: 0
+[ 5198.798248] socket->sk is not NULL
+[ 5198.798249] sk->sk_state: 7
+[ 5198.798250] sk->sk_type: 2
+[ 5198.798250] sk->sk_err: 0
+[ 5198.798251] sk->sk_shutdown: 0
+[ 5198.798251] sk->sk_lock->slock: 0
+[ 5198.798252] sk->sk_rcv_saddr: 0
+[ 5198.798253] sk->sk_daddr: 0
+[ 5198.798253] sk->sk_family: 1
+[ 5198.798254] sk->sk_sndbuf: 212992
+[ 5198.798254] sk->sk_rcvbuf: 212992
+[ 5198.798255] sk->sk_write_space: 0
+[ 5198.798256] sk->sk_data_ready: 0
+[ 5198.798256] ///////////////////////
+[ 5198.798257] /////// after setSockopt fput_light /////////
+[ 5198.798257] &&&& fput_light: socket is not NULL
+[ 5198.798258] sock->state: 1
+[ 5198.798258] sock->type: 2
+[ 5198.798259] sock->flags: 0
+[ 5198.798260] sock->wq: 0
+[ 5198.798260] sock->file: 0
+[ 5198.798261] sock->sk: 0
+[ 5198.798261] sock->ops: 0
+[ 5198.798262] socket->sk is not NULL
+[ 5198.798262] sk->sk_state: 7
+[ 5198.798263] sk->sk_type: 2
+[ 5198.798263] sk->sk_err: 0
+[ 5198.798264] sk->sk_shutdown: 0
+[ 5198.798265] sk->sk_lock->slock: 0
+[ 5198.798265] sk->sk_rcv_saddr: 0
+[ 5198.798266] sk->sk_daddr: 0
+[ 5198.798266] sk->sk_family: 1
+[ 5198.798267] sk->sk_sndbuf: 212992
+[ 5198.798267] sk->sk_rcvbuf: 212992
+[ 5198.798268] sk->sk_write_space: 0
+[ 5198.798269] sk->sk_data_ready: 0
+[ 5198.798269] ///////////////////////
+[ 5198.798275] ///////////////////////
+[ 5198.798276] @@@@socket is not NULL
+[ 5198.798276] sock->state: 1
+[ 5198.798277] sock->type: 2
+[ 5198.798278] sock->flags: 0
+[ 5198.798278] sock->wq: 0
+[ 5198.798279] sock->file: 0
+[ 5198.798280] sock->sk: 0
+[ 5198.798280] sock->ops: 0
+[ 5198.798281] socket->sk is not NULL
+[ 5198.798281] sk->sk_state: 7
+[ 5198.798282] sk->sk_type: 2
+[ 5198.798283] sk->sk_err: 0
+[ 5198.798283] sk->sk_shutdown: 0
+[ 5198.798284] sk->sk_lock->slock: 0
+[ 5198.798285] sk->sk_rcv_saddr: 0
+[ 5198.798285] sk->sk_daddr: 0
+[ 5198.798286] sk->sk_family: 1
+[ 5198.798287] sk->sk_sndbuf: 212992
+[ 5198.798288] sk->sk_rcvbuf: 212992
+[ 5198.798288] sk->sk_write_space: 0
+[ 5198.798289] sk->sk_data_ready: 0
+[ 5198.798289] ///////////////////////
+[ 5198.798290] ///////////////////////
+[ 5198.798290] ====after setsockopt security check - socket is not NULL
+[ 5198.798291] sock->state: 1
+[ 5198.798292] sock->type: 2
+[ 5198.798292] sock->flags: 0
+[ 5198.798293] sock->wq: 0
+[ 5198.798294] sock->file: 0
+[ 5198.798294] sock->sk: 0
+[ 5198.798295] sock->ops: 0
+[ 5198.798295] socket->sk is not NULL
+[ 5198.798296] sk->sk_state: 7
+[ 5198.798297] sk->sk_type: 2
+[ 5198.798297] sk->sk_err: 0
+[ 5198.798298] sk->sk_shutdown: 0
+[ 5198.798299] sk->sk_lock->slock: 0
+[ 5198.798299] sk->sk_rcv_saddr: 0
+[ 5198.798300] sk->sk_daddr: 0
+[ 5198.798301] sk->sk_family: 1
+[ 5198.798301] sk->sk_sndbuf: 212992
+[ 5198.798302] sk->sk_rcvbuf: 212992
+[ 5198.798303] sk->sk_write_space: 0
+[ 5198.798303] sk->sk_data_ready: 0
+[ 5198.798304] ///////////////////////
+[ 5198.798304] /// sock_setsockopt ////////
+[ 5198.798305] sock_setsockopt:: socket is not NULL
+[ 5198.798306] sock->state: 1
+[ 5198.798306] sock->type: 2
+[ 5198.798307] sock->flags: 0
+[ 5198.798307] sock->wq: 0
+[ 5198.798308] sock->file: 0
+[ 5198.798309] sock->sk: 0
+[ 5198.798309] sock->ops: 0
+[ 5198.798310] sock_setsockopt:: socket->sk is not NULL
+[ 5198.798310] sk->sk_state: 7
+[ 5198.798311] sk->sk_type: 2
+[ 5198.798312] sk->sk_err: 0
+[ 5198.798312] sk->sk_shutdown: 0
+[ 5198.798313] sk->sk_lock->slock: 0
+[ 5198.798314] sk->sk_rcv_saddr: 0
+[ 5198.798314] sk->sk_daddr: 0
+[ 5198.798315] sk->sk_family: 1
+[ 5198.798316] sk->sk_sndbuf: 212992
+[ 5198.798316] sk->sk_rcvbuf: 212992
+[ 5198.798317] sk->sk_write_space: 0
+[ 5198.798317] sk->sk_data_ready: 0
+[ 5198.798318] ///////////////////////
+[ 5198.798319] /// SO_BINDTODEVICE false ////////
+[ 5198.798320] SO_BINDTODEVICE false:: socket is not NULL
+[ 5198.798321] sock->state: 1
+[ 5198.798321] sock->type: 2
+[ 5198.798322] sock->flags: 0
+[ 5198.798322] sock->wq: 0
+[ 5198.798323] sock->file: 0
+[ 5198.798324] sock->sk: 0
+[ 5198.798324] sock->ops: 0
+[ 5198.798325] SO_BINDTODEVICE false:: socket->sk is not NULL
+[ 5198.798325] sk->sk_state: 7
+[ 5198.798326] sk->sk_type: 2
+[ 5198.798327] sk->sk_err: 0
+[ 5198.798327] sk->sk_shutdown: 0
+[ 5198.798328] sk->sk_lock->slock: 0
+[ 5198.798329] sk->sk_rcv_saddr: 0
+[ 5198.798329] sk->sk_daddr: 0
+[ 5198.798330] sk->sk_family: 1
+[ 5198.798331] sk->sk_sndbuf: 425984
+[ 5198.798331] sk->sk_rcvbuf: 212992
+[ 5198.798332] sk->sk_write_space: 0
+[ 5198.798333] sk->sk_data_ready: 0
+[ 5198.798333] ///////////////////////
+[ 5198.798334] ///sock_setsockopt:: after release_sock() ////////
+[ 5198.798334] after release_sock:: socket is not NULL
+[ 5198.798335] sock->state: 1
+[ 5198.798335] sock->type: 2
+[ 5198.798336] sock->flags: 0
+[ 5198.798337] sock->wq: 0
+[ 5198.798338] sock->file: 0
+[ 5198.798338] sock->sk: 0
+[ 5198.798339] sock->ops: 0
+[ 5198.798339] after release_sock:: socket->sk is not NULL
+[ 5198.798340] sk->sk_state: 7
+[ 5198.798340] sk->sk_type: 2
+[ 5198.798341] sk->sk_err: 0
+[ 5198.798342] sk->sk_shutdown: 0
+[ 5198.798342] sk->sk_lock->slock: 0
+[ 5198.798343] sk->sk_rcv_saddr: 0
+[ 5198.798344] sk->sk_daddr: 0
+[ 5198.798344] sk->sk_family: 1
+[ 5198.798345] sk->sk_sndbuf: 425984
+[ 5198.798345] sk->sk_rcvbuf: 212992
+[ 5198.798346] sk->sk_write_space: 0
+[ 5198.798346] sk->sk_data_ready: 0
+[ 5198.798347] ///////////////////////
+[ 5198.798348] ///////////////////////
+[ 5198.798348] ****after generic or protoclspecific - socket is not NULL
+[ 5198.798349] sock->state: 1
+[ 5198.798349] sock->type: 2
+[ 5198.798350] sock->flags: 0
+[ 5198.798350] sock->wq: 0
+[ 5198.798351] sock->file: 0
+[ 5198.798352] sock->sk: 0
+[ 5198.798352] sock->ops: 0
+[ 5198.798353] socket->sk is not NULL
+[ 5198.798353] sk->sk_state: 7
+[ 5198.798354] sk->sk_type: 2
+[ 5198.798354] sk->sk_err: 0
+[ 5198.798355] sk->sk_shutdown: 0
+[ 5198.798356] sk->sk_lock->slock: 0
+[ 5198.798356] sk->sk_rcv_saddr: 0
+[ 5198.798357] sk->sk_daddr: 0
+[ 5198.798357] sk->sk_family: 1
+[ 5198.798358] sk->sk_sndbuf: 425984
+[ 5198.798359] sk->sk_rcvbuf: 212992
+[ 5198.798359] sk->sk_write_space: 0
+[ 5198.798360] sk->sk_data_ready: 0
+[ 5198.798361] ///////////////////////
+[ 5198.798361] /////// After out_put: /////////
+[ 5198.798362] !!!! After out_put: socket is not NULL
+[ 5198.798362] sock->state: 1
+[ 5198.798363] sock->type: 2
+[ 5198.798364] sock->flags: 0
+[ 5198.798364] sock->wq: 0
+[ 5198.798365] sock->file: 0
+[ 5198.798365] sock->sk: 0
+[ 5198.798366] sock->ops: 0
+[ 5198.798367] socket->sk is not NULL
+[ 5198.798367] sk->sk_state: 7
+[ 5198.798368] sk->sk_type: 2
+[ 5198.798368] sk->sk_err: 0
+[ 5198.798369] sk->sk_shutdown: 0
+[ 5198.798370] sk->sk_lock->slock: 0
+[ 5198.798370] sk->sk_rcv_saddr: 0
+[ 5198.798371] sk->sk_daddr: 0
+[ 5198.798371] sk->sk_family: 1
+[ 5198.798372] sk->sk_sndbuf: 425984
+[ 5198.798373] sk->sk_rcvbuf: 212992
+[ 5198.798373] sk->sk_write_space: 0
+[ 5198.798374] sk->sk_data_ready: 0
+[ 5198.798374] ///////////////////////
+[ 5198.798375] /////// after setSockopt fput_light /////////
+[ 5198.798376] &&&& fput_light: socket is not NULL
+[ 5198.798376] sock->state: 1
+[ 5198.798377] sock->type: 2
+[ 5198.798377] sock->flags: 0
+[ 5198.798378] sock->wq: 0
+[ 5198.798379] sock->file: 0
+[ 5198.798379] sock->sk: 0
+[ 5198.798380] sock->ops: 0
+[ 5198.798381] socket->sk is not NULL
+[ 5198.798381] sk->sk_state: 7
+[ 5198.798382] sk->sk_type: 2
+[ 5198.798382] sk->sk_err: 0
+[ 5198.798383] sk->sk_shutdown: 0
+[ 5198.798384] sk->sk_lock->slock: 0
+[ 5198.798384] sk->sk_rcv_saddr: 0
+[ 5198.798385] sk->sk_daddr: 0
+[ 5198.798386] sk->sk_family: 1
+[ 5198.798386] sk->sk_sndbuf: 425984
+[ 5198.798387] sk->sk_rcvbuf: 212992
+[ 5198.798388] sk->sk_write_space: 0
+[ 5198.798388] sk->sk_data_ready: 0
+[ 5198.798389] ///////////////////////
+[ 5198.798514] /// CONSTANTS ///////
+[ 5198.798515] family: 1
+[ 5198.798517] type: 524290
+[ 5198.798517] protocol: 0
+[ 5198.798518] SOCK_CLOEXEC: 524288
+[ 5198.798518] O_CLOEXEC: 524288
+[ 5198.798519] SOCK_MAX: 11
+[ 5198.798520] SOCK_TYPE_MASK: 15
+[ 5198.798520] sock: 0
+[ 5198.798521] /// END CONSTANTS ///////
+[ 5198.798521] /// CONSTANTS 2 ///////
+[ 5198.798522] flags: 524288
+[ 5198.798523] type: 2
+[ 5198.798523] /// END CONSTANTS 2 ///////
+[ 5198.798524] /// CONSTANTS 3 ///////
+[ 5198.798524] flags: 524288
+[ 5198.798525] /// END CONSTANTS 3 ///////
+[ 5198.798528] /// CREATE SOCKET ///////
+[ 5198.798528] Connect1-socket is not NULL
+[ 5198.798529] sock->state: 1
+[ 5198.798529] sock->type: 2
+[ 5198.798530] sock->flags: 0
+[ 5198.798531] sock->wq: 0
+[ 5198.798531] sock->file: 1
+[ 5198.798532] sock->sk: 0
+[ 5198.798532] sock->ops: 0
+[ 5198.798533] Create:: socket->sk is not NULL
+[ 5198.798534] sk->sk_state: 7
+[ 5198.798534] sk->sk_type: 2
+[ 5198.798535] sk->sk_err: 0
+[ 5198.798536] sk->sk_shutdown: 0
+[ 5198.798537] sk->sk_lock->slock: 0
+[ 5198.798537] sk->sk_rcv_saddr: 0
+[ 5198.798538] sk->sk_daddr: 0
+[ 5198.798539] sk->sk_family: 1
+[ 5198.798539] sk->sk_sndbuf: 212992
+[ 5198.798540] sk->sk_rcvbuf: 212992
+[ 5198.798541] sk->sk_write_space: 0
+[ 5198.798541] sk->sk_data_ready: 0
+[ 5198.798542] /// END CREATE SOCKET ///////
+[ 5198.798544] /// MAP SOCKET ///////
+[ 5198.798545] After Map:: socket is not NULL
+[ 5198.798545] sock->state: 1
+[ 5198.798546] sock->type: 2
+[ 5198.798546] sock->flags: 0
+[ 5198.798547] sock->wq: 0
+[ 5198.798548] sock->file: 0
+[ 5198.798548] sock->sk: 0
+[ 5198.798549] sock->ops: 0
+[ 5198.798550] Map:: sk is not NULL
+[ 5198.798550] sk->sk_state: 7
+[ 5198.798551] sk->sk_type: 2
+[ 5198.798551] sk->sk_err: 0
+[ 5198.798552] sk->sk_shutdown: 0
+[ 5198.798553] sk->sk_lock->slock: 0
+[ 5198.798554] sk->sk_rcv_saddr: 0
+[ 5198.798554] sk->sk_daddr: 0
+[ 5198.798555] sk->sk_family: 1
+[ 5198.798556] sk->sk_sndbuf: 212992
+[ 5198.798556] sk->sk_rcvbuf: 212992
+[ 5198.798557] sk->sk_write_space: 0
+[ 5198.798557] sk->sk_data_ready: 0
+[ 5198.798558] /// END MAP SOCKET ///////
+[ 5198.798571] ///////////////////////
+[ 5198.798572] @@@@socket is not NULL
+[ 5198.798572] sock->state: 1
+[ 5198.798573] sock->type: 2
+[ 5198.798574] sock->flags: 0
+[ 5198.798574] sock->wq: 0
+[ 5198.798575] sock->file: 0
+[ 5198.798575] sock->sk: 0
+[ 5198.798576] sock->ops: 0
+[ 5198.798577] socket->sk is not NULL
+[ 5198.798577] sk->sk_state: 7
+[ 5198.798578] sk->sk_type: 2
+[ 5198.798579] sk->sk_err: 0
+[ 5198.798580] sk->sk_shutdown: 0
+[ 5198.798581] sk->sk_lock->slock: 0
+[ 5198.798582] sk->sk_rcv_saddr: 0
+[ 5198.798582] sk->sk_daddr: 0
+[ 5198.798583] sk->sk_family: 1
+[ 5198.798583] sk->sk_sndbuf: 212992
+[ 5198.798584] sk->sk_rcvbuf: 212992
+[ 5198.798585] sk->sk_write_space: 0
+[ 5198.798586] sk->sk_data_ready: 0
+[ 5198.798586] ///////////////////////
+[ 5198.798587] ///////////////////////
+[ 5198.798588] ====after setsockopt security check - socket is not NULL
+[ 5198.798588] sock->state: 1
+[ 5198.798589] sock->type: 2
+[ 5198.798589] sock->flags: 0
+[ 5198.798590] sock->wq: 0
+[ 5198.798591] sock->file: 0
+[ 5198.798591] sock->sk: 0
+[ 5198.798592] sock->ops: 0
+[ 5198.798592] socket->sk is not NULL
+[ 5198.798593] sk->sk_state: 7
+[ 5198.798593] sk->sk_type: 2
+[ 5198.798594] sk->sk_err: 0
+[ 5198.798595] sk->sk_shutdown: 0
+[ 5198.798595] sk->sk_lock->slock: 0
+[ 5198.798596] sk->sk_rcv_saddr: 0
+[ 5198.798596] sk->sk_daddr: 0
+[ 5198.798597] sk->sk_family: 1
+[ 5198.798598] sk->sk_sndbuf: 212992
+[ 5198.798598] sk->sk_rcvbuf: 212992
+[ 5198.798599] sk->sk_write_space: 0
+[ 5198.798600] sk->sk_data_ready: 0
+[ 5198.798600] ///////////////////////
+[ 5198.798600] /// sock_setsockopt ////////
+[ 5198.798601] sock_setsockopt:: socket is not NULL
+[ 5198.798602] sock->state: 1
+[ 5198.798602] sock->type: 2
+[ 5198.798603] sock->flags: 0
+[ 5198.798603] sock->wq: 0
+[ 5198.798604] sock->file: 0
+[ 5198.798605] sock->sk: 0
+[ 5198.798605] sock->ops: 0
+[ 5198.798606] sock_setsockopt:: socket->sk is not NULL
+[ 5198.798606] sk->sk_state: 7
+[ 5198.798607] sk->sk_type: 2
+[ 5198.798607] sk->sk_err: 0
+[ 5198.798608] sk->sk_shutdown: 0
+[ 5198.798609] sk->sk_lock->slock: 0
+[ 5198.798609] sk->sk_rcv_saddr: 0
+[ 5198.798610] sk->sk_daddr: 0
+[ 5198.798611] sk->sk_family: 1
+[ 5198.798611] sk->sk_sndbuf: 212992
+[ 5198.798612] sk->sk_rcvbuf: 212992
+[ 5198.798613] sk->sk_write_space: 0
+[ 5198.798613] sk->sk_data_ready: 0
+[ 5198.798614] ///////////////////////
+[ 5198.798615] /// SO_BINDTODEVICE false ////////
+[ 5198.798615] SO_BINDTODEVICE false:: socket is not NULL
+[ 5198.798616] sock->state: 1
+[ 5198.798616] sock->type: 2
+[ 5198.798617] sock->flags: 0
+[ 5198.798618] sock->wq: 0
+[ 5198.798618] sock->file: 0
+[ 5198.798619] sock->sk: 0
+[ 5198.798619] sock->ops: 0
+[ 5198.798620] SO_BINDTODEVICE false:: socket->sk is not NULL
+[ 5198.798620] sk->sk_state: 7
+[ 5198.798621] sk->sk_type: 2
+[ 5198.798622] sk->sk_err: 0
+[ 5198.798623] sk->sk_shutdown: 0
+[ 5198.798623] sk->sk_lock->slock: 0
+[ 5198.798625] sk->sk_rcv_saddr: 0
+[ 5198.798625] sk->sk_daddr: 0
+[ 5198.798626] sk->sk_family: 1
+[ 5198.798627] sk->sk_sndbuf: 212992
+[ 5198.798628] sk->sk_rcvbuf: 212992
+[ 5198.798629] sk->sk_write_space: 0
+[ 5198.798629] sk->sk_data_ready: 0
+[ 5198.798630] ///////////////////////
+[ 5198.798631] ///sock_setsockopt:: after release_sock() ////////
+[ 5198.798632] after release_sock:: socket is not NULL
+[ 5198.798632] sock->state: 1
+[ 5198.798633] sock->type: 2
+[ 5198.798633] sock->flags: 0
+[ 5198.798634] sock->wq: 0
+[ 5198.798635] sock->file: 0
+[ 5198.798635] sock->sk: 0
+[ 5198.798636] sock->ops: 0
+[ 5198.798636] after release_sock:: socket->sk is not NULL
+[ 5198.798637] sk->sk_state: 7
+[ 5198.798638] sk->sk_type: 2
+[ 5198.798638] sk->sk_err: 0
+[ 5198.798639] sk->sk_shutdown: 0
+[ 5198.798640] sk->sk_lock->slock: 0
+[ 5198.798640] sk->sk_rcv_saddr: 0
+[ 5198.798641] sk->sk_daddr: 0
+[ 5198.798642] sk->sk_family: 1
+[ 5198.798642] sk->sk_sndbuf: 212992
+[ 5198.798643] sk->sk_rcvbuf: 212992
+[ 5198.798644] sk->sk_write_space: 0
+[ 5198.798644] sk->sk_data_ready: 0
+[ 5198.798645] ///////////////////////
+[ 5198.798645] ///////////////////////
+[ 5198.798646] ****after generic or protoclspecific - socket is not NULL
+[ 5198.798646] sock->state: 1
+[ 5198.798647] sock->type: 2
+[ 5198.798648] sock->flags: 0
+[ 5198.798648] sock->wq: 0
+[ 5198.798649] sock->file: 0
+[ 5198.798650] sock->sk: 0
+[ 5198.798651] sock->ops: 0
+[ 5198.798651] socket->sk is not NULL
+[ 5198.798652] sk->sk_state: 7
+[ 5198.798653] sk->sk_type: 2
+[ 5198.798654] sk->sk_err: 0
+[ 5198.798655] sk->sk_shutdown: 0
+[ 5198.798656] sk->sk_lock->slock: 0
+[ 5198.798656] sk->sk_rcv_saddr: 0
+[ 5198.798657] sk->sk_daddr: 0
+[ 5198.798658] sk->sk_family: 1
+[ 5198.798658] sk->sk_sndbuf: 212992
+[ 5198.798659] sk->sk_rcvbuf: 212992
+[ 5198.798660] sk->sk_write_space: 0
+[ 5198.798661] sk->sk_data_ready: 0
+[ 5198.798661] ///////////////////////
+[ 5198.798662] /////// After out_put: /////////
+[ 5198.798662] !!!! After out_put: socket is not NULL
+[ 5198.798663] sock->state: 1
+[ 5198.798663] sock->type: 2
+[ 5198.798664] sock->flags: 0
+[ 5198.798665] sock->wq: 0
+[ 5198.798665] sock->file: 0
+[ 5198.798666] sock->sk: 0
+[ 5198.798666] sock->ops: 0
+[ 5198.798667] socket->sk is not NULL
+[ 5198.798667] sk->sk_state: 7
+[ 5198.798668] sk->sk_type: 2
+[ 5198.798669] sk->sk_err: 0
+[ 5198.798669] sk->sk_shutdown: 0
+[ 5198.798670] sk->sk_lock->slock: 0
+[ 5198.798671] sk->sk_rcv_saddr: 0
+[ 5198.798671] sk->sk_daddr: 0
+[ 5198.798672] sk->sk_family: 1
+[ 5198.798673] sk->sk_sndbuf: 212992
+[ 5198.798674] sk->sk_rcvbuf: 212992
+[ 5198.798675] sk->sk_write_space: 0
+[ 5198.798676] sk->sk_data_ready: 0
+[ 5198.798677] ///////////////////////
+[ 5198.798677] /////// after setSockopt fput_light /////////
+[ 5198.798678] &&&& fput_light: socket is not NULL
+[ 5198.798679] sock->state: 1
+[ 5198.798680] sock->type: 2
+[ 5198.798680] sock->flags: 0
+[ 5198.798681] sock->wq: 0
+[ 5198.798681] sock->file: 0
+[ 5198.798682] sock->sk: 0
+[ 5198.798683] sock->ops: 0
+[ 5198.798684] socket->sk is not NULL
+[ 5198.798685] sk->sk_state: 7
+[ 5198.798686] sk->sk_type: 2
+[ 5198.798686] sk->sk_err: 0
+[ 5198.798687] sk->sk_shutdown: 0
+[ 5198.798688] sk->sk_lock->slock: 0
+[ 5198.798688] sk->sk_rcv_saddr: 0
+[ 5198.798689] sk->sk_daddr: 0
+[ 5198.798690] sk->sk_family: 1
+[ 5198.798690] sk->sk_sndbuf: 212992
+[ 5198.798691] sk->sk_rcvbuf: 212992
+[ 5198.798691] sk->sk_write_space: 0
+[ 5198.798692] sk->sk_data_ready: 0
+[ 5198.798693] ///////////////////////
+[ 5198.798700] ///////////////////////
+[ 5198.798700] @@@@socket is not NULL
+[ 5198.798700] sock->state: 1
+[ 5198.798701] sock->type: 2
+[ 5198.798701] sock->flags: 0
+[ 5198.798702] sock->wq: 0
+[ 5198.798702] sock->file: 0
+[ 5198.798703] sock->sk: 0
+[ 5198.798703] sock->ops: 0
+[ 5198.798704] socket->sk is not NULL
+[ 5198.798704] sk->sk_state: 7
+[ 5198.798705] sk->sk_type: 2
+[ 5198.798705] sk->sk_err: 0
+[ 5198.798706] sk->sk_shutdown: 0
+[ 5198.798706] sk->sk_lock->slock: 0
+[ 5198.798707] sk->sk_rcv_saddr: 0
+[ 5198.798707] sk->sk_daddr: 0
+[ 5198.798707] sk->sk_family: 1
+[ 5198.798708] sk->sk_sndbuf: 212992
+[ 5198.798708] sk->sk_rcvbuf: 212992
+[ 5198.798709] sk->sk_write_space: 0
+[ 5198.798709] sk->sk_data_ready: 0
+[ 5198.798710] ///////////////////////
+[ 5198.798710] ///////////////////////
+[ 5198.798711] ====after setsockopt security check - socket is not NULL
+[ 5198.798711] sock->state: 1
+[ 5198.798712] sock->type: 2
+[ 5198.798712] sock->flags: 0
+[ 5198.798713] sock->wq: 0
+[ 5198.798713] sock->file: 0
+[ 5198.798713] sock->sk: 0
+[ 5198.798714] sock->ops: 0
+[ 5198.798714] socket->sk is not NULL
+[ 5198.798715] sk->sk_state: 7
+[ 5198.798715] sk->sk_type: 2
+[ 5198.798716] sk->sk_err: 0
+[ 5198.798716] sk->sk_shutdown: 0
+[ 5198.798717] sk->sk_lock->slock: 0
+[ 5198.798717] sk->sk_rcv_saddr: 0
+[ 5198.798718] sk->sk_daddr: 0
+[ 5198.798718] sk->sk_family: 1
+[ 5198.798719] sk->sk_sndbuf: 212992
+[ 5198.798719] sk->sk_rcvbuf: 212992
+[ 5198.798720] sk->sk_write_space: 0
+[ 5198.798720] sk->sk_data_ready: 0
+[ 5198.798721] ///////////////////////
+[ 5198.798721] /// sock_setsockopt ////////
+[ 5198.798721] sock_setsockopt:: socket is not NULL
+[ 5198.798722] sock->state: 1
+[ 5198.798722] sock->type: 2
+[ 5198.798723] sock->flags: 0
+[ 5198.798723] sock->wq: 0
+[ 5198.798724] sock->file: 0
+[ 5198.798724] sock->sk: 0
+[ 5198.798725] sock->ops: 0
+[ 5198.798725] sock_setsockopt:: socket->sk is not NULL
+[ 5198.798725] sk->sk_state: 7
+[ 5198.798726] sk->sk_type: 2
+[ 5198.798726] sk->sk_err: 0
+[ 5198.798727] sk->sk_shutdown: 0
+[ 5198.798727] sk->sk_lock->slock: 0
+[ 5198.798728] sk->sk_rcv_saddr: 0
+[ 5198.798728] sk->sk_daddr: 0
+[ 5198.798729] sk->sk_family: 1
+[ 5198.798729] sk->sk_sndbuf: 212992
+[ 5198.798730] sk->sk_rcvbuf: 212992
+[ 5198.798730] sk->sk_write_space: 0
+[ 5198.798731] sk->sk_data_ready: 0
+[ 5198.798731] ///////////////////////
+[ 5198.798732] /// SO_BINDTODEVICE false ////////
+[ 5198.798732] SO_BINDTODEVICE false:: socket is not NULL
+[ 5198.798733] sock->state: 1
+[ 5198.798733] sock->type: 2
+[ 5198.798734] sock->flags: 0
+[ 5198.798734] sock->wq: 0
+[ 5198.798735] sock->file: 0
+[ 5198.798735] sock->sk: 0
+[ 5198.798735] sock->ops: 0
+[ 5198.798736] SO_BINDTODEVICE false:: socket->sk is not NULL
+[ 5198.798736] sk->sk_state: 7
+[ 5198.798737] sk->sk_type: 2
+[ 5198.798737] sk->sk_err: 0
+[ 5198.798738] sk->sk_shutdown: 0
+[ 5198.798738] sk->sk_lock->slock: 0
+[ 5198.798739] sk->sk_rcv_saddr: 0
+[ 5198.798739] sk->sk_daddr: 0
+[ 5198.798740] sk->sk_family: 1
+[ 5198.798740] sk->sk_sndbuf: 425984
+[ 5198.798741] sk->sk_rcvbuf: 212992
+[ 5198.798741] sk->sk_write_space: 0
+[ 5198.798742] sk->sk_data_ready: 0
+[ 5198.798742] ///////////////////////
+[ 5198.798743] ///sock_setsockopt:: after release_sock() ////////
+[ 5198.798743] after release_sock:: socket is not NULL
+[ 5198.798743] sock->state: 1
+[ 5198.798744] sock->type: 2
+[ 5198.798744] sock->flags: 0
+[ 5198.798745] sock->wq: 0
+[ 5198.798745] sock->file: 0
+[ 5198.798746] sock->sk: 0
+[ 5198.798746] sock->ops: 0
+[ 5198.798747] after release_sock:: socket->sk is not NULL
+[ 5198.798747] sk->sk_state: 7
+[ 5198.798748] sk->sk_type: 2
+[ 5198.798748] sk->sk_err: 0
+[ 5198.798749] sk->sk_shutdown: 0
+[ 5198.798749] sk->sk_lock->slock: 0
+[ 5198.798749] sk->sk_rcv_saddr: 0
+[ 5198.798750] sk->sk_daddr: 0
+[ 5198.798750] sk->sk_family: 1
+[ 5198.798751] sk->sk_sndbuf: 425984
+[ 5198.798751] sk->sk_rcvbuf: 212992
+[ 5198.798752] sk->sk_write_space: 0
+[ 5198.798752] sk->sk_data_ready: 0
+[ 5198.798753] ///////////////////////
+[ 5198.798753] ///////////////////////
+[ 5198.798754] ****after generic or protoclspecific - socket is not NULL
+[ 5198.798754] sock->state: 1
+[ 5198.798755] sock->type: 2
+[ 5198.798755] sock->flags: 0
+[ 5198.798755] sock->wq: 0
+[ 5198.798756] sock->file: 0
+[ 5198.798756] sock->sk: 0
+[ 5198.798757] sock->ops: 0
+[ 5198.798757] socket->sk is not NULL
+[ 5198.798758] sk->sk_state: 7
+[ 5198.798758] sk->sk_type: 2
+[ 5198.798759] sk->sk_err: 0
+[ 5198.798759] sk->sk_shutdown: 0
+[ 5198.798760] sk->sk_lock->slock: 0
+[ 5198.798760] sk->sk_rcv_saddr: 0
+[ 5198.798760] sk->sk_daddr: 0
+[ 5198.798761] sk->sk_family: 1
+[ 5198.798761] sk->sk_sndbuf: 425984
+[ 5198.798762] sk->sk_rcvbuf: 212992
+[ 5198.798762] sk->sk_write_space: 0
+[ 5198.798763] sk->sk_data_ready: 0
+[ 5198.798763] ///////////////////////
+[ 5198.798764] /////// After out_put: /////////
+[ 5198.798764] !!!! After out_put: socket is not NULL
+[ 5198.798765] sock->state: 1
+[ 5198.798765] sock->type: 2
+[ 5198.798766] sock->flags: 0
+[ 5198.798766] sock->wq: 0
+[ 5198.798766] sock->file: 0
+[ 5198.798767] sock->sk: 0
+[ 5198.798767] sock->ops: 0
+[ 5198.798768] socket->sk is not NULL
+[ 5198.798768] sk->sk_state: 7
+[ 5198.798769] sk->sk_type: 2
+[ 5198.798769] sk->sk_err: 0
+[ 5198.798770] sk->sk_shutdown: 0
+[ 5198.798770] sk->sk_lock->slock: 0
+[ 5198.798771] sk->sk_rcv_saddr: 0
+[ 5198.798771] sk->sk_daddr: 0
+[ 5198.798772] sk->sk_family: 1
+[ 5198.798772] sk->sk_sndbuf: 425984
+[ 5198.798773] sk->sk_rcvbuf: 212992
+[ 5198.798773] sk->sk_write_space: 0
+[ 5198.798774] sk->sk_data_ready: 0
+[ 5198.798774] ///////////////////////
+[ 5198.798774] /////// after setSockopt fput_light /////////
+[ 5198.798775] &&&& fput_light: socket is not NULL
+[ 5198.798775] sock->state: 1
+[ 5198.798776] sock->type: 2
+[ 5198.798776] sock->flags: 0
+[ 5198.798777] sock->wq: 0
+[ 5198.798777] sock->file: 0
+[ 5198.798778] sock->sk: 0
+[ 5198.798778] sock->ops: 0
+[ 5198.798779] socket->sk is not NULL
+[ 5198.798779] sk->sk_state: 7
+[ 5198.798780] sk->sk_type: 2
+[ 5198.798780] sk->sk_err: 0
+[ 5198.798780] sk->sk_shutdown: 0
+[ 5198.798781] sk->sk_lock->slock: 0
+[ 5198.798781] sk->sk_rcv_saddr: 0
+[ 5198.798782] sk->sk_daddr: 0
+[ 5198.798782] sk->sk_family: 1
+[ 5198.798783] sk->sk_sndbuf: 425984
+[ 5198.798783] sk->sk_rcvbuf: 212992
+[ 5198.798784] sk->sk_write_space: 0
+[ 5198.798784] sk->sk_data_ready: 0
+[ 5198.798785] ///////////////////////
+[ 5209.283546] /// CONSTANTS ///////
+[ 5209.283552] family: 2
+[ 5209.283555] type: 526338
+[ 5209.283558] protocol: 0
+[ 5209.283561] SOCK_CLOEXEC: 524288
+[ 5209.283563] O_CLOEXEC: 524288
+[ 5209.283566] SOCK_MAX: 11
+[ 5209.283568] SOCK_TYPE_MASK: 15
+[ 5209.283571] sock: 0
+[ 5209.283573] /// END CONSTANTS ///////
+[ 5209.283575] /// CONSTANTS 2 ///////
+[ 5209.283578] flags: 526336
+[ 5209.283580] type: 2
+[ 5209.283582] /// END CONSTANTS 2 ///////
+[ 5209.283585] /// CONSTANTS 3 ///////
+[ 5209.283587] flags: 526336
+[ 5209.283589] /// END CONSTANTS 3 ///////
+[ 5209.283601] /// CREATE SOCKET ///////
+[ 5209.283603] Connect1-socket is not NULL
+[ 5209.283606] sock->state: 1
+[ 5209.283608] sock->type: 2
+[ 5209.283611] sock->flags: 0
+[ 5209.283613] sock->wq: 0
+[ 5209.283616] sock->file: 1
+[ 5209.283618] sock->sk: 0
+[ 5209.283620] sock->ops: 0
+[ 5209.283623] Create:: socket->sk is not NULL
+[ 5209.283625] sk->sk_state: 7
+[ 5209.283627] sk->sk_type: 2
+[ 5209.283630] sk->sk_err: 0
+[ 5209.283632] sk->sk_shutdown: 0
+[ 5209.283634] sk->sk_lock->slock: 0
+[ 5209.283637] sk->sk_rcv_saddr: 0
+[ 5209.283639] sk->sk_daddr: 0
+[ 5209.283642] sk->sk_family: 2
+[ 5209.283644] sk->sk_sndbuf: 212992
+[ 5209.283647] sk->sk_rcvbuf: 212992
+[ 5209.283649] sk->sk_write_space: 0
+[ 5209.283652] sk->sk_data_ready: 0
+[ 5209.283654] /// END CREATE SOCKET ///////
+[ 5209.283664] /// MAP SOCKET ///////
+[ 5209.283666] After Map:: socket is not NULL
+[ 5209.283668] sock->state: 1
+[ 5209.283671] sock->type: 2
+[ 5209.283673] sock->flags: 0
+[ 5209.283675] sock->wq: 0
+[ 5209.283677] sock->file: 0
+[ 5209.283680] sock->sk: 0
+[ 5209.283682] sock->ops: 0
+[ 5209.283684] Map:: sk is not NULL
+[ 5209.283687] sk->sk_state: 7
+[ 5209.283689] sk->sk_type: 2
+[ 5209.283691] sk->sk_err: 0
+[ 5209.283694] sk->sk_shutdown: 0
+[ 5209.283696] sk->sk_lock->slock: 0
+[ 5209.283699] sk->sk_rcv_saddr: 0
+[ 5209.283701] sk->sk_daddr: 0
+[ 5209.283703] sk->sk_family: 2
+[ 5209.283706] sk->sk_sndbuf: 212992
+[ 5209.283708] sk->sk_rcvbuf: 212992
+[ 5209.283711] sk->sk_write_space: 0
+[ 5209.283713] sk->sk_data_ready: 0
+[ 5209.283715] /// END MAP SOCKET ///////
+[ 5209.283719] ///////////////////////
+[ 5209.283722] Connect1-socket is not NULL
+[ 5209.283724] sock->state: 1
+[ 5209.283726] sock->type: 2
+[ 5209.283729] sock->flags: 0
+[ 5209.283731] sock->wq: 0
+[ 5209.283734] sock->file: 0
+[ 5209.283736] sock->sk: 0
+[ 5209.283738] sock->ops: 0
+[ 5209.283741] Connectsocket->sk is not NULL
+[ 5209.283743] sk->sk_state: 7
+[ 5209.283745] sk->sk_type: 2
+[ 5209.283748] sk->sk_err: 0
+[ 5209.283750] sk->sk_shutdown: 0
+[ 5209.283753] sk->sk_lock->slock: 0
+[ 5209.283755] sk->sk_rcv_saddr: 0
+[ 5209.283758] sk->sk_daddr: 0
+[ 5209.283760] sk->sk_family: 2
+[ 5209.283763] sk->sk_sndbuf: 212992
+[ 5209.283765] sk->sk_rcvbuf: 212992
+[ 5209.283768] sk->sk_write_space: 0
+[ 5209.283770] sk->sk_data_ready: 0
+[ 5209.283772] ///////////////////////
+[ 5209.283794] ///////////////////////
+[ 5209.283796] Connect2-socket is not NULL
+[ 5209.283799] sock->state: 1
+[ 5209.283801] sock->type: 2
+[ 5209.283804] sock->flags: 0
+[ 5209.283806] sock->wq: 0
+[ 5209.283809] sock->file: 0
+[ 5209.283811] sock->sk: 0
+[ 5209.283813] sock->ops: 0
+[ 5209.283815] ///////////////////////
+[ 5209.284609] /// CONSTANTS ///////
+[ 5209.284613] family: 2
+[ 5209.284617] type: 526338
+[ 5209.284619] protocol: 0
+[ 5209.284641] SOCK_CLOEXEC: 524288
+[ 5209.284644] O_CLOEXEC: 524288
+[ 5209.284646] SOCK_MAX: 11
+[ 5209.284649] SOCK_TYPE_MASK: 15
+[ 5209.284652] sock: 0
+[ 5209.284654] /// END CONSTANTS ///////
+[ 5209.284656] /// CONSTANTS 2 ///////
+[ 5209.284658] flags: 526336
+[ 5209.284661] type: 2
+[ 5209.284663] /// END CONSTANTS 2 ///////
+[ 5209.284665] /// CONSTANTS 3 ///////
+[ 5209.284667] flags: 526336
+[ 5209.284669] /// END CONSTANTS 3 ///////
+[ 5209.284679] /// CREATE SOCKET ///////
+[ 5209.284681] Connect1-socket is not NULL
+[ 5209.284684] sock->state: 1
+[ 5209.284686] sock->type: 2
+[ 5209.284689] sock->flags: 0
+[ 5209.284691] sock->wq: 0
+[ 5209.284693] sock->file: 1
+[ 5209.284696] sock->sk: 0
+[ 5209.284698] sock->ops: 0
+[ 5209.284701] Create:: socket->sk is not NULL
+[ 5209.284703] sk->sk_state: 7
+[ 5209.284706] sk->sk_type: 2
+[ 5209.284708] sk->sk_err: 0
+[ 5209.284710] sk->sk_shutdown: 0
+[ 5209.284713] sk->sk_lock->slock: 0
+[ 5209.284715] sk->sk_rcv_saddr: 0
+[ 5209.284718] sk->sk_daddr: 0
+[ 5209.284720] sk->sk_family: 2
+[ 5209.284723] sk->sk_sndbuf: 212992
+[ 5209.284726] sk->sk_rcvbuf: 212992
+[ 5209.284728] sk->sk_write_space: 0
+[ 5209.284731] sk->sk_data_ready: 0
+[ 5209.284733] /// END CREATE SOCKET ///////
+[ 5209.284741] /// MAP SOCKET ///////
+[ 5209.284744] After Map:: socket is not NULL
+[ 5209.284746] sock->state: 1
+[ 5209.284749] sock->type: 2
+[ 5209.284751] sock->flags: 0
+[ 5209.284753] sock->wq: 0
+[ 5209.284756] sock->file: 0
+[ 5209.284758] sock->sk: 0
+[ 5209.284760] sock->ops: 0
+[ 5209.284762] Map:: sk is not NULL
+[ 5209.284765] sk->sk_state: 7
+[ 5209.284767] sk->sk_type: 2
+[ 5209.284770] sk->sk_err: 0
+[ 5209.284772] sk->sk_shutdown: 0
+[ 5209.284774] sk->sk_lock->slock: 0
+[ 5209.284777] sk->sk_rcv_saddr: 0
+[ 5209.284779] sk->sk_daddr: 0
+[ 5209.284782] sk->sk_family: 2
+[ 5209.284784] sk->sk_sndbuf: 212992
+[ 5209.284787] sk->sk_rcvbuf: 212992
+[ 5209.284789] sk->sk_write_space: 0
+[ 5209.284792] sk->sk_data_ready: 0
+[ 5209.284793] /// END MAP SOCKET ///////
+[ 5209.284817] ///////////////////////
+[ 5209.284819] @@@@socket is not NULL
+[ 5209.284822] sock->state: 1
+[ 5209.284824] sock->type: 2
+[ 5209.284827] sock->flags: 0
+[ 5209.284829] sock->wq: 0
+[ 5209.284831] sock->file: 0
+[ 5209.284834] sock->sk: 0
+[ 5209.284836] sock->ops: 0
+[ 5209.284838] socket->sk is not NULL
+[ 5209.284841] sk->sk_state: 7
+[ 5209.284843] sk->sk_type: 2
+[ 5209.284846] sk->sk_err: 0
+[ 5209.284848] sk->sk_shutdown: 0
+[ 5209.284851] sk->sk_lock->slock: 0
+[ 5209.284853] sk->sk_rcv_saddr: 0
+[ 5209.284856] sk->sk_daddr: 0
+[ 5209.284858] sk->sk_family: 2
+[ 5209.284861] sk->sk_sndbuf: 212992
+[ 5209.284864] sk->sk_rcvbuf: 212992
+[ 5209.284866] sk->sk_write_space: 0
+[ 5209.284869] sk->sk_data_ready: 0
+[ 5209.284871] ///////////////////////
+[ 5209.284873] ///////////////////////
+[ 5209.284875] ====after setsockopt security check - socket is not NULL
+[ 5209.284878] sock->state: 1
+[ 5209.284880] sock->type: 2
+[ 5209.284883] sock->flags: 0
+[ 5209.284885] sock->wq: 0
+[ 5209.284888] sock->file: 0
+[ 5209.284890] sock->sk: 0
+[ 5209.284893] sock->ops: 0
+[ 5209.284895] socket->sk is not NULL
+[ 5209.284897] sk->sk_state: 7
+[ 5209.284899] sk->sk_type: 2
+[ 5209.284901] sk->sk_err: 0
+[ 5209.284904] sk->sk_shutdown: 0
+[ 5209.284906] sk->sk_lock->slock: 0
+[ 5209.284908] sk->sk_rcv_saddr: 0
+[ 5209.284911] sk->sk_daddr: 0
+[ 5209.284913] sk->sk_family: 2
+[ 5209.284915] sk->sk_sndbuf: 212992
+[ 5209.284917] sk->sk_rcvbuf: 212992
+[ 5209.284920] sk->sk_write_space: 0
+[ 5209.284922] sk->sk_data_ready: 0
+[ 5209.284924] ///////////////////////
+[ 5209.284927] /// do_ip_setsockopt1 ////////
+[ 5209.284929] do_ip_setsockopt1:: socket->sk is not NULL
+[ 5209.284931] sk->sk_state: 7
+[ 5209.284934] sk->sk_type: 2
+[ 5209.284936] sk->sk_err: 0
+[ 5209.284938] sk->sk_shutdown: 0
+[ 5209.284941] sk->sk_lock->slock: 0
+[ 5209.284943] sk->sk_rcv_saddr: 0
+[ 5209.284945] sk->sk_daddr: 0
+[ 5209.284947] sk->sk_family: 2
+[ 5209.284950] sk->sk_sndbuf: 212992
+[ 5209.284952] sk->sk_rcvbuf: 212992
+[ 5209.284955] sk->sk_write_space: 0
+[ 5209.284957] sk->sk_data_ready: 0
+[ 5209.284959] ///////////////////////
+[ 5209.284965] /// do_ip_setsockopt b4  release_sock////////
+[ 5209.284967] do_ip_setsockopt b4  release_sock:: socket->sk is not NULL
+[ 5209.284970] sk->sk_state: 7
+[ 5209.284972] sk->sk_type: 2
+[ 5209.284975] sk->sk_err: 0
+[ 5209.284977] sk->sk_shutdown: 0
+[ 5209.284980] sk->sk_lock->slock: 0
+[ 5209.284982] sk->sk_rcv_saddr: 0
+[ 5209.284985] sk->sk_daddr: 0
+[ 5209.284987] sk->sk_family: 2
+[ 5209.284989] sk->sk_sndbuf: 212992
+[ 5209.284992] sk->sk_rcvbuf: 212992
+[ 5209.284994] sk->sk_write_space: 0
+[ 5209.284996] sk->sk_data_ready: 0
+[ 5209.284998] ///////////////////////
+[ 5209.285001] /// do_ip_setsockopt after  release_sock////////
+[ 5209.285003] do_ip_setsockopt after  release_sock:: socket->sk is not NULL
+[ 5209.285005] sk->sk_state: 7
+[ 5209.285008] sk->sk_type: 2
+[ 5209.285010] sk->sk_err: 0
+[ 5209.285012] sk->sk_shutdown: 0
+[ 5209.285015] sk->sk_lock->slock: 0
+[ 5209.285017] sk->sk_rcv_saddr: 0
+[ 5209.285019] sk->sk_daddr: 0
+[ 5209.285022] sk->sk_family: 2
+[ 5209.285024] sk->sk_sndbuf: 212992
+[ 5209.285027] sk->sk_rcvbuf: 212992
+[ 5209.285029] sk->sk_write_space: 0
+[ 5209.285032] sk->sk_data_ready: 0
+[ 5209.285034] ///////////////////////
+[ 5209.285036] ///////////////////////
+[ 5209.285038] ****after generic or protoclspecific - socket is not NULL
+[ 5209.285041] sock->state: 1
+[ 5209.285043] sock->type: 2
+[ 5209.285046] sock->flags: 0
+[ 5209.285048] sock->wq: 0
+[ 5209.285051] sock->file: 0
+[ 5209.285053] sock->sk: 0
+[ 5209.285055] sock->ops: 0
+[ 5209.285058] socket->sk is not NULL
+[ 5209.285060] sk->sk_state: 7
+[ 5209.285063] sk->sk_type: 2
+[ 5209.285065] sk->sk_err: 0
+[ 5209.285067] sk->sk_shutdown: 0
+[ 5209.285070] sk->sk_lock->slock: 0
+[ 5209.285072] sk->sk_rcv_saddr: 0
+[ 5209.285075] sk->sk_daddr: 0
+[ 5209.285077] sk->sk_family: 2
+[ 5209.285080] sk->sk_sndbuf: 212992
+[ 5209.285082] sk->sk_rcvbuf: 212992
+[ 5209.285085] sk->sk_write_space: 0
+[ 5209.285087] sk->sk_data_ready: 0
+[ 5209.285089] ///////////////////////
+[ 5209.285091] /////// After out_put: /////////
+[ 5209.285093] !!!! After out_put: socket is not NULL
+[ 5209.285096] sock->state: 1
+[ 5209.285098] sock->type: 2
+[ 5209.285100] sock->flags: 0
+[ 5209.285102] sock->wq: 0
+[ 5209.285105] sock->file: 0
+[ 5209.285107] sock->sk: 0
+[ 5209.285109] sock->ops: 0
+[ 5209.285111] socket->sk is not NULL
+[ 5209.285113] sk->sk_state: 7
+[ 5209.285115] sk->sk_type: 2
+[ 5209.285117] sk->sk_err: 0
+[ 5209.285119] sk->sk_shutdown: 0
+[ 5209.285122] sk->sk_lock->slock: 0
+[ 5209.285124] sk->sk_rcv_saddr: 0
+[ 5209.285126] sk->sk_daddr: 0
+[ 5209.285128] sk->sk_family: 2
+[ 5209.285130] sk->sk_sndbuf: 212992
+[ 5209.285132] sk->sk_rcvbuf: 212992
+[ 5209.285134] sk->sk_write_space: 0
+[ 5209.285137] sk->sk_data_ready: 0
+[ 5209.285138] ///////////////////////
+[ 5209.285140] /////// after setSockopt fput_light /////////
+[ 5209.285142] &&&& fput_light: socket is not NULL
+[ 5209.285145] sock->state: 1
+[ 5209.285147] sock->type: 2
+[ 5209.285149] sock->flags: 0
+[ 5209.285151] sock->wq: 0
+[ 5209.285154] sock->file: 0
+[ 5209.285156] sock->sk: 0
+[ 5209.285158] sock->ops: 0
+[ 5209.285160] socket->sk is not NULL
+[ 5209.285162] sk->sk_state: 7
+[ 5209.285164] sk->sk_type: 2
+[ 5209.285167] sk->sk_err: 0
+[ 5209.285169] sk->sk_shutdown: 0
+[ 5209.285171] sk->sk_lock->slock: 0
+[ 5209.285173] sk->sk_rcv_saddr: 0
+[ 5209.285175] sk->sk_daddr: 0
+[ 5209.285177] sk->sk_family: 2
+[ 5209.285180] sk->sk_sndbuf: 212992
+[ 5209.285182] sk->sk_rcvbuf: 212992
+[ 5209.285214] sk->sk_write_space: 0
+[ 5209.285217] sk->sk_data_ready: 0
+[ 5209.285219] ///////////////////////
+[ 5209.285246] ///////////////////////
+[ 5209.285248] Connect1-socket is not NULL
+[ 5209.285250] sock->state: 1
+[ 5209.285252] sock->type: 2
+[ 5209.285255] sock->flags: 0
+[ 5209.285257] sock->wq: 0
+[ 5209.285259] sock->file: 0
+[ 5209.285261] sock->sk: 0
+[ 5209.285263] sock->ops: 0
+[ 5209.285265] Connectsocket->sk is not NULL
+[ 5209.285267] sk->sk_state: 7
+[ 5209.285270] sk->sk_type: 2
+[ 5209.285272] sk->sk_err: 0
+[ 5209.285274] sk->sk_shutdown: 0
+[ 5209.285276] sk->sk_lock->slock: 0
+[ 5209.285278] sk->sk_rcv_saddr: 0
+[ 5209.285280] sk->sk_daddr: 0
+[ 5209.285283] sk->sk_family: 2
+[ 5209.285285] sk->sk_sndbuf: 212992
+[ 5209.285287] sk->sk_rcvbuf: 212992
+[ 5209.285290] sk->sk_write_space: 0
+[ 5209.285292] sk->sk_data_ready: 0
+[ 5209.285294] ///////////////////////
+[ 5209.285314] ///////////////////////
+[ 5209.285317] Connect2-socket is not NULL
+[ 5209.285319] sock->state: 1
+[ 5209.285321] sock->type: 2
+[ 5209.285324] sock->flags: 0
+[ 5209.285326] sock->wq: 0
+[ 5209.285329] sock->file: 0
+[ 5209.285331] sock->sk: 0
+[ 5209.285333] sock->ops: 0
+[ 5209.285335] ///////////////////////
+[ 5209.286346] /// CONSTANTS ///////
+[ 5209.286350] family: 2
+[ 5209.286392] type: 526338
+[ 5209.286395] protocol: 0
+[ 5209.286397] SOCK_CLOEXEC: 524288
+[ 5209.286400] O_CLOEXEC: 524288
+[ 5209.286403] SOCK_MAX: 11
+[ 5209.286405] SOCK_TYPE_MASK: 15
+[ 5209.286407] sock: 0
+[ 5209.286409] /// END CONSTANTS ///////
+[ 5209.286411] /// CONSTANTS 2 ///////
+[ 5209.286414] flags: 526336
+[ 5209.286416] type: 2
+[ 5209.286418] /// END CONSTANTS 2 ///////
+[ 5209.286421] /// CONSTANTS 3 ///////
+[ 5209.286423] flags: 526336
+[ 5209.286425] /// END CONSTANTS 3 ///////
+[ 5209.286437] /// CREATE SOCKET ///////
+[ 5209.286438] Connect1-socket is not NULL
+[ 5209.286441] sock->state: 1
+[ 5209.286443] sock->type: 2
+[ 5209.286446] sock->flags: 0
+[ 5209.286448] sock->wq: 0
+[ 5209.286450] sock->file: 1
+[ 5209.286452] sock->sk: 0
+[ 5209.286454] sock->ops: 0
+[ 5209.286457] Create:: socket->sk is not NULL
+[ 5209.286459] sk->sk_state: 7
+[ 5209.286461] sk->sk_type: 2
+[ 5209.286463] sk->sk_err: 0
+[ 5209.286465] sk->sk_shutdown: 0
+[ 5209.286468] sk->sk_lock->slock: 0
+[ 5209.286470] sk->sk_rcv_saddr: 0
+[ 5209.286472] sk->sk_daddr: 0
+[ 5209.286474] sk->sk_family: 2
+[ 5209.286476] sk->sk_sndbuf: 212992
+[ 5209.286479] sk->sk_rcvbuf: 212992
+[ 5209.286481] sk->sk_write_space: 0
+[ 5209.286484] sk->sk_data_ready: 0
+[ 5209.286486] /// END CREATE SOCKET ///////
+[ 5209.286496] /// MAP SOCKET ///////
+[ 5209.286498] After Map:: socket is not NULL
+[ 5209.286500] sock->state: 1
+[ 5209.286503] sock->type: 2
+[ 5209.286505] sock->flags: 0
+[ 5209.286507] sock->wq: 0
+[ 5209.286509] sock->file: 0
+[ 5209.286511] sock->sk: 0
+[ 5209.286513] sock->ops: 0
+[ 5209.286515] Map:: sk is not NULL
+[ 5209.286517] sk->sk_state: 7
+[ 5209.286520] sk->sk_type: 2
+[ 5209.286522] sk->sk_err: 0
+[ 5209.286524] sk->sk_shutdown: 0
+[ 5209.286526] sk->sk_lock->slock: 0
+[ 5209.286528] sk->sk_rcv_saddr: 0
+[ 5209.286530] sk->sk_daddr: 0
+[ 5209.286533] sk->sk_family: 2
+[ 5209.286535] sk->sk_sndbuf: 212992
+[ 5209.286537] sk->sk_rcvbuf: 212992
+[ 5209.286541] sk->sk_write_space: 0
+[ 5209.286543] sk->sk_data_ready: 0
+[ 5209.286545] /// END MAP SOCKET ///////
+[ 5209.286571] ///////////////////////
+[ 5209.286573] @@@@socket is not NULL
+[ 5209.286576] sock->state: 1
+[ 5209.286578] sock->type: 2
+[ 5209.286580] sock->flags: 0
+[ 5209.286584] sock->wq: 0
+[ 5209.286586] sock->file: 0
+[ 5209.286588] sock->sk: 0
+[ 5209.286590] sock->ops: 0
+[ 5209.286592] socket->sk is not NULL
+[ 5209.286595] sk->sk_state: 7
+[ 5209.286597] sk->sk_type: 2
+[ 5209.286599] sk->sk_err: 0
+[ 5209.286602] sk->sk_shutdown: 0
+[ 5209.286604] sk->sk_lock->slock: 0
+[ 5209.286606] sk->sk_rcv_saddr: 0
+[ 5209.286608] sk->sk_daddr: 0
+[ 5209.286611] sk->sk_family: 2
+[ 5209.286613] sk->sk_sndbuf: 212992
+[ 5209.286615] sk->sk_rcvbuf: 212992
+[ 5209.286618] sk->sk_write_space: 0
+[ 5209.286620] sk->sk_data_ready: 0
+[ 5209.286622] ///////////////////////
+[ 5209.286624] ///////////////////////
+[ 5209.286626] ====after setsockopt security check - socket is not NULL
+[ 5209.286629] sock->state: 1
+[ 5209.286631] sock->type: 2
+[ 5209.286634] sock->flags: 0
+[ 5209.286636] sock->wq: 0
+[ 5209.286638] sock->file: 0
+[ 5209.286640] sock->sk: 0
+[ 5209.286643] sock->ops: 0
+[ 5209.286644] socket->sk is not NULL
+[ 5209.286648] sk->sk_state: 7
+[ 5209.286650] sk->sk_type: 2
+[ 5209.286652] sk->sk_err: 0
+[ 5209.286654] sk->sk_shutdown: 0
+[ 5209.286656] sk->sk_lock->slock: 0
+[ 5209.286658] sk->sk_rcv_saddr: 0
+[ 5209.286660] sk->sk_daddr: 0
+[ 5209.286662] sk->sk_family: 2
+[ 5209.286664] sk->sk_sndbuf: 212992
+[ 5209.286666] sk->sk_rcvbuf: 212992
+[ 5209.286668] sk->sk_write_space: 0
+[ 5209.286670] sk->sk_data_ready: 0
+[ 5209.286671] ///////////////////////
+[ 5209.286674] /// do_ip_setsockopt1 ////////
+[ 5209.286676] do_ip_setsockopt1:: socket->sk is not NULL
+[ 5209.286678] sk->sk_state: 7
+[ 5209.286679] sk->sk_type: 2
+[ 5209.286681] sk->sk_err: 0
+[ 5209.286683] sk->sk_shutdown: 0
+[ 5209.286685] sk->sk_lock->slock: 0
+[ 5209.286687] sk->sk_rcv_saddr: 0
+[ 5209.286689] sk->sk_daddr: 0
+[ 5209.286691] sk->sk_family: 2
+[ 5209.286693] sk->sk_sndbuf: 212992
+[ 5209.286695] sk->sk_rcvbuf: 212992
+[ 5209.286697] sk->sk_write_space: 0
+[ 5209.286699] sk->sk_data_ready: 0
+[ 5209.286700] ///////////////////////
+[ 5209.286704] /// do_ip_setsockopt b4  release_sock////////
+[ 5209.286705] do_ip_setsockopt b4  release_sock:: socket->sk is not NULL
+[ 5209.286707] sk->sk_state: 7
+[ 5209.286709] sk->sk_type: 2
+[ 5209.286711] sk->sk_err: 0
+[ 5209.286713] sk->sk_shutdown: 0
+[ 5209.286715] sk->sk_lock->slock: 0
+[ 5209.286717] sk->sk_rcv_saddr: 0
+[ 5209.286718] sk->sk_daddr: 0
+[ 5209.286720] sk->sk_family: 2
+[ 5209.286722] sk->sk_sndbuf: 212992
+[ 5209.286724] sk->sk_rcvbuf: 212992
+[ 5209.286726] sk->sk_write_space: 0
+[ 5209.286728] sk->sk_data_ready: 0
+[ 5209.286729] ///////////////////////
+[ 5209.286732] /// do_ip_setsockopt after  release_sock////////
+[ 5209.286733] do_ip_setsockopt after  release_sock:: socket->sk is not NULL
+[ 5209.286735] sk->sk_state: 7
+[ 5209.286737] sk->sk_type: 2
+[ 5209.286739] sk->sk_err: 0
+[ 5209.286741] sk->sk_shutdown: 0
+[ 5209.286743] sk->sk_lock->slock: 0
+[ 5209.286744] sk->sk_rcv_saddr: 0
+[ 5209.286746] sk->sk_daddr: 0
+[ 5209.286748] sk->sk_family: 2
+[ 5209.286750] sk->sk_sndbuf: 212992
+[ 5209.286752] sk->sk_rcvbuf: 212992
+[ 5209.286754] sk->sk_write_space: 0
+[ 5209.286756] sk->sk_data_ready: 0
+[ 5209.286757] ///////////////////////
+[ 5209.286759] ///////////////////////
+[ 5209.286761] ****after generic or protoclspecific - socket is not NULL
+[ 5209.286763] sock->state: 1
+[ 5209.286764] sock->type: 2
+[ 5209.286766] sock->flags: 0
+[ 5209.286768] sock->wq: 0
+[ 5209.286770] sock->file: 0
+[ 5209.286772] sock->sk: 0
+[ 5209.286774] sock->ops: 0
+[ 5209.286775] socket->sk is not NULL
+[ 5209.286777] sk->sk_state: 7
+[ 5209.286779] sk->sk_type: 2
+[ 5209.286781] sk->sk_err: 0
+[ 5209.286783] sk->sk_shutdown: 0
+[ 5209.286785] sk->sk_lock->slock: 0
+[ 5209.286786] sk->sk_rcv_saddr: 0
+[ 5209.286788] sk->sk_daddr: 0
+[ 5209.286790] sk->sk_family: 2
+[ 5209.286792] sk->sk_sndbuf: 212992
+[ 5209.286794] sk->sk_rcvbuf: 212992
+[ 5209.286796] sk->sk_write_space: 0
+[ 5209.286798] sk->sk_data_ready: 0
+[ 5209.286799] ///////////////////////
+[ 5209.286801] /////// After out_put: /////////
+[ 5209.286803] !!!! After out_put: socket is not NULL
+[ 5209.286805] sock->state: 1
+[ 5209.286806] sock->type: 2
+[ 5209.286808] sock->flags: 0
+[ 5209.286810] sock->wq: 0
+[ 5209.286812] sock->file: 0
+[ 5209.286814] sock->sk: 0
+[ 5209.286816] sock->ops: 0
+[ 5209.286817] socket->sk is not NULL
+[ 5209.286819] sk->sk_state: 7
+[ 5209.286821] sk->sk_type: 2
+[ 5209.286823] sk->sk_err: 0
+[ 5209.286824] sk->sk_shutdown: 0
+[ 5209.286826] sk->sk_lock->slock: 0
+[ 5209.286828] sk->sk_rcv_saddr: 0
+[ 5209.286830] sk->sk_daddr: 0
+[ 5209.286832] sk->sk_family: 2
+[ 5209.286834] sk->sk_sndbuf: 212992
+[ 5209.286836] sk->sk_rcvbuf: 212992
+[ 5209.286838] sk->sk_write_space: 0
+[ 5209.286839] sk->sk_data_ready: 0
+[ 5209.286841] ///////////////////////
+[ 5209.286843] /////// after setSockopt fput_light /////////
+[ 5209.286844] &&&& fput_light: socket is not NULL
+[ 5209.286846] sock->state: 1
+[ 5209.286848] sock->type: 2
+[ 5209.286850] sock->flags: 0
+[ 5209.286852] sock->wq: 0
+[ 5209.286853] sock->file: 0
+[ 5209.286855] sock->sk: 0
+[ 5209.286857] sock->ops: 0
+[ 5209.286859] socket->sk is not NULL
+[ 5209.286861] sk->sk_state: 7
+[ 5209.286862] sk->sk_type: 2
+[ 5209.286864] sk->sk_err: 0
+[ 5209.286866] sk->sk_shutdown: 0
+[ 5209.286868] sk->sk_lock->slock: 0
+[ 5209.286870] sk->sk_rcv_saddr: 0
+[ 5209.286872] sk->sk_daddr: 0
+[ 5209.286874] sk->sk_family: 2
+[ 5209.286876] sk->sk_sndbuf: 212992
+[ 5209.286878] sk->sk_rcvbuf: 212992
+[ 5209.286879] sk->sk_write_space: 0
+[ 5209.286881] sk->sk_data_ready: 0
+[ 5209.286883] ///////////////////////
+[ 5209.286903] ///////////////////////
+[ 5209.286905] Connect1-socket is not NULL
+[ 5209.286907] sock->state: 1
+[ 5209.286909] sock->type: 2
+[ 5209.286910] sock->flags: 0
+[ 5209.286912] sock->wq: 0
+[ 5209.286914] sock->file: 0
+[ 5209.286916] sock->sk: 0
+[ 5209.286918] sock->ops: 0
+[ 5209.286919] Connectsocket->sk is not NULL
+[ 5209.286921] sk->sk_state: 7
+[ 5209.286923] sk->sk_type: 2
+[ 5209.286925] sk->sk_err: 0
+[ 5209.286927] sk->sk_shutdown: 0
+[ 5209.286929] sk->sk_lock->slock: 0
+[ 5209.286930] sk->sk_rcv_saddr: 0
+[ 5209.286932] sk->sk_daddr: 0
+[ 5209.286934] sk->sk_family: 2
+[ 5209.286936] sk->sk_sndbuf: 212992
+[ 5209.286938] sk->sk_rcvbuf: 212992
+[ 5209.286940] sk->sk_write_space: 0
+[ 5209.286942] sk->sk_data_ready: 0
+[ 5209.286944] ///////////////////////
+[ 5209.286957] ///////////////////////
+[ 5209.286959] Connect2-socket is not NULL
+[ 5209.286961] sock->state: 1
+[ 5209.286963] sock->type: 2
+[ 5209.286965] sock->flags: 0
+[ 5209.286967] sock->wq: 0
+[ 5209.286968] sock->file: 0
+[ 5209.286970] sock->sk: 0
+[ 5209.286972] sock->ops: 0
+[ 5209.286974] ///////////////////////
+[ 5209.312230] /// CONSTANTS ///////
+[ 5209.312234] family: 16
+[ 5209.312235] type: 3
+[ 5209.312237] protocol: 0
+[ 5209.312238] SOCK_CLOEXEC: 524288
+[ 5209.312240] O_CLOEXEC: 524288
+[ 5209.312241] SOCK_MAX: 11
+[ 5209.312242] SOCK_TYPE_MASK: 15
+[ 5209.312243] sock: 0
+[ 5209.312245] /// END CONSTANTS ///////
+[ 5209.312246] /// CONSTANTS 2 ///////
+[ 5209.312247] flags: 0
+[ 5209.312248] type: 3
+[ 5209.312249] /// END CONSTANTS 2 ///////
+[ 5209.312250] /// CONSTANTS 3 ///////
+[ 5209.312252] flags: 0
+[ 5209.312253] /// END CONSTANTS 3 ///////
+[ 5209.312261] /// CREATE SOCKET ///////
+[ 5209.312262] Connect1-socket is not NULL
+[ 5209.312263] sock->state: 1
+[ 5209.312264] sock->type: 3
+[ 5209.312266] sock->flags: 0
+[ 5209.312267] sock->wq: 0
+[ 5209.312268] sock->file: 1
+[ 5209.312270] sock->sk: 0
+[ 5209.312271] sock->ops: 0
+[ 5209.312272] Create:: socket->sk is not NULL
+[ 5209.312273] sk->sk_state: 7
+[ 5209.312275] sk->sk_type: 3
+[ 5209.312276] sk->sk_err: 0
+[ 5209.312277] sk->sk_shutdown: 0
+[ 5209.312278] sk->sk_lock->slock: 0
+[ 5209.312280] sk->sk_rcv_saddr: 0
+[ 5209.312281] sk->sk_daddr: 0
+[ 5209.312282] sk->sk_family: 16
+[ 5209.312283] sk->sk_sndbuf: 212992
+[ 5209.312285] sk->sk_rcvbuf: 212992
+[ 5209.312286] sk->sk_write_space: 0
+[ 5209.312287] sk->sk_data_ready: 0
+[ 5209.312288] /// END CREATE SOCKET ///////
+[ 5209.312294] /// MAP SOCKET ///////
+[ 5209.312295] After Map:: socket is not NULL
+[ 5209.312297] sock->state: 1
+[ 5209.312298] sock->type: 3
+[ 5209.312299] sock->flags: 0
+[ 5209.312300] sock->wq: 0
+[ 5209.312302] sock->file: 0
+[ 5209.312303] sock->sk: 0
+[ 5209.312304] sock->ops: 0
+[ 5209.312305] Map:: sk is not NULL
+[ 5209.312306] sk->sk_state: 7
+[ 5209.312308] sk->sk_type: 3
+[ 5209.312309] sk->sk_err: 0
+[ 5209.312310] sk->sk_shutdown: 0
+[ 5209.312311] sk->sk_lock->slock: 0
+[ 5209.312313] sk->sk_rcv_saddr: 0
+[ 5209.312314] sk->sk_daddr: 0
+[ 5209.312315] sk->sk_family: 16
+[ 5209.312316] sk->sk_sndbuf: 212992
+[ 5209.312318] sk->sk_rcvbuf: 212992
+[ 5209.312319] sk->sk_write_space: 0
+[ 5209.312320] sk->sk_data_ready: 0
+[ 5209.312321] /// END MAP SOCKET ///////
+[ 5209.312323] ///////////////////////
+[ 5209.312324] Bind1-socket is not NULL
+[ 5209.312325] sock->state: 1
+[ 5209.312327] sock->type: 3
+[ 5209.312328] sock->flags: 0
+[ 5209.312329] sock->wq: 0
+[ 5209.312330] sock->file: 0
+[ 5209.312332] sock->sk: 0
+[ 5209.312333] sock->ops: 0
+[ 5209.312334] Connectsocket->sk is not NULL
+[ 5209.312335] sk->sk_state: 7
+[ 5209.312336] sk->sk_type: 3
+[ 5209.312338] sk->sk_err: 0
+[ 5209.312339] sk->sk_shutdown: 0
+[ 5209.312340] sk->sk_lock->slock: 0
+[ 5209.312341] sk->sk_rcv_saddr: 0
+[ 5209.312342] sk->sk_daddr: 0
+[ 5209.312344] sk->sk_family: 16
+[ 5209.312345] sk->sk_sndbuf: 212992
+[ 5209.312346] sk->sk_rcvbuf: 212992
+[ 5209.312348] sk->sk_write_space: 0
+[ 5209.312349] sk->sk_data_ready: 0
+[ 5209.312350] ///////////////////////
+[ 5209.312354] ///////////////////////
+[ 5209.312355] Bind2:: socket is not NULL
+[ 5209.312356] sock->state: 1
+[ 5209.312357] sock->type: 3
+[ 5209.312359] sock->flags: 0
+[ 5209.312360] sock->wq: 0
+[ 5209.312361] sock->file: 0
+[ 5209.312362] sock->sk: 0
+[ 5209.312363] sock->ops: 0
+[ 5209.312364] Bind2:: sk is not NULL
+[ 5209.312366] sk->sk_state: 7
+[ 5209.312367] sk->sk_type: 3
+[ 5209.312368] sk->sk_err: 0
+[ 5209.312369] sk->sk_shutdown: 0
+[ 5209.312371] sk->sk_lock->slock: 0
+[ 5209.312372] sk->sk_rcv_saddr: 0
+[ 5209.312373] sk->sk_daddr: 0
+[ 5209.312374] sk->sk_family: 16
+[ 5209.312376] sk->sk_sndbuf: 212992
+[ 5209.312377] sk->sk_rcvbuf: 212992
+[ 5209.312378] sk->sk_write_space: 0
+[ 5209.312379] sk->sk_data_ready: 0
+[ 5209.312381] ///////////////////////
+[ 5209.312424] /// CONSTANTS ///////
+[ 5209.312426] family: 2
+[ 5209.312427] type: 524290
+[ 5209.312428] protocol: 0
+[ 5209.312429] SOCK_CLOEXEC: 524288
+[ 5209.312431] O_CLOEXEC: 524288
+[ 5209.312432] SOCK_MAX: 11
+[ 5209.312433] SOCK_TYPE_MASK: 15
+[ 5209.312435] sock: 0
+[ 5209.312436] /// END CONSTANTS ///////
+[ 5209.312437] /// CONSTANTS 2 ///////
+[ 5209.312438] flags: 524288
+[ 5209.312439] type: 2
+[ 5209.312440] /// END CONSTANTS 2 ///////
+[ 5209.312441] /// CONSTANTS 3 ///////
+[ 5209.312443] flags: 524288
+[ 5209.312444] /// END CONSTANTS 3 ///////
+[ 5209.312447] /// CREATE SOCKET ///////
+[ 5209.312448] Connect1-socket is not NULL
+[ 5209.312449] sock->state: 1
+[ 5209.312451] sock->type: 2
+[ 5209.312452] sock->flags: 0
+[ 5209.312453] sock->wq: 0
+[ 5209.312454] sock->file: 1
+[ 5209.312455] sock->sk: 0
+[ 5209.312457] sock->ops: 0
+[ 5209.312458] Create:: socket->sk is not NULL
+[ 5209.312459] sk->sk_state: 7
+[ 5209.312460] sk->sk_type: 2
+[ 5209.312461] sk->sk_err: 0
+[ 5209.312463] sk->sk_shutdown: 0
+[ 5209.312464] sk->sk_lock->slock: 0
+[ 5209.312465] sk->sk_rcv_saddr: 0
+[ 5209.312466] sk->sk_daddr: 0
+[ 5209.312467] sk->sk_family: 2
+[ 5209.312469] sk->sk_sndbuf: 212992
+[ 5209.312470] sk->sk_rcvbuf: 212992
+[ 5209.312471] sk->sk_write_space: 0
+[ 5209.312472] sk->sk_data_ready: 0
+[ 5209.312473] /// END CREATE SOCKET ///////
+[ 5209.312476] /// MAP SOCKET ///////
+[ 5209.312477] After Map:: socket is not NULL
+[ 5209.312478] sock->state: 1
+[ 5209.312479] sock->type: 2
+[ 5209.312481] sock->flags: 0
+[ 5209.312482] sock->wq: 0
+[ 5209.312483] sock->file: 0
+[ 5209.312484] sock->sk: 0
+[ 5209.312485] sock->ops: 0
+[ 5209.312486] Map:: sk is not NULL
+[ 5209.312488] sk->sk_state: 7
+[ 5209.312489] sk->sk_type: 2
+[ 5209.312490] sk->sk_err: 0
+[ 5209.312491] sk->sk_shutdown: 0
+[ 5209.312493] sk->sk_lock->slock: 0
+[ 5209.312494] sk->sk_rcv_saddr: 0
+[ 5209.312495] sk->sk_daddr: 0
+[ 5209.312496] sk->sk_family: 2
+[ 5209.312498] sk->sk_sndbuf: 212992
+[ 5209.312499] sk->sk_rcvbuf: 212992
+[ 5209.312500] sk->sk_write_space: 0
+[ 5209.312501] sk->sk_data_ready: 0
+[ 5209.312502] /// END MAP SOCKET ///////
+[ 5209.312504] ///////////////////////
+[ 5209.312505] Connect1-socket is not NULL
+[ 5209.312506] sock->state: 1
+[ 5209.312507] sock->type: 2
+[ 5209.312508] sock->flags: 0
+[ 5209.312510] sock->wq: 0
+[ 5209.312511] sock->file: 0
+[ 5209.312512] sock->sk: 0
+[ 5209.312513] sock->ops: 0
+[ 5209.312514] Connectsocket->sk is not NULL
+[ 5209.312516] sk->sk_state: 7
+[ 5209.312517] sk->sk_type: 2
+[ 5209.312518] sk->sk_err: 0
+[ 5209.312519] sk->sk_shutdown: 0
+[ 5209.312521] sk->sk_lock->slock: 0
+[ 5209.312522] sk->sk_rcv_saddr: 0
+[ 5209.312523] sk->sk_daddr: 0
+[ 5209.312524] sk->sk_family: 2
+[ 5209.312526] sk->sk_sndbuf: 212992
+[ 5209.312527] sk->sk_rcvbuf: 212992
+[ 5209.312528] sk->sk_write_space: 0
+[ 5209.312529] sk->sk_data_ready: 0
+[ 5209.312530] ///////////////////////
+[ 5209.312538] ///////////////////////
+[ 5209.312539] Connect2-socket is not NULL
+[ 5209.312540] sock->state: 1
+[ 5209.312541] sock->type: 2
+[ 5209.312543] sock->flags: 0
+[ 5209.312544] sock->wq: 0
+[ 5209.312545] sock->file: 0
+[ 5209.312546] sock->sk: 0
+[ 5209.312547] sock->ops: 0
+[ 5209.312549] ///////////////////////
+[ 5209.312551] ///////////////////////
+[ 5209.312552] Connect1-socket is not NULL
+[ 5209.312554] sock->state: 1
+[ 5209.312555] sock->type: 2
+[ 5209.312556] sock->flags: 0
+[ 5209.312557] sock->wq: 0
+[ 5209.312558] sock->file: 0
+[ 5209.312560] sock->sk: 0
+[ 5209.312561] sock->ops: 0
+[ 5209.312562] Connectsocket->sk is not NULL
+[ 5209.312563] sk->sk_state: 1
+[ 5209.312564] sk->sk_type: 2
+[ 5209.312565] sk->sk_err: 0
+[ 5209.312567] sk->sk_shutdown: 0
+[ 5209.312568] sk->sk_lock->slock: 0
+[ 5209.312569] sk->sk_rcv_saddr: 251789322
+[ 5209.312571] sk->sk_daddr: 828095835
+[ 5209.312572] sk->sk_family: 2
+[ 5209.312573] sk->sk_sndbuf: 212992
+[ 5209.312574] sk->sk_rcvbuf: 212992
+[ 5209.312576] sk->sk_write_space: 0
+[ 5209.312577] sk->sk_data_ready: 0
+[ 5209.312578] ///////////////////////
+[ 5209.312580] ///////////////////////
+[ 5209.312581] Connect2-socket is not NULL
+[ 5209.312582] sock->state: 1
+[ 5209.312583] sock->type: 2
+[ 5209.312584] sock->flags: 0
+[ 5209.312585] sock->wq: 0
+[ 5209.312587] sock->file: 0
+[ 5209.312588] sock->sk: 0
+[ 5209.312589] sock->ops: 0
+[ 5209.312590] ///////////////////////
+[ 5209.312591] ///////////////////////
+[ 5209.312592] Connect1-socket is not NULL
+[ 5209.312594] sock->state: 1
+[ 5209.312595] sock->type: 2
+[ 5209.312596] sock->flags: 0
+[ 5209.312597] sock->wq: 0
+[ 5209.312598] sock->file: 0
+[ 5209.312599] sock->sk: 0
+[ 5209.312601] sock->ops: 0
+[ 5209.312602] Connectsocket->sk is not NULL
+[ 5209.312603] sk->sk_state: 7
+[ 5209.312604] sk->sk_type: 2
+[ 5209.312605] sk->sk_err: 0
+[ 5209.312607] sk->sk_shutdown: 0
+[ 5209.312608] sk->sk_lock->slock: 0
+[ 5209.312609] sk->sk_rcv_saddr: 0
+[ 5209.312610] sk->sk_daddr: 0
+[ 5209.312611] sk->sk_family: 2
+[ 5209.312613] sk->sk_sndbuf: 212992
+[ 5209.312614] sk->sk_rcvbuf: 212992
+[ 5209.312615] sk->sk_write_space: 0
+[ 5209.312616] sk->sk_data_ready: 0
+[ 5209.312617] ///////////////////////
+[ 5209.312621] ///////////////////////
+[ 5209.312622] Connect2-socket is not NULL
+[ 5209.312623] sock->state: 1
+[ 5209.312624] sock->type: 2
+[ 5209.312625] sock->flags: 0
+[ 5209.312627] sock->wq: 0
+[ 5209.312628] sock->file: 0
+[ 5209.312629] sock->sk: 0
+[ 5209.312630] sock->ops: 0
+[ 5209.312631] ///////////////////////
+[ 5209.312633] ///////////////////////
+[ 5209.312634] Connect1-socket is not NULL
+[ 5209.312635] sock->state: 1
+[ 5209.312637] sock->type: 2
+[ 5209.312638] sock->flags: 0
+[ 5209.312639] sock->wq: 0
+[ 5209.312640] sock->file: 0
+[ 5209.312641] sock->sk: 0
+[ 5209.312643] sock->ops: 0
+[ 5209.312644] Connectsocket->sk is not NULL
+[ 5209.312645] sk->sk_state: 1
+[ 5209.312646] sk->sk_type: 2
+[ 5209.312647] sk->sk_err: 0
+[ 5209.312648] sk->sk_shutdown: 0
+[ 5209.312650] sk->sk_lock->slock: 0
+[ 5209.312651] sk->sk_rcv_saddr: 251789322
+[ 5209.312652] sk->sk_daddr: 817790393
+[ 5209.312654] sk->sk_family: 2
+[ 5209.312655] sk->sk_sndbuf: 212992
+[ 5209.312656] sk->sk_rcvbuf: 212992
+[ 5209.312657] sk->sk_write_space: 0
+[ 5209.312658] sk->sk_data_ready: 0
+[ 5209.312659] ///////////////////////
+[ 5209.312661] ///////////////////////
+[ 5209.312662] Connect2-socket is not NULL
+[ 5209.312663] sock->state: 1
+[ 5209.312664] sock->type: 2
+[ 5209.312666] sock->flags: 0
+[ 5209.312667] sock->wq: 0
+[ 5209.312668] sock->file: 0
+[ 5209.312669] sock->sk: 0
+[ 5209.312670] sock->ops: 0
+[ 5209.312671] ///////////////////////
+[ 5209.312673] ///////////////////////
+[ 5209.312674] Connect1-socket is not NULL
+[ 5209.312675] sock->state: 1
+[ 5209.312676] sock->type: 2
+[ 5209.312677] sock->flags: 0
+[ 5209.312678] sock->wq: 0
+[ 5209.312679] sock->file: 0
+[ 5209.312681] sock->sk: 0
+[ 5209.312682] sock->ops: 0
+[ 5209.312683] Connectsocket->sk is not NULL
+[ 5209.312684] sk->sk_state: 7
+[ 5209.312685] sk->sk_type: 2
+[ 5209.312686] sk->sk_err: 0
+[ 5209.312688] sk->sk_shutdown: 0
+[ 5209.312689] sk->sk_lock->slock: 0
+[ 5209.312690] sk->sk_rcv_saddr: 0
+[ 5209.312691] sk->sk_daddr: 0
+[ 5209.312693] sk->sk_family: 2
+[ 5209.312694] sk->sk_sndbuf: 212992
+[ 5209.312695] sk->sk_rcvbuf: 212992
+[ 5209.312696] sk->sk_write_space: 0
+[ 5209.312698] sk->sk_data_ready: 0
+[ 5209.312699] ///////////////////////
+[ 5209.312702] ///////////////////////
+[ 5209.312703] Connect2-socket is not NULL
+[ 5209.312704] sock->state: 1
+[ 5209.312705] sock->type: 2
+[ 5209.312706] sock->flags: 0
+[ 5209.312708] sock->wq: 0
+[ 5209.312709] sock->file: 0
+[ 5209.312710] sock->sk: 0
+[ 5209.312711] sock->ops: 0
+[ 5209.312712] ///////////////////////
+[ 5209.312714] ///////////////////////
+[ 5209.312715] Connect1-socket is not NULL
+[ 5209.312716] sock->state: 1
+[ 5209.312717] sock->type: 2
+[ 5209.312719] sock->flags: 0
+[ 5209.312720] sock->wq: 0
+[ 5209.312721] sock->file: 0
+[ 5209.312722] sock->sk: 0
+[ 5209.312723] sock->ops: 0
+[ 5209.312724] Connectsocket->sk is not NULL
+[ 5209.312726] sk->sk_state: 1
+[ 5209.312727] sk->sk_type: 2
+[ 5209.312728] sk->sk_err: 0
+[ 5209.312729] sk->sk_shutdown: 0
+[ 5209.312730] sk->sk_lock->slock: 0
+[ 5209.312732] sk->sk_rcv_saddr: 251789322
+[ 5209.312733] sk->sk_daddr: 314473913
+[ 5209.312734] sk->sk_family: 2
+[ 5209.312735] sk->sk_sndbuf: 212992
+[ 5209.312737] sk->sk_rcvbuf: 212992
+[ 5209.312738] sk->sk_write_space: 0
+[ 5209.312739] sk->sk_data_ready: 0
+[ 5209.312740] ///////////////////////
+[ 5209.312742] ///////////////////////
+[ 5209.312743] Connect2-socket is not NULL
+[ 5209.312744] sock->state: 1
+[ 5209.312745] sock->type: 2
+[ 5209.312746] sock->flags: 0
+[ 5209.312747] sock->wq: 0
+[ 5209.312749] sock->file: 0
+[ 5209.312750] sock->sk: 0
+[ 5209.312751] sock->ops: 0
+[ 5209.312752] ///////////////////////
+[ 5209.312753] ///////////////////////
+[ 5209.312754] Connect1-socket is not NULL
+[ 5209.312755] sock->state: 1
+[ 5209.312757] sock->type: 2
+[ 5209.312758] sock->flags: 0
+[ 5209.312759] sock->wq: 0
+[ 5209.312760] sock->file: 0
+[ 5209.312761] sock->sk: 0
+[ 5209.312762] sock->ops: 0
+[ 5209.312763] Connectsocket->sk is not NULL
+[ 5209.312765] sk->sk_state: 7
+[ 5209.312766] sk->sk_type: 2
+[ 5209.312767] sk->sk_err: 0
+[ 5209.312768] sk->sk_shutdown: 0
+[ 5209.312769] sk->sk_lock->slock: 0
+[ 5209.312771] sk->sk_rcv_saddr: 0
+[ 5209.312772] sk->sk_daddr: 0
+[ 5209.312773] sk->sk_family: 2
+[ 5209.312774] sk->sk_sndbuf: 212992
+[ 5209.312776] sk->sk_rcvbuf: 212992
+[ 5209.312777] sk->sk_write_space: 0
+[ 5209.312778] sk->sk_data_ready: 0
+[ 5209.312779] ///////////////////////
+[ 5209.312782] ///////////////////////
+[ 5209.312783] Connect2-socket is not NULL
+[ 5209.312784] sock->state: 1
+[ 5209.312785] sock->type: 2
+[ 5209.312787] sock->flags: 0
+[ 5209.312788] sock->wq: 0
+[ 5209.312789] sock->file: 0
+[ 5209.312790] sock->sk: 0
+[ 5209.312791] sock->ops: 0
+[ 5209.312792] ///////////////////////
+[ 5209.312794] ///////////////////////
+[ 5209.312795] Connect1-socket is not NULL
+[ 5209.312797] sock->state: 1
+[ 5209.312798] sock->type: 2
+[ 5209.312799] sock->flags: 0
+[ 5209.312800] sock->wq: 0
+[ 5209.312801] sock->file: 0
+[ 5209.312802] sock->sk: 0
+[ 5209.312804] sock->ops: 0
+[ 5209.312805] Connectsocket->sk is not NULL
+[ 5209.312806] sk->sk_state: 1
+[ 5209.312807] sk->sk_type: 2
+[ 5209.312808] sk->sk_err: 0
+[ 5209.312809] sk->sk_shutdown: 0
+[ 5209.312811] sk->sk_lock->slock: 0
+[ 5209.312812] sk->sk_rcv_saddr: 251789322
+[ 5209.312813] sk->sk_daddr: 544832034
+[ 5209.312814] sk->sk_family: 2
+[ 5209.312816] sk->sk_sndbuf: 212992
+[ 5209.312817] sk->sk_rcvbuf: 212992
+[ 5209.312818] sk->sk_write_space: 0
+[ 5209.312819] sk->sk_data_ready: 0
+[ 5209.312820] ///////////////////////
+[ 5209.312822] ///////////////////////
+[ 5209.312823] Connect2-socket is not NULL
+[ 5209.312824] sock->state: 1
+[ 5209.312825] sock->type: 2
+[ 5209.312827] sock->flags: 0
+[ 5209.312828] sock->wq: 0
+[ 5209.312829] sock->file: 0
+[ 5209.312830] sock->sk: 0
+[ 5209.312831] sock->ops: 0
+[ 5209.312832] ///////////////////////
+[ 5209.312834] ///////////////////////
+[ 5209.312835] Connect1-socket is not NULL
+[ 5209.312836] sock->state: 1
+[ 5209.312837] sock->type: 2
+[ 5209.312838] sock->flags: 0
+[ 5209.312839] sock->wq: 0
+[ 5209.312841] sock->file: 0
+[ 5209.312842] sock->sk: 0
+[ 5209.312843] sock->ops: 0
+[ 5209.312844] Connectsocket->sk is not NULL
+[ 5209.312845] sk->sk_state: 7
+[ 5209.312846] sk->sk_type: 2
+[ 5209.312848] sk->sk_err: 0
+[ 5209.312849] sk->sk_shutdown: 0
+[ 5209.312850] sk->sk_lock->slock: 0
+[ 5209.312851] sk->sk_rcv_saddr: 0
+[ 5209.312853] sk->sk_daddr: 0
+[ 5209.312854] sk->sk_family: 2
+[ 5209.312855] sk->sk_sndbuf: 212992
+[ 5209.312856] sk->sk_rcvbuf: 212992
+[ 5209.312857] sk->sk_write_space: 0
+[ 5209.312859] sk->sk_data_ready: 0
+[ 5209.312860] ///////////////////////
+[ 5209.312863] ///////////////////////
+[ 5209.312864] Connect2-socket is not NULL
+[ 5209.312865] sock->state: 1
+[ 5209.312866] sock->type: 2
+[ 5209.312867] sock->flags: 0
+[ 5209.312869] sock->wq: 0
+[ 5209.312870] sock->file: 0
+[ 5209.312871] sock->sk: 0
+[ 5209.312872] sock->ops: 0
+[ 5209.312873] ///////////////////////
+[ 5209.312875] ///////////////////////
+[ 5209.312876] Connect1-socket is not NULL
+[ 5209.312877] sock->state: 1
+[ 5209.312878] sock->type: 2
+[ 5209.312880] sock->flags: 0
+[ 5209.312881] sock->wq: 0
+[ 5209.312882] sock->file: 0
+[ 5209.312883] sock->sk: 0
+[ 5209.312884] sock->ops: 0
+[ 5209.312885] Connectsocket->sk is not NULL
+[ 5209.312886] sk->sk_state: 1
+[ 5209.312888] sk->sk_type: 2
+[ 5209.312889] sk->sk_err: 0
+[ 5209.312890] sk->sk_shutdown: 0
+[ 5209.312891] sk->sk_lock->slock: 0
+[ 5209.312893] sk->sk_rcv_saddr: 251789322
+[ 5209.312894] sk->sk_daddr: 811318619
+[ 5209.312895] sk->sk_family: 2
+[ 5209.312896] sk->sk_sndbuf: 212992
+[ 5209.312898] sk->sk_rcvbuf: 212992
+[ 5209.312899] sk->sk_write_space: 0
+[ 5209.312900] sk->sk_data_ready: 0
+[ 5209.312901] ///////////////////////
+[ 5209.312903] ///////////////////////
+[ 5209.312904] Connect2-socket is not NULL
+[ 5209.312905] sock->state: 1
+[ 5209.312906] sock->type: 2
+[ 5209.312907] sock->flags: 0
+[ 5209.312908] sock->wq: 0
+[ 5209.312909] sock->file: 0
+[ 5209.312911] sock->sk: 0
+[ 5209.312912] sock->ops: 0
+[ 5209.312913] ///////////////////////
+[ 5209.312914] ///////////////////////
+[ 5209.312915] Connect1-socket is not NULL
+[ 5209.312916] sock->state: 1
+[ 5209.312917] sock->type: 2
+[ 5209.312919] sock->flags: 0
+[ 5209.312920] sock->wq: 0
+[ 5209.312921] sock->file: 0
+[ 5209.312922] sock->sk: 0
+[ 5209.312923] sock->ops: 0
+[ 5209.312924] Connectsocket->sk is not NULL
+[ 5209.312926] sk->sk_state: 7
+[ 5209.312927] sk->sk_type: 2
+[ 5209.312928] sk->sk_err: 0
+[ 5209.312929] sk->sk_shutdown: 0
+[ 5209.312930] sk->sk_lock->slock: 0
+[ 5209.312932] sk->sk_rcv_saddr: 0
+[ 5209.312933] sk->sk_daddr: 0
+[ 5209.312934] sk->sk_family: 2
+[ 5209.312935] sk->sk_sndbuf: 212992
+[ 5209.312937] sk->sk_rcvbuf: 212992
+[ 5209.312938] sk->sk_write_space: 0
+[ 5209.312939] sk->sk_data_ready: 0
+[ 5209.312940] ///////////////////////
+[ 5209.312943] ///////////////////////
+[ 5209.312944] Connect2-socket is not NULL
+[ 5209.312945] sock->state: 1
+[ 5209.312947] sock->type: 2
+[ 5209.312948] sock->flags: 0
+[ 5209.312949] sock->wq: 0
+[ 5209.312950] sock->file: 0
+[ 5209.312951] sock->sk: 0
+[ 5209.312952] sock->ops: 0
+[ 5209.312953] ///////////////////////
+[ 5209.312955] ///////////////////////
+[ 5209.312956] Connect1-socket is not NULL
+[ 5209.312958] sock->state: 1
+[ 5209.312959] sock->type: 2
+[ 5209.312960] sock->flags: 0
+[ 5209.312961] sock->wq: 0
+[ 5209.312962] sock->file: 0
+[ 5209.312964] sock->sk: 0
+[ 5209.312965] sock->ops: 0
+[ 5209.312966] Connectsocket->sk is not NULL
+[ 5209.312967] sk->sk_state: 1
+[ 5209.312968] sk->sk_type: 2
+[ 5209.312969] sk->sk_err: 0
+[ 5209.312970] sk->sk_shutdown: 0
+[ 5209.312972] sk->sk_lock->slock: 0
+[ 5209.312973] sk->sk_rcv_saddr: 251789322
+[ 5209.312974] sk->sk_daddr: 297696697
+[ 5209.312976] sk->sk_family: 2
+[ 5209.312977] sk->sk_sndbuf: 212992
+[ 5209.312978] sk->sk_rcvbuf: 212992
+[ 5209.312979] sk->sk_write_space: 0
+[ 5209.312981] sk->sk_data_ready: 0
+[ 5209.312982] ///////////////////////
+[ 5209.312983] ///////////////////////
+[ 5209.312984] Connect2-socket is not NULL
+[ 5209.312985] sock->state: 1
+[ 5209.312987] sock->type: 2
+[ 5209.312988] sock->flags: 0
+[ 5209.312989] sock->wq: 0
+[ 5209.312990] sock->file: 0
+[ 5209.312991] sock->sk: 0
+[ 5209.312992] sock->ops: 0
+[ 5209.312993] ///////////////////////
+[ 5209.312995] ///////////////////////
+[ 5209.312996] Connect1-socket is not NULL
+[ 5209.312997] sock->state: 1
+[ 5209.312998] sock->type: 2
+[ 5209.312999] sock->flags: 0
+[ 5209.313000] sock->wq: 0
+[ 5209.313002] sock->file: 0
+[ 5209.313003] sock->sk: 0
+[ 5209.313004] sock->ops: 0
+[ 5209.313005] Connectsocket->sk is not NULL
+[ 5209.313006] sk->sk_state: 7
+[ 5209.313007] sk->sk_type: 2
+[ 5209.313009] sk->sk_err: 0
+[ 5209.313010] sk->sk_shutdown: 0
+[ 5209.313011] sk->sk_lock->slock: 0
+[ 5209.313012] sk->sk_rcv_saddr: 0
+[ 5209.313013] sk->sk_daddr: 0
+[ 5209.313015] sk->sk_family: 2
+[ 5209.313016] sk->sk_sndbuf: 212992
+[ 5209.313017] sk->sk_rcvbuf: 212992
+[ 5209.313018] sk->sk_write_space: 0
+[ 5209.313020] sk->sk_data_ready: 0
+[ 5209.313021] ///////////////////////
+[ 5209.313024] ///////////////////////
+[ 5209.313025] Connect2-socket is not NULL
+[ 5209.313026] sock->state: 1
+[ 5209.313027] sock->type: 2
+[ 5209.313028] sock->flags: 0
+[ 5209.313030] sock->wq: 0
+[ 5209.313031] sock->file: 0
+[ 5209.313032] sock->sk: 0
+[ 5209.313033] sock->ops: 0
+[ 5209.313034] ///////////////////////
+[ 5209.313036] ///////////////////////
+[ 5209.313037] Connect1-socket is not NULL
+[ 5209.313038] sock->state: 1
+[ 5209.313039] sock->type: 2
+[ 5209.313041] sock->flags: 0
+[ 5209.313042] sock->wq: 0
+[ 5209.313043] sock->file: 0
+[ 5209.313044] sock->sk: 0
+[ 5209.313045] sock->ops: 0
+[ 5209.313046] Connectsocket->sk is not NULL
+[ 5209.313048] sk->sk_state: 1
+[ 5209.313049] sk->sk_type: 2
+[ 5209.313050] sk->sk_err: 0
+[ 5209.313051] sk->sk_shutdown: 0
+[ 5209.313052] sk->sk_lock->slock: 0
+[ 5209.313054] sk->sk_rcv_saddr: 251789322
+[ 5209.313055] sk->sk_daddr: 1420484643
+[ 5209.313056] sk->sk_family: 2
+[ 5209.313058] sk->sk_sndbuf: 212992
+[ 5209.313059] sk->sk_rcvbuf: 212992
+[ 5209.313060] sk->sk_write_space: 0
+[ 5209.313061] sk->sk_data_ready: 0
+[ 5209.313062] ///////////////////////
+[ 5209.313064] ///////////////////////
+[ 5209.313065] Connect2-socket is not NULL
+[ 5209.313066] sock->state: 1
+[ 5209.313067] sock->type: 2
+[ 5209.313068] sock->flags: 0
+[ 5209.313069] sock->wq: 0
+[ 5209.313071] sock->file: 0
+[ 5209.313072] sock->sk: 0
+[ 5209.313073] sock->ops: 0
+[ 5209.313074] ///////////////////////
+[ 5209.313075] ///////////////////////
+[ 5209.313076] Connect1-socket is not NULL
+[ 5209.313077] sock->state: 1
+[ 5209.313079] sock->type: 2
+[ 5209.313080] sock->flags: 0
+[ 5209.313081] sock->wq: 0
+[ 5209.313082] sock->file: 0
+[ 5209.313083] sock->sk: 0
+[ 5209.313085] sock->ops: 0
+[ 5209.313086] Connectsocket->sk is not NULL
+[ 5209.313087] sk->sk_state: 7
+[ 5209.313088] sk->sk_type: 2
+[ 5209.313089] sk->sk_err: 0
+[ 5209.313090] sk->sk_shutdown: 0
+[ 5209.313092] sk->sk_lock->slock: 0
+[ 5209.313093] sk->sk_rcv_saddr: 0
+[ 5209.313094] sk->sk_daddr: 0
+[ 5209.313095] sk->sk_family: 2
+[ 5209.313096] sk->sk_sndbuf: 212992
+[ 5209.313098] sk->sk_rcvbuf: 212992
+[ 5209.313099] sk->sk_write_space: 0
+[ 5209.313100] sk->sk_data_ready: 0
+[ 5209.313101] ///////////////////////
+[ 5209.313104] ///////////////////////
+[ 5209.313105] Connect2-socket is not NULL
+[ 5209.313106] sock->state: 1
+[ 5209.313108] sock->type: 2
+[ 5209.313109] sock->flags: 0
+[ 5209.313110] sock->wq: 0
+[ 5209.313111] sock->file: 0
+[ 5209.313112] sock->sk: 0
+[ 5209.313114] sock->ops: 0
+[ 5209.313115] ///////////////////////
+[ 5209.313117] ///////////////////////
+[ 5209.313118] Connect1-socket is not NULL
+[ 5209.313119] sock->state: 1
+[ 5209.313120] sock->type: 2
+[ 5209.313121] sock->flags: 0
+[ 5209.313122] sock->wq: 0
+[ 5209.313123] sock->file: 0
+[ 5209.313125] sock->sk: 0
+[ 5209.313126] sock->ops: 0
+[ 5209.313127] Connectsocket->sk is not NULL
+[ 5209.313128] sk->sk_state: 1
+[ 5209.313129] sk->sk_type: 2
+[ 5209.313130] sk->sk_err: 0
+[ 5209.313132] sk->sk_shutdown: 0
+[ 5209.313133] sk->sk_lock->slock: 0
+[ 5209.313134] sk->sk_rcv_saddr: 251789322
+[ 5209.313136] sk->sk_daddr: 834567609
+[ 5209.313137] sk->sk_family: 2
+[ 5209.313138] sk->sk_sndbuf: 212992
+[ 5209.313139] sk->sk_rcvbuf: 212992
+[ 5209.313140] sk->sk_write_space: 0
+[ 5209.313142] sk->sk_data_ready: 0
+[ 5209.313143] ///////////////////////
+[ 5209.313144] ///////////////////////
+[ 5209.313145] Connect2-socket is not NULL
+[ 5209.313146] sock->state: 1
+[ 5209.313148] sock->type: 2
+[ 5209.313149] sock->flags: 0
+[ 5209.313150] sock->wq: 0
+[ 5209.313151] sock->file: 0
+[ 5209.313152] sock->sk: 0
+[ 5209.313154] sock->ops: 0
+[ 5209.313155] ///////////////////////
+[ 5209.313156] ///////////////////////
+[ 5209.313157] Connect1-socket is not NULL
+[ 5209.313158] sock->state: 1
+[ 5209.313159] sock->type: 2
+[ 5209.313160] sock->flags: 0
+[ 5209.313162] sock->wq: 0
+[ 5209.313163] sock->file: 0
+[ 5209.313164] sock->sk: 0
+[ 5209.313165] sock->ops: 0
+[ 5209.313166] Connectsocket->sk is not NULL
+[ 5209.313167] sk->sk_state: 7
+[ 5209.313168] sk->sk_type: 2
+[ 5209.313170] sk->sk_err: 0
+[ 5209.313171] sk->sk_shutdown: 0
+[ 5209.313172] sk->sk_lock->slock: 0
+[ 5209.313173] sk->sk_rcv_saddr: 0
+[ 5209.313174] sk->sk_daddr: 0
+[ 5209.313176] sk->sk_family: 2
+[ 5209.313177] sk->sk_sndbuf: 212992
+[ 5209.313178] sk->sk_rcvbuf: 212992
+[ 5209.313179] sk->sk_write_space: 0
+[ 5209.313180] sk->sk_data_ready: 0
+[ 5209.313182] ///////////////////////
+[ 5209.313185] ///////////////////////
+[ 5209.313186] Connect2-socket is not NULL
+[ 5209.313187] sock->state: 1
+[ 5209.313188] sock->type: 2
+[ 5209.313189] sock->flags: 0
+[ 5209.313190] sock->wq: 0
+[ 5209.313192] sock->file: 0
+[ 5209.313193] sock->sk: 0
+[ 5209.313194] sock->ops: 0
+[ 5209.313195] ///////////////////////
+[ 5209.313200] /// CONSTANTS ///////
+[ 5209.313202] family: 10
+[ 5209.313203] type: 524290
+[ 5209.313204] protocol: 0
+[ 5209.313206] SOCK_CLOEXEC: 524288
+[ 5209.313207] O_CLOEXEC: 524288
+[ 5209.313208] SOCK_MAX: 11
+[ 5209.313210] SOCK_TYPE_MASK: 15
+[ 5209.313211] sock: 0
+[ 5209.313212] /// END CONSTANTS ///////
+[ 5209.313213] /// CONSTANTS 2 ///////
+[ 5209.313214] flags: 524288
+[ 5209.313215] type: 2
+[ 5209.313216] /// END CONSTANTS 2 ///////
+[ 5209.313218] /// CONSTANTS 3 ///////
+[ 5209.313219] flags: 524288
+[ 5209.313220] /// END CONSTANTS 3 ///////
+[ 5209.313224] /// CREATE SOCKET ///////
+[ 5209.313225] Connect1-socket is not NULL
+[ 5209.313226] sock->state: 1
+[ 5209.313227] sock->type: 2
+[ 5209.313228] sock->flags: 0
+[ 5209.313230] sock->wq: 0
+[ 5209.313231] sock->file: 1
+[ 5209.313232] sock->sk: 0
+[ 5209.313233] sock->ops: 0
+[ 5209.313234] Create:: socket->sk is not NULL
+[ 5209.313235] sk->sk_state: 7
+[ 5209.313237] sk->sk_type: 2
+[ 5209.313238] sk->sk_err: 0
+[ 5209.313239] sk->sk_shutdown: 0
+[ 5209.313240] sk->sk_lock->slock: 0
+[ 5209.313242] sk->sk_rcv_saddr: 0
+[ 5209.313243] sk->sk_daddr: 0
+[ 5209.313244] sk->sk_family: 10
+[ 5209.313245] sk->sk_sndbuf: 212992
+[ 5209.313247] sk->sk_rcvbuf: 212992
+[ 5209.313248] sk->sk_write_space: 0
+[ 5209.313249] sk->sk_data_ready: 0
+[ 5209.313250] /// END CREATE SOCKET ///////
+[ 5209.313252] /// MAP SOCKET ///////
+[ 5209.313253] After Map:: socket is not NULL
+[ 5209.313255] sock->state: 1
+[ 5209.313256] sock->type: 2
+[ 5209.313257] sock->flags: 0
+[ 5209.313258] sock->wq: 0
+[ 5209.313260] sock->file: 0
+[ 5209.313261] sock->sk: 0
+[ 5209.313262] sock->ops: 0
+[ 5209.313263] Map:: sk is not NULL
+[ 5209.313264] sk->sk_state: 7
+[ 5209.313265] sk->sk_type: 2
+[ 5209.313266] sk->sk_err: 0
+[ 5209.313268] sk->sk_shutdown: 0
+[ 5209.313269] sk->sk_lock->slock: 0
+[ 5209.313270] sk->sk_rcv_saddr: 0
+[ 5209.313271] sk->sk_daddr: 0
+[ 5209.313273] sk->sk_family: 10
+[ 5209.313274] sk->sk_sndbuf: 212992
+[ 5209.313275] sk->sk_rcvbuf: 212992
+[ 5209.313276] sk->sk_write_space: 0
+[ 5209.313278] sk->sk_data_ready: 0
+[ 5209.313279] /// END MAP SOCKET ///////
+[ 5209.313280] ///////////////////////
+[ 5209.313281] Connect1-socket is not NULL
+[ 5209.313282] sock->state: 1
+[ 5209.313284] sock->type: 2
+[ 5209.313285] sock->flags: 0
+[ 5209.313286] sock->wq: 0
+[ 5209.313287] sock->file: 0
+[ 5209.313288] sock->sk: 0
+[ 5209.313289] sock->ops: 0
+[ 5209.313290] Connectsocket->sk is not NULL
+[ 5209.313292] sk->sk_state: 7
+[ 5209.313293] sk->sk_type: 2
+[ 5209.313294] sk->sk_err: 0
+[ 5209.313295] sk->sk_shutdown: 0
+[ 5209.313296] sk->sk_lock->slock: 0
+[ 5209.313298] sk->sk_rcv_saddr: 0
+[ 5209.313299] sk->sk_daddr: 0
+[ 5209.313300] sk->sk_family: 10
+[ 5209.313301] sk->sk_sndbuf: 212992
+[ 5209.313303] sk->sk_rcvbuf: 212992
+[ 5209.313304] sk->sk_write_space: 0
+[ 5209.313305] sk->sk_data_ready: 0
+[ 5209.313306] ///////////////////////
+[ 5209.313323] ///////////////////////
+[ 5209.313324] Connect2-socket is not NULL
+[ 5209.313325] sock->state: 1
+[ 5209.313327] sock->type: 2
+[ 5209.313328] sock->flags: 0
+[ 5209.313329] sock->wq: 0
+[ 5209.313330] sock->file: 0
+[ 5209.313331] sock->sk: 0
+[ 5209.313332] sock->ops: 0
+[ 5209.313334] ///////////////////////
+[ 5209.313335] ///////////////////////
+[ 5209.313336] Connect1-socket is not NULL
+[ 5209.313337] sock->state: 1
+[ 5209.313339] sock->type: 2
+[ 5209.313340] sock->flags: 0
+[ 5209.313341] sock->wq: 0
+[ 5209.313342] sock->file: 0
+[ 5209.313343] sock->sk: 0
+[ 5209.313344] sock->ops: 0
+[ 5209.313345] Connectsocket->sk is not NULL
+[ 5209.313347] sk->sk_state: 7
+[ 5209.313348] sk->sk_type: 2
+[ 5209.313349] sk->sk_err: 0
+[ 5209.313350] sk->sk_shutdown: 0
+[ 5209.313351] sk->sk_lock->slock: 0
+[ 5209.313353] sk->sk_rcv_saddr: 0
+[ 5209.313354] sk->sk_daddr: 0
+[ 5209.313355] sk->sk_family: 10
+[ 5209.313356] sk->sk_sndbuf: 212992
+[ 5209.313358] sk->sk_rcvbuf: 212992
+[ 5209.313359] sk->sk_write_space: 0
+[ 5209.313360] sk->sk_data_ready: 0
+[ 5209.313361] ///////////////////////
+[ 5209.313363] ///////////////////////
+[ 5209.313364] Connect2-socket is not NULL
+[ 5209.313365] sock->state: 1
+[ 5209.313366] sock->type: 2
+[ 5209.313367] sock->flags: 0
+[ 5209.313369] sock->wq: 0
+[ 5209.313370] sock->file: 0
+[ 5209.313371] sock->sk: 0
+[ 5209.313372] sock->ops: 0
+[ 5209.313373] ///////////////////////
+[ 5209.313374] ///////////////////////
+[ 5209.313375] Connect1-socket is not NULL
+[ 5209.313377] sock->state: 1
+[ 5209.313378] sock->type: 2
+[ 5209.313379] sock->flags: 0
+[ 5209.313380] sock->wq: 0
+[ 5209.313381] sock->file: 0
+[ 5209.313383] sock->sk: 0
+[ 5209.313384] sock->ops: 0
+[ 5209.313385] Connectsocket->sk is not NULL
+[ 5209.313386] sk->sk_state: 7
+[ 5209.313387] sk->sk_type: 2
+[ 5209.313388] sk->sk_err: 0
+[ 5209.313389] sk->sk_shutdown: 0
+[ 5209.313391] sk->sk_lock->slock: 0
+[ 5209.313392] sk->sk_rcv_saddr: 0
+[ 5209.313393] sk->sk_daddr: 0
+[ 5209.313394] sk->sk_family: 10
+[ 5209.313396] sk->sk_sndbuf: 212992
+[ 5209.313397] sk->sk_rcvbuf: 212992
+[ 5209.313398] sk->sk_write_space: 0
+[ 5209.313399] sk->sk_data_ready: 0
+[ 5209.313400] ///////////////////////
+[ 5209.313406] ///////////////////////
+[ 5209.313407] Connect2-socket is not NULL
+[ 5209.313408] sock->state: 1
+[ 5209.313409] sock->type: 2
+[ 5209.313411] sock->flags: 0
+[ 5209.313412] sock->wq: 0
+[ 5209.313413] sock->file: 0
+[ 5209.313414] sock->sk: 0
+[ 5209.313415] sock->ops: 0
+[ 5209.313416] ///////////////////////
+[ 5209.313418] ///////////////////////
+[ 5209.313419] Connect1-socket is not NULL
+[ 5209.313420] sock->state: 1
+[ 5209.313421] sock->type: 2
+[ 5209.313422] sock->flags: 0
+[ 5209.313424] sock->wq: 0
+[ 5209.313425] sock->file: 0
+[ 5209.313426] sock->sk: 0
+[ 5209.313427] sock->ops: 0
+[ 5209.313428] Connectsocket->sk is not NULL
+[ 5209.313429] sk->sk_state: 7
+[ 5209.313431] sk->sk_type: 2
+[ 5209.313432] sk->sk_err: 0
+[ 5209.313433] sk->sk_shutdown: 0
+[ 5209.313434] sk->sk_lock->slock: 0
+[ 5209.313435] sk->sk_rcv_saddr: 0
+[ 5209.313437] sk->sk_daddr: 0
+[ 5209.313438] sk->sk_family: 10
+[ 5209.313439] sk->sk_sndbuf: 212992
+[ 5209.313440] sk->sk_rcvbuf: 212992
+[ 5209.313442] sk->sk_write_space: 0
+[ 5209.313443] sk->sk_data_ready: 0
+[ 5209.313444] ///////////////////////
+[ 5209.313445] ///////////////////////
+[ 5209.313446] Connect2-socket is not NULL
+[ 5209.313448] sock->state: 1
+[ 5209.313449] sock->type: 2
+[ 5209.313450] sock->flags: 0
+[ 5209.313451] sock->wq: 0
+[ 5209.313452] sock->file: 0
+[ 5209.313453] sock->sk: 0
+[ 5209.313455] sock->ops: 0
+[ 5209.313456] ///////////////////////
+[ 5209.313457] ///////////////////////
+[ 5209.313458] Connect1-socket is not NULL
+[ 5209.313459] sock->state: 1
+[ 5209.313460] sock->type: 2
+[ 5209.313461] sock->flags: 0
+[ 5209.313463] sock->wq: 0
+[ 5209.313464] sock->file: 0
+[ 5209.313465] sock->sk: 0
+[ 5209.313466] sock->ops: 0
+[ 5209.313467] Connectsocket->sk is not NULL
+[ 5209.313468] sk->sk_state: 7
+[ 5209.313470] sk->sk_type: 2
+[ 5209.313471] sk->sk_err: 0
+[ 5209.313472] sk->sk_shutdown: 0
+[ 5209.313473] sk->sk_lock->slock: 0
+[ 5209.313474] sk->sk_rcv_saddr: 0
+[ 5209.313476] sk->sk_daddr: 0
+[ 5209.313477] sk->sk_family: 10
+[ 5209.313478] sk->sk_sndbuf: 212992
+[ 5209.313479] sk->sk_rcvbuf: 212992
+[ 5209.313481] sk->sk_write_space: 0
+[ 5209.313482] sk->sk_data_ready: 0
+[ 5209.313483] ///////////////////////
+[ 5209.313488] ///////////////////////
+[ 5209.313489] Connect2-socket is not NULL
+[ 5209.313490] sock->state: 1
+[ 5209.313491] sock->type: 2
+[ 5209.313493] sock->flags: 0
+[ 5209.313494] sock->wq: 0
+[ 5209.313495] sock->file: 0
+[ 5209.313496] sock->sk: 0
+[ 5209.313497] sock->ops: 0
+[ 5209.313498] ///////////////////////
+[ 5209.313500] ///////////////////////
+[ 5209.313501] Connect1-socket is not NULL
+[ 5209.313502] sock->state: 1
+[ 5209.313503] sock->type: 2
+[ 5209.313504] sock->flags: 0
+[ 5209.313506] sock->wq: 0
+[ 5209.313507] sock->file: 0
+[ 5209.313508] sock->sk: 0
+[ 5209.313509] sock->ops: 0
+[ 5209.313510] Connectsocket->sk is not NULL
+[ 5209.313511] sk->sk_state: 7
+[ 5209.313513] sk->sk_type: 2
+[ 5209.313514] sk->sk_err: 0
+[ 5209.313515] sk->sk_shutdown: 0
+[ 5209.313516] sk->sk_lock->slock: 0
+[ 5209.313517] sk->sk_rcv_saddr: 0
+[ 5209.313519] sk->sk_daddr: 0
+[ 5209.313520] sk->sk_family: 10
+[ 5209.313521] sk->sk_sndbuf: 212992
+[ 5209.313522] sk->sk_rcvbuf: 212992
+[ 5209.313523] sk->sk_write_space: 0
+[ 5209.313525] sk->sk_data_ready: 0
+[ 5209.313526] ///////////////////////
+[ 5209.313527] ///////////////////////
+[ 5209.313528] Connect2-socket is not NULL
+[ 5209.313530] sock->state: 1
+[ 5209.313531] sock->type: 2
+[ 5209.313532] sock->flags: 0
+[ 5209.313533] sock->wq: 0
+[ 5209.313534] sock->file: 0
+[ 5209.313535] sock->sk: 0
+[ 5209.313537] sock->ops: 0
+[ 5209.313538] ///////////////////////
+[ 5209.313539] ///////////////////////
+[ 5209.313540] Connect1-socket is not NULL
+[ 5209.313541] sock->state: 1
+[ 5209.313542] sock->type: 2
+[ 5209.313544] sock->flags: 0
+[ 5209.313545] sock->wq: 0
+[ 5209.313546] sock->file: 0
+[ 5209.313547] sock->sk: 0
+[ 5209.313548] sock->ops: 0
+[ 5209.313549] Connectsocket->sk is not NULL
+[ 5209.313550] sk->sk_state: 7
+[ 5209.313552] sk->sk_type: 2
+[ 5209.313553] sk->sk_err: 0
+[ 5209.313554] sk->sk_shutdown: 0
+[ 5209.313555] sk->sk_lock->slock: 0
+[ 5209.313556] sk->sk_rcv_saddr: 0
+[ 5209.313558] sk->sk_daddr: 0
+[ 5209.313559] sk->sk_family: 10
+[ 5209.313560] sk->sk_sndbuf: 212992
+[ 5209.313561] sk->sk_rcvbuf: 212992
+[ 5209.313563] sk->sk_write_space: 0
+[ 5209.313564] sk->sk_data_ready: 0
+[ 5209.313565] ///////////////////////
+[ 5209.313570] ///////////////////////
+[ 5209.313571] Connect2-socket is not NULL
+[ 5209.313572] sock->state: 1
+[ 5209.313573] sock->type: 2
+[ 5209.313575] sock->flags: 0
+[ 5209.313576] sock->wq: 0
+[ 5209.313577] sock->file: 0
+[ 5209.313578] sock->sk: 0
+[ 5209.313579] sock->ops: 0
+[ 5209.313580] ///////////////////////
+[ 5209.313582] ///////////////////////
+[ 5209.313583] Connect1-socket is not NULL
+[ 5209.313584] sock->state: 1
+[ 5209.313585] sock->type: 2
+[ 5209.313586] sock->flags: 0
+[ 5209.313588] sock->wq: 0
+[ 5209.313589] sock->file: 0
+[ 5209.313590] sock->sk: 0
+[ 5209.313591] sock->ops: 0
+[ 5209.313592] Connectsocket->sk is not NULL
+[ 5209.313593] sk->sk_state: 7
+[ 5209.313595] sk->sk_type: 2
+[ 5209.313596] sk->sk_err: 0
+[ 5209.313597] sk->sk_shutdown: 0
+[ 5209.313598] sk->sk_lock->slock: 0
+[ 5209.313599] sk->sk_rcv_saddr: 0
+[ 5209.313601] sk->sk_daddr: 0
+[ 5209.313602] sk->sk_family: 10
+[ 5209.313603] sk->sk_sndbuf: 212992
+[ 5209.313604] sk->sk_rcvbuf: 212992
+[ 5209.313606] sk->sk_write_space: 0
+[ 5209.313607] sk->sk_data_ready: 0
+[ 5209.313608] ///////////////////////
+[ 5209.313609] ///////////////////////
+[ 5209.313610] Connect2-socket is not NULL
+[ 5209.313612] sock->state: 1
+[ 5209.313613] sock->type: 2
+[ 5209.313614] sock->flags: 0
+[ 5209.313615] sock->wq: 0
+[ 5209.313616] sock->file: 0
+[ 5209.313617] sock->sk: 0
+[ 5209.313619] sock->ops: 0
+[ 5209.313620] ///////////////////////
+[ 5209.313621] ///////////////////////
+[ 5209.313622] Connect1-socket is not NULL
+[ 5209.313623] sock->state: 1
+[ 5209.313624] sock->type: 2
+[ 5209.313625] sock->flags: 0
+[ 5209.313627] sock->wq: 0
+[ 5209.313628] sock->file: 0
+[ 5209.313629] sock->sk: 0
+[ 5209.313630] sock->ops: 0
+[ 5209.313631] Connectsocket->sk is not NULL
+[ 5209.313632] sk->sk_state: 7
+[ 5209.313634] sk->sk_type: 2
+[ 5209.313635] sk->sk_err: 0
+[ 5209.313636] sk->sk_shutdown: 0
+[ 5209.313637] sk->sk_lock->slock: 0
+[ 5209.313638] sk->sk_rcv_saddr: 0
+[ 5209.313640] sk->sk_daddr: 0
+[ 5209.313641] sk->sk_family: 10
+[ 5209.313642] sk->sk_sndbuf: 212992
+[ 5209.313644] sk->sk_rcvbuf: 212992
+[ 5209.313645] sk->sk_write_space: 0
+[ 5209.313646] sk->sk_data_ready: 0
+[ 5209.313647] ///////////////////////
+[ 5209.313653] ///////////////////////
+[ 5209.313654] Connect2-socket is not NULL
+[ 5209.313655] sock->state: 1
+[ 5209.313656] sock->type: 2
+[ 5209.313657] sock->flags: 0
+[ 5209.313658] sock->wq: 0
+[ 5209.313660] sock->file: 0
+[ 5209.313661] sock->sk: 0
+[ 5209.313662] sock->ops: 0
+[ 5209.313663] ///////////////////////
+[ 5209.313664] ///////////////////////
+[ 5209.313665] Connect1-socket is not NULL
+[ 5209.313667] sock->state: 1
+[ 5209.313668] sock->type: 2
+[ 5209.313669] sock->flags: 0
+[ 5209.313670] sock->wq: 0
+[ 5209.313671] sock->file: 0
+[ 5209.313673] sock->sk: 0
+[ 5209.313674] sock->ops: 0
+[ 5209.313675] Connectsocket->sk is not NULL
+[ 5209.313676] sk->sk_state: 7
+[ 5209.313677] sk->sk_type: 2
+[ 5209.313678] sk->sk_err: 0
+[ 5209.313680] sk->sk_shutdown: 0
+[ 5209.313681] sk->sk_lock->slock: 0
+[ 5209.313682] sk->sk_rcv_saddr: 0
+[ 5209.313683] sk->sk_daddr: 0
+[ 5209.313684] sk->sk_family: 10
+[ 5209.313686] sk->sk_sndbuf: 212992
+[ 5209.313687] sk->sk_rcvbuf: 212992
+[ 5209.313688] sk->sk_write_space: 0
+[ 5209.313689] sk->sk_data_ready: 0
+[ 5209.313690] ///////////////////////
+[ 5209.313692] ///////////////////////
+[ 5209.313693] Connect2-socket is not NULL
+[ 5209.313694] sock->state: 1
+[ 5209.313695] sock->type: 2
+[ 5209.313696] sock->flags: 0
+[ 5209.313698] sock->wq: 0
+[ 5209.313699] sock->file: 0
+[ 5209.313700] sock->sk: 0
+[ 5209.313701] sock->ops: 0
+[ 5209.313702] ///////////////////////
+[ 5209.313703] ///////////////////////
+[ 5209.313704] Connect1-socket is not NULL
+[ 5209.313706] sock->state: 1
+[ 5209.313707] sock->type: 2
+[ 5209.313708] sock->flags: 0
+[ 5209.313709] sock->wq: 0
+[ 5209.313710] sock->file: 0
+[ 5209.313712] sock->sk: 0
+[ 5209.313713] sock->ops: 0
+[ 5209.313714] Connectsocket->sk is not NULL
+[ 5209.313715] sk->sk_state: 7
+[ 5209.313716] sk->sk_type: 2
+[ 5209.313717] sk->sk_err: 0
+[ 5209.313719] sk->sk_shutdown: 0
+[ 5209.313720] sk->sk_lock->slock: 0
+[ 5209.313721] sk->sk_rcv_saddr: 0
+[ 5209.313722] sk->sk_daddr: 0
+[ 5209.313724] sk->sk_family: 10
+[ 5209.313725] sk->sk_sndbuf: 212992
+[ 5209.313726] sk->sk_rcvbuf: 212992
+[ 5209.313727] sk->sk_write_space: 0
+[ 5209.313728] sk->sk_data_ready: 0
+[ 5209.313729] ///////////////////////
+[ 5209.313735] ///////////////////////
+[ 5209.313736] Connect2-socket is not NULL
+[ 5209.313737] sock->state: 1
+[ 5209.313738] sock->type: 2
+[ 5209.313739] sock->flags: 0
+[ 5209.313740] sock->wq: 0
+[ 5209.313742] sock->file: 0
+[ 5209.313743] sock->sk: 0
+[ 5209.313744] sock->ops: 0
+[ 5209.313745] ///////////////////////
+[ 5210.290560] /// CONSTANTS ///////
+[ 5210.290566] family: 2
+[ 5210.290568] type: 1
+[ 5210.290570] protocol: 6
+[ 5210.290573] SOCK_CLOEXEC: 524288
+[ 5210.290574] O_CLOEXEC: 524288
+[ 5210.290576] SOCK_MAX: 11
+[ 5210.290578] SOCK_TYPE_MASK: 15
+[ 5210.290580] sock: 0
+[ 5210.290582] /// END CONSTANTS ///////
+[ 5210.290584] /// CONSTANTS 2 ///////
+[ 5210.290586] flags: 0
+[ 5210.290588] type: 1
+[ 5210.290589] /// END CONSTANTS 2 ///////
+[ 5210.290591] /// CONSTANTS 3 ///////
+[ 5210.290593] flags: 0
+[ 5210.290594] /// END CONSTANTS 3 ///////
+[ 5210.290610] /// CREATE SOCKET ///////
+[ 5210.290611] Connect1-socket is not NULL
+[ 5210.290613] sock->state: 1
+[ 5210.290615] sock->type: 1
+[ 5210.290618] sock->flags: 0
+[ 5210.290620] sock->wq: 0
+[ 5210.290622] sock->file: 1
+[ 5210.290624] sock->sk: 0
+[ 5210.290626] sock->ops: 0
+[ 5210.290628] Create:: socket->sk is not NULL
+[ 5210.290631] sk->sk_state: 7
+[ 5210.290633] sk->sk_type: 1
+[ 5210.290635] sk->sk_err: 0
+[ 5210.290638] sk->sk_shutdown: 0
+[ 5210.290640] sk->sk_lock->slock: 0
+[ 5210.290642] sk->sk_rcv_saddr: 0
+[ 5210.290644] sk->sk_daddr: 0
+[ 5210.290647] sk->sk_family: 2
+[ 5210.290649] sk->sk_sndbuf: 16384
+[ 5210.290652] sk->sk_rcvbuf: 87380
+[ 5210.290654] sk->sk_write_space: 0
+[ 5210.290656] sk->sk_data_ready: 0
+[ 5210.290658] /// END CREATE SOCKET ///////
+[ 5210.290673] /// MAP SOCKET ///////
+[ 5210.290675] After Map:: socket is not NULL
+[ 5210.290678] sock->state: 1
+[ 5210.290680] sock->type: 1
+[ 5210.290682] sock->flags: 0
+[ 5210.290684] sock->wq: 0
+[ 5210.290687] sock->file: 0
+[ 5210.290689] sock->sk: 0
+[ 5210.290691] sock->ops: 0
+[ 5210.290693] Map:: sk is not NULL
+[ 5210.290695] sk->sk_state: 7
+[ 5210.290697] sk->sk_type: 1
+[ 5210.290700] sk->sk_err: 0
+[ 5210.290702] sk->sk_shutdown: 0
+[ 5210.290704] sk->sk_lock->slock: 0
+[ 5210.290706] sk->sk_rcv_saddr: 0
+[ 5210.290708] sk->sk_daddr: 0
+[ 5210.290711] sk->sk_family: 2
+[ 5210.290713] sk->sk_sndbuf: 16384
+[ 5210.290716] sk->sk_rcvbuf: 87380
+[ 5210.290719] sk->sk_write_space: 0
+[ 5210.290722] sk->sk_data_ready: 0
+[ 5210.290724] /// END MAP SOCKET ///////
+[ 5210.290740] ///////////////////////
+[ 5210.290742] @@@@socket is not NULL
+[ 5210.290744] sock->state: 1
+[ 5210.290745] sock->type: 1
+[ 5210.290747] sock->flags: 0
+[ 5210.290749] sock->wq: 0
+[ 5210.290751] sock->file: 0
+[ 5210.290753] sock->sk: 0
+[ 5210.290755] sock->ops: 0
+[ 5210.290756] socket->sk is not NULL
+[ 5210.290758] sk->sk_state: 7
+[ 5210.290760] sk->sk_type: 1
+[ 5210.290762] sk->sk_err: 0
+[ 5210.290764] sk->sk_shutdown: 0
+[ 5210.290766] sk->sk_lock->slock: 0
+[ 5210.290767] sk->sk_rcv_saddr: 0
+[ 5210.290769] sk->sk_daddr: 0
+[ 5210.290771] sk->sk_family: 2
+[ 5210.290773] sk->sk_sndbuf: 16384
+[ 5210.290775] sk->sk_rcvbuf: 87380
+[ 5210.290777] sk->sk_write_space: 0
+[ 5210.290779] sk->sk_data_ready: 0
+[ 5210.290780] ///////////////////////
+[ 5210.290782] ///////////////////////
+[ 5210.290784] ====after setsockopt security check - socket is not NULL
+[ 5210.290786] sock->state: 1
+[ 5210.290788] sock->type: 1
+[ 5210.290790] sock->flags: 0
+[ 5210.290792] sock->wq: 0
+[ 5210.290793] sock->file: 0
+[ 5210.290795] sock->sk: 0
+[ 5210.290797] sock->ops: 0
+[ 5210.290799] socket->sk is not NULL
+[ 5210.290800] sk->sk_state: 7
+[ 5210.290802] sk->sk_type: 1
+[ 5210.290804] sk->sk_err: 0
+[ 5210.290806] sk->sk_shutdown: 0
+[ 5210.290808] sk->sk_lock->slock: 0
+[ 5210.290810] sk->sk_rcv_saddr: 0
+[ 5210.290812] sk->sk_daddr: 0
+[ 5210.290814] sk->sk_family: 2
+[ 5210.290816] sk->sk_sndbuf: 16384
+[ 5210.290818] sk->sk_rcvbuf: 87380
+[ 5210.290820] sk->sk_write_space: 0
+[ 5210.290821] sk->sk_data_ready: 0
+[ 5210.290823] ///////////////////////
+[ 5210.290826] /// do_tcp_setsockopt1 ////////
+[ 5210.290827] do_tcp_setsockopt1:: socket->sk is not NULL
+[ 5210.290829] sk->sk_state: 7
+[ 5210.290831] sk->sk_type: 1
+[ 5210.290833] sk->sk_err: 0
+[ 5210.290835] sk->sk_shutdown: 0
+[ 5210.290837] sk->sk_lock->slock: 0
+[ 5210.290838] sk->sk_rcv_saddr: 0
+[ 5210.290840] sk->sk_daddr: 0
+[ 5210.290842] sk->sk_family: 2
+[ 5210.290844] sk->sk_sndbuf: 16384
+[ 5210.290846] sk->sk_rcvbuf: 87380
+[ 5210.290848] sk->sk_write_space: 0
+[ 5210.290850] sk->sk_data_ready: 0
+[ 5210.290851] ///////////////////////
+[ 5210.290854] /// do_tcp_setsockopt b4 release_sock ////////
+[ 5210.290856] do_tcp_setsockopt b4 release_sock:: socket->sk is not NULL
+[ 5210.290858] sk->sk_state: 7
+[ 5210.290860] sk->sk_type: 1
+[ 5210.290862] sk->sk_err: 0
+[ 5210.290863] sk->sk_shutdown: 0
+[ 5210.290865] sk->sk_lock->slock: 0
+[ 5210.290867] sk->sk_rcv_saddr: 0
+[ 5210.290869] sk->sk_daddr: 0
+[ 5210.290871] sk->sk_family: 2
+[ 5210.290873] sk->sk_sndbuf: 16384
+[ 5210.290875] sk->sk_rcvbuf: 87380
+[ 5210.290877] sk->sk_write_space: 0
+[ 5210.290879] sk->sk_data_ready: 0
+[ 5210.290880] ///////////////////////
+[ 5210.290883] /// do_tcp_setsockopt after release_sock ////////
+[ 5210.290884] do_tcp_setsockopt after release_sock:: socket->sk is not NULL
+[ 5210.290886] sk->sk_state: 7
+[ 5210.290888] sk->sk_type: 1
+[ 5210.290890] sk->sk_err: 0
+[ 5210.290892] sk->sk_shutdown: 0
+[ 5210.290893] sk->sk_lock->slock: 0
+[ 5210.290895] sk->sk_rcv_saddr: 0
+[ 5210.290897] sk->sk_daddr: 0
+[ 5210.290899] sk->sk_family: 2
+[ 5210.290901] sk->sk_sndbuf: 16384
+[ 5210.290903] sk->sk_rcvbuf: 87380
+[ 5210.290905] sk->sk_write_space: 0
+[ 5210.290907] sk->sk_data_ready: 0
+[ 5210.290908] ///////////////////////
+[ 5210.290910] ///////////////////////
+[ 5210.290912] ****after generic or protoclspecific - socket is not NULL
+[ 5210.290913] sock->state: 1
+[ 5210.290915] sock->type: 1
+[ 5210.290917] sock->flags: 0
+[ 5210.290919] sock->wq: 0
+[ 5210.290921] sock->file: 0
+[ 5210.290923] sock->sk: 0
+[ 5210.290924] sock->ops: 0
+[ 5210.290926] socket->sk is not NULL
+[ 5210.290928] sk->sk_state: 7
+[ 5210.290930] sk->sk_type: 1
+[ 5210.290932] sk->sk_err: 0
+[ 5210.290933] sk->sk_shutdown: 0
+[ 5210.290935] sk->sk_lock->slock: 0
+[ 5210.290937] sk->sk_rcv_saddr: 0
+[ 5210.290939] sk->sk_daddr: 0
+[ 5210.290941] sk->sk_family: 2
+[ 5210.290943] sk->sk_sndbuf: 16384
+[ 5210.290945] sk->sk_rcvbuf: 87380
+[ 5210.290947] sk->sk_write_space: 0
+[ 5210.290948] sk->sk_data_ready: 0
+[ 5210.290950] ///////////////////////
+[ 5210.290952] /////// After out_put: /////////
+[ 5210.290953] !!!! After out_put: socket is not NULL
+[ 5210.290955] sock->state: 1
+[ 5210.290957] sock->type: 1
+[ 5210.290959] sock->flags: 0
+[ 5210.290961] sock->wq: 0
+[ 5210.290962] sock->file: 0
+[ 5210.290964] sock->sk: 0
+[ 5210.290966] sock->ops: 0
+[ 5210.290968] socket->sk is not NULL
+[ 5210.290969] sk->sk_state: 7
+[ 5210.290971] sk->sk_type: 1
+[ 5210.290973] sk->sk_err: 0
+[ 5210.290975] sk->sk_shutdown: 0
+[ 5210.290977] sk->sk_lock->slock: 0
+[ 5210.290979] sk->sk_rcv_saddr: 0
+[ 5210.290981] sk->sk_daddr: 0
+[ 5210.290982] sk->sk_family: 2
+[ 5210.290984] sk->sk_sndbuf: 16384
+[ 5210.290986] sk->sk_rcvbuf: 87380
+[ 5210.290988] sk->sk_write_space: 0
+[ 5210.290990] sk->sk_data_ready: 0
+[ 5210.290992] ///////////////////////
+[ 5210.290993] /////// after setSockopt fput_light /////////
+[ 5210.290995] &&&& fput_light: socket is not NULL
+[ 5210.290997] sock->state: 1
+[ 5210.290999] sock->type: 1
+[ 5210.291001] sock->flags: 0
+[ 5210.291002] sock->wq: 0
+[ 5210.291004] sock->file: 0
+[ 5210.291006] sock->sk: 0
+[ 5210.291008] sock->ops: 0
+[ 5210.291009] socket->sk is not NULL
+[ 5210.291011] sk->sk_state: 7
+[ 5210.291013] sk->sk_type: 1
+[ 5210.291015] sk->sk_err: 0
+[ 5210.291017] sk->sk_shutdown: 0
+[ 5210.291019] sk->sk_lock->slock: 0
+[ 5210.291021] sk->sk_rcv_saddr: 0
+[ 5210.291023] sk->sk_daddr: 0
+[ 5210.291024] sk->sk_family: 2
+[ 5210.291026] sk->sk_sndbuf: 16384
+[ 5210.291028] sk->sk_rcvbuf: 87380
+[ 5210.291030] sk->sk_write_space: 0
+[ 5210.291032] sk->sk_data_ready: 0
+[ 5210.291034] ///////////////////////
+[ 5210.291037] ///////////////////////
+[ 5210.291039] @@@@socket is not NULL
+[ 5210.291041] sock->state: 1
+[ 5210.291043] sock->type: 1
+[ 5210.291045] sock->flags: 0
+[ 5210.291046] sock->wq: 0
+[ 5210.291048] sock->file: 0
+[ 5210.291050] sock->sk: 0
+[ 5210.291052] sock->ops: 0
+[ 5210.291053] socket->sk is not NULL
+[ 5210.291055] sk->sk_state: 7
+[ 5210.291057] sk->sk_type: 1
+[ 5210.291059] sk->sk_err: 0
+[ 5210.291060] sk->sk_shutdown: 0
+[ 5210.291062] sk->sk_lock->slock: 0
+[ 5210.291064] sk->sk_rcv_saddr: 0
+[ 5210.291066] sk->sk_daddr: 0
+[ 5210.291068] sk->sk_family: 2
+[ 5210.291070] sk->sk_sndbuf: 16384
+[ 5210.291072] sk->sk_rcvbuf: 87380
+[ 5210.291074] sk->sk_write_space: 0
+[ 5210.291075] sk->sk_data_ready: 0
+[ 5210.291077] ///////////////////////
+[ 5210.291079] ///////////////////////
+[ 5210.291080] ====after setsockopt security check - socket is not NULL
+[ 5210.291082] sock->state: 1
+[ 5210.291084] sock->type: 1
+[ 5210.291086] sock->flags: 0
+[ 5210.291088] sock->wq: 0
+[ 5210.291089] sock->file: 0
+[ 5210.291091] sock->sk: 0
+[ 5210.291093] sock->ops: 0
+[ 5210.291094] socket->sk is not NULL
+[ 5210.291096] sk->sk_state: 7
+[ 5210.291098] sk->sk_type: 1
+[ 5210.291100] sk->sk_err: 0
+[ 5210.291102] sk->sk_shutdown: 0
+[ 5210.291104] sk->sk_lock->slock: 0
+[ 5210.291105] sk->sk_rcv_saddr: 0
+[ 5210.291107] sk->sk_daddr: 0
+[ 5210.291109] sk->sk_family: 2
+[ 5210.291111] sk->sk_sndbuf: 16384
+[ 5210.291113] sk->sk_rcvbuf: 87380
+[ 5210.291115] sk->sk_write_space: 0
+[ 5210.291117] sk->sk_data_ready: 0
+[ 5210.291118] ///////////////////////
+[ 5210.291120] /// sock_setsockopt ////////
+[ 5210.291122] sock_setsockopt:: socket is not NULL
+[ 5210.291124] sock->state: 1
+[ 5210.291126] sock->type: 1
+[ 5210.291128] sock->flags: 0
+[ 5210.291130] sock->wq: 0
+[ 5210.291131] sock->file: 0
+[ 5210.291133] sock->sk: 0
+[ 5210.291135] sock->ops: 0
+[ 5210.291137] sock_setsockopt:: socket->sk is not NULL
+[ 5210.291139] sk->sk_state: 7
+[ 5210.291141] sk->sk_type: 1
+[ 5210.291142] sk->sk_err: 0
+[ 5210.291144] sk->sk_shutdown: 0
+[ 5210.291146] sk->sk_lock->slock: 0
+[ 5210.291148] sk->sk_rcv_saddr: 0
+[ 5210.291150] sk->sk_daddr: 0
+[ 5210.291152] sk->sk_family: 2
+[ 5210.291154] sk->sk_sndbuf: 16384
+[ 5210.291156] sk->sk_rcvbuf: 87380
+[ 5210.291158] sk->sk_write_space: 0
+[ 5210.291159] sk->sk_data_ready: 0
+[ 5210.291161] ///////////////////////
+[ 5210.291169] /// SO_BINDTODEVICE true ////////
+[ 5210.291170] SO_BINDTODEVICE:: socket is not NULL
+[ 5210.291172] sock->state: 1
+[ 5210.291174] sock->type: 1
+[ 5210.291176] sock->flags: 0
+[ 5210.291178] sock->wq: 0
+[ 5210.291180] sock->file: 0
+[ 5210.291181] sock->sk: 0
+[ 5210.291183] sock->ops: 0
+[ 5210.291185] SO_BINDTODEVICE:: socket->sk is not NULL
+[ 5210.291187] sk->sk_state: 7
+[ 5210.291189] sk->sk_type: 1
+[ 5210.291190] sk->sk_err: 0
+[ 5210.291192] sk->sk_shutdown: 0
+[ 5210.291194] sk->sk_lock->slock: 0
+[ 5210.291196] sk->sk_rcv_saddr: 0
+[ 5210.291198] sk->sk_daddr: 0
+[ 5210.291200] sk->sk_family: 2
+[ 5210.291202] sk->sk_sndbuf: 16384
+[ 5210.291204] sk->sk_rcvbuf: 87380
+[ 5210.291206] sk->sk_write_space: 0
+[ 5210.291207] sk->sk_data_ready: 0
+[ 5210.291209] ///////////////////////
+[ 5210.291211] ///////////////////////
+[ 5210.291212] ****after generic or protoclspecific - socket is not NULL
+[ 5210.291214] sock->state: 1
+[ 5210.291216] sock->type: 1
+[ 5210.291218] sock->flags: 0
+[ 5210.291220] sock->wq: 0
+[ 5210.291222] sock->file: 0
+[ 5210.291223] sock->sk: 0
+[ 5210.291225] sock->ops: 0
+[ 5210.291227] socket->sk is not NULL
+[ 5210.291229] sk->sk_state: 7
+[ 5210.291231] sk->sk_type: 1
+[ 5210.291232] sk->sk_err: 0
+[ 5210.291234] sk->sk_shutdown: 0
+[ 5210.291236] sk->sk_lock->slock: 0
+[ 5210.291238] sk->sk_rcv_saddr: 0
+[ 5210.291240] sk->sk_daddr: 0
+[ 5210.291242] sk->sk_family: 2
+[ 5210.291244] sk->sk_sndbuf: 16384
+[ 5210.291246] sk->sk_rcvbuf: 87380
+[ 5210.291247] sk->sk_write_space: 0
+[ 5210.291249] sk->sk_data_ready: 0
+[ 5210.291251] ///////////////////////
+[ 5210.291253] /////// After out_put: /////////
+[ 5210.291254] !!!! After out_put: socket is not NULL
+[ 5210.291256] sock->state: 1
+[ 5210.291258] sock->type: 1
+[ 5210.291260] sock->flags: 0
+[ 5210.291262] sock->wq: 0
+[ 5210.291264] sock->file: 0
+[ 5210.291265] sock->sk: 0
+[ 5210.291267] sock->ops: 0
+[ 5210.291269] socket->sk is not NULL
+[ 5210.291270] sk->sk_state: 7
+[ 5210.291272] sk->sk_type: 1
+[ 5210.291274] sk->sk_err: 0
+[ 5210.291276] sk->sk_shutdown: 0
+[ 5210.291278] sk->sk_lock->slock: 0
+[ 5210.291279] sk->sk_rcv_saddr: 0
+[ 5210.291281] sk->sk_daddr: 0
+[ 5210.291283] sk->sk_family: 2
+[ 5210.291285] sk->sk_sndbuf: 16384
+[ 5210.291287] sk->sk_rcvbuf: 87380
+[ 5210.291289] sk->sk_write_space: 0
+[ 5210.291291] sk->sk_data_ready: 0
+[ 5210.291292] ///////////////////////
+[ 5210.291294] /////// after setSockopt fput_light /////////
+[ 5210.291295] &&&& fput_light: socket is not NULL
+[ 5210.291297] sock->state: 1
+[ 5210.291299] sock->type: 1
+[ 5210.291301] sock->flags: 0
+[ 5210.291303] sock->wq: 0
+[ 5210.291305] sock->file: 0
+[ 5210.291306] sock->sk: 0
+[ 5210.291308] sock->ops: 0
+[ 5210.291310] socket->sk is not NULL
+[ 5210.291311] sk->sk_state: 7
+[ 5210.291313] sk->sk_type: 1
+[ 5210.291315] sk->sk_err: 0
+[ 5210.291317] sk->sk_shutdown: 0
+[ 5210.291319] sk->sk_lock->slock: 0
+[ 5210.291321] sk->sk_rcv_saddr: 0
+[ 5210.291323] sk->sk_daddr: 0
+[ 5210.291325] sk->sk_family: 2
+[ 5210.291326] sk->sk_sndbuf: 16384
+[ 5210.291328] sk->sk_rcvbuf: 87380
+[ 5210.291330] sk->sk_write_space: 0
+[ 5210.291332] sk->sk_data_ready: 0
+[ 5210.291334] ///////////////////////
+[ 5210.291341] ///////////////////////
+[ 5210.291342] Connect1-socket is not NULL
+[ 5210.291344] sock->state: 1
+[ 5210.291346] sock->type: 1
+[ 5210.291348] sock->flags: 0
+[ 5210.291350] sock->wq: 0
+[ 5210.291352] sock->file: 0
+[ 5210.291353] sock->sk: 0
+[ 5210.291355] sock->ops: 0
+[ 5210.291357] Connectsocket->sk is not NULL
+[ 5210.291359] sk->sk_state: 7
+[ 5210.291361] sk->sk_type: 1
+[ 5210.291363] sk->sk_err: 0
+[ 5210.291364] sk->sk_shutdown: 0
+[ 5210.291366] sk->sk_lock->slock: 0
+[ 5210.291368] sk->sk_rcv_saddr: 0
+[ 5210.291370] sk->sk_daddr: 0
+[ 5210.291372] sk->sk_family: 2
+[ 5210.291374] sk->sk_sndbuf: 16384
+[ 5210.291376] sk->sk_rcvbuf: 87380
+[ 5210.291378] sk->sk_write_space: 0
+[ 5210.291379] sk->sk_data_ready: 0
+[ 5210.291381] ///////////////////////
+[ 5210.291490] ///////////////////////
+[ 5210.291492] Connect2-socket is not NULL
+[ 5210.291494] sock->state: 2
+[ 5210.291495] sock->type: 1
+[ 5210.291497] sock->flags: 0
+[ 5210.291499] sock->wq: 0
+[ 5210.291501] sock->file: 0
+[ 5210.291503] sock->sk: 0
+[ 5210.291505] sock->ops: 0
+[ 5210.291506] ///////////////////////
+[ 5258.325191] /// CONSTANTS ///////
+[ 5258.325197] family: 1
+[ 5258.325200] type: 526338
+[ 5258.325202] protocol: 0
+[ 5258.325204] SOCK_CLOEXEC: 524288
+[ 5258.325206] O_CLOEXEC: 524288
+[ 5258.325208] SOCK_MAX: 11
+[ 5258.325210] SOCK_TYPE_MASK: 15
+[ 5258.325212] sock: 0
+[ 5258.325213] /// END CONSTANTS ///////
+[ 5258.325215] /// CONSTANTS 2 ///////
+[ 5258.325217] flags: 526336
+[ 5258.325219] type: 2
+[ 5258.325221] /// END CONSTANTS 2 ///////
+[ 5258.325222] /// CONSTANTS 3 ///////
+[ 5258.325224] flags: 526336
+[ 5258.325226] /// END CONSTANTS 3 ///////
+[ 5258.325242] /// CREATE SOCKET ///////
+[ 5258.325244] Connect1-socket is not NULL
+[ 5258.325246] sock->state: 1
+[ 5258.325248] sock->type: 2
+[ 5258.325249] sock->flags: 0
+[ 5258.325251] sock->wq: 0
+[ 5258.325253] sock->file: 1
+[ 5258.325255] sock->sk: 0
+[ 5258.325257] sock->ops: 0
+[ 5258.325259] Create:: socket->sk is not NULL
+[ 5258.325261] sk->sk_state: 7
+[ 5258.325263] sk->sk_type: 2
+[ 5258.325265] sk->sk_err: 0
+[ 5258.325267] sk->sk_shutdown: 0
+[ 5258.325268] sk->sk_lock->slock: 0
+[ 5258.325270] sk->sk_rcv_saddr: 0
+[ 5258.325272] sk->sk_daddr: 0
+[ 5258.325274] sk->sk_family: 1
+[ 5258.325276] sk->sk_sndbuf: 212992
+[ 5258.325278] sk->sk_rcvbuf: 212992
+[ 5258.325280] sk->sk_write_space: 0
+[ 5258.325282] sk->sk_data_ready: 0
+[ 5258.325283] /// END CREATE SOCKET ///////
+[ 5258.325298] /// MAP SOCKET ///////
+[ 5258.325299] After Map:: socket is not NULL
+[ 5258.325301] sock->state: 1
+[ 5258.325303] sock->type: 2
+[ 5258.325305] sock->flags: 0
+[ 5258.325307] sock->wq: 0
+[ 5258.325309] sock->file: 0
+[ 5258.325310] sock->sk: 0
+[ 5258.325312] sock->ops: 0
+[ 5258.325314] Map:: sk is not NULL
+[ 5258.325316] sk->sk_state: 7
+[ 5258.325318] sk->sk_type: 2
+[ 5258.325319] sk->sk_err: 0
+[ 5258.325321] sk->sk_shutdown: 0
+[ 5258.325323] sk->sk_lock->slock: 0
+[ 5258.325325] sk->sk_rcv_saddr: 0
+[ 5258.325327] sk->sk_daddr: 0
+[ 5258.325329] sk->sk_family: 1
+[ 5258.325331] sk->sk_sndbuf: 212992
+[ 5258.325333] sk->sk_rcvbuf: 212992
+[ 5258.325335] sk->sk_write_space: 0
+[ 5258.325336] sk->sk_data_ready: 0
+[ 5258.325338] /// END MAP SOCKET ///////
+[ 5258.325343] ///////////////////////
+[ 5258.325345] @@@@socket is not NULL
+[ 5258.325347] sock->state: 1
+[ 5258.325348] sock->type: 2
+[ 5258.325350] sock->flags: 0
+[ 5258.325352] sock->wq: 0
+[ 5258.325354] sock->file: 0
+[ 5258.325356] sock->sk: 0
+[ 5258.325358] sock->ops: 0
+[ 5258.325359] socket->sk is not NULL
+[ 5258.325361] sk->sk_state: 7
+[ 5258.325363] sk->sk_type: 2
+[ 5258.325365] sk->sk_err: 0
+[ 5258.325367] sk->sk_shutdown: 0
+[ 5258.325369] sk->sk_lock->slock: 0
+[ 5258.325370] sk->sk_rcv_saddr: 0
+[ 5258.325372] sk->sk_daddr: 0
+[ 5258.325374] sk->sk_family: 1
+[ 5258.325376] sk->sk_sndbuf: 212992
+[ 5258.325378] sk->sk_rcvbuf: 212992
+[ 5258.325380] sk->sk_write_space: 0
+[ 5258.325382] sk->sk_data_ready: 0
+[ 5258.325383] ///////////////////////
+[ 5258.325385] ///////////////////////
+[ 5258.325387] ====after setsockopt security check - socket is not NULL
+[ 5258.325389] sock->state: 1
+[ 5258.325391] sock->type: 2
+[ 5258.325393] sock->flags: 0
+[ 5258.325394] sock->wq: 0
+[ 5258.325396] sock->file: 0
+[ 5258.325398] sock->sk: 0
+[ 5258.325400] sock->ops: 0
+[ 5258.325401] socket->sk is not NULL
+[ 5258.325403] sk->sk_state: 7
+[ 5258.325405] sk->sk_type: 2
+[ 5258.325407] sk->sk_err: 0
+[ 5258.325409] sk->sk_shutdown: 0
+[ 5258.325411] sk->sk_lock->slock: 0
+[ 5258.325412] sk->sk_rcv_saddr: 0
+[ 5258.325414] sk->sk_daddr: 0
+[ 5258.325416] sk->sk_family: 1
+[ 5258.325418] sk->sk_sndbuf: 212992
+[ 5258.325420] sk->sk_rcvbuf: 212992
+[ 5258.325422] sk->sk_write_space: 0
+[ 5258.325424] sk->sk_data_ready: 0
+[ 5258.325425] ///////////////////////
+[ 5258.325427] /// sock_setsockopt ////////
+[ 5258.325429] sock_setsockopt:: socket is not NULL
+[ 5258.325431] sock->state: 1
+[ 5258.325433] sock->type: 2
+[ 5258.325435] sock->flags: 0
+[ 5258.325437] sock->wq: 0
+[ 5258.325438] sock->file: 0
+[ 5258.325440] sock->sk: 0
+[ 5258.325442] sock->ops: 0
+[ 5258.325444] sock_setsockopt:: socket->sk is not NULL
+[ 5258.325446] sk->sk_state: 7
+[ 5258.325447] sk->sk_type: 2
+[ 5258.325449] sk->sk_err: 0
+[ 5258.325451] sk->sk_shutdown: 0
+[ 5258.325453] sk->sk_lock->slock: 0
+[ 5258.325455] sk->sk_rcv_saddr: 0
+[ 5258.325457] sk->sk_daddr: 0
+[ 5258.325459] sk->sk_family: 1
+[ 5258.325461] sk->sk_sndbuf: 212992
+[ 5258.325463] sk->sk_rcvbuf: 212992
+[ 5258.325464] sk->sk_write_space: 0
+[ 5258.325466] sk->sk_data_ready: 0
+[ 5258.325468] ///////////////////////
+[ 5258.325470] /// SO_BINDTODEVICE false ////////
+[ 5258.325472] SO_BINDTODEVICE false:: socket is not NULL
+[ 5258.325474] sock->state: 1
+[ 5258.325476] sock->type: 2
+[ 5258.325478] sock->flags: 0
+[ 5258.325479] sock->wq: 0
+[ 5258.325481] sock->file: 0
+[ 5258.325483] sock->sk: 0
+[ 5258.325485] sock->ops: 0
+[ 5258.325487] SO_BINDTODEVICE false:: socket->sk is not NULL
+[ 5258.325489] sk->sk_state: 7
+[ 5258.325490] sk->sk_type: 2
+[ 5258.325492] sk->sk_err: 0
+[ 5258.325494] sk->sk_shutdown: 0
+[ 5258.325496] sk->sk_lock->slock: 0
+[ 5258.325498] sk->sk_rcv_saddr: 0
+[ 5258.325500] sk->sk_daddr: 0
+[ 5258.325502] sk->sk_family: 1
+[ 5258.325504] sk->sk_sndbuf: 212992
+[ 5258.325505] sk->sk_rcvbuf: 212992
+[ 5258.325507] sk->sk_write_space: 0
+[ 5258.325509] sk->sk_data_ready: 0
+[ 5258.325511] ///////////////////////
+[ 5258.325513] ///sock_setsockopt:: after release_sock() ////////
+[ 5258.325515] after release_sock:: socket is not NULL
+[ 5258.325517] sock->state: 1
+[ 5258.325518] sock->type: 2
+[ 5258.325520] sock->flags: 0
+[ 5258.325522] sock->wq: 0
+[ 5258.325524] sock->file: 0
+[ 5258.325526] sock->sk: 0
+[ 5258.325527] sock->ops: 0
+[ 5258.325529] after release_sock:: socket->sk is not NULL
+[ 5258.325531] sk->sk_state: 7
+[ 5258.325533] sk->sk_type: 2
+[ 5258.325535] sk->sk_err: 0
+[ 5258.325537] sk->sk_shutdown: 0
+[ 5258.325539] sk->sk_lock->slock: 0
+[ 5258.325540] sk->sk_rcv_saddr: 0
+[ 5258.325542] sk->sk_daddr: 0
+[ 5258.325544] sk->sk_family: 1
+[ 5258.325546] sk->sk_sndbuf: 212992
+[ 5258.325548] sk->sk_rcvbuf: 212992
+[ 5258.325550] sk->sk_write_space: 0
+[ 5258.325552] sk->sk_data_ready: 0
+[ 5258.325553] ///////////////////////
+[ 5258.325555] ///////////////////////
+[ 5258.325557] ****after generic or protoclspecific - socket is not NULL
+[ 5258.325558] sock->state: 1
+[ 5258.325560] sock->type: 2
+[ 5258.325562] sock->flags: 0
+[ 5258.325564] sock->wq: 0
+[ 5258.325566] sock->file: 0
+[ 5258.325568] sock->sk: 0
+[ 5258.325569] sock->ops: 0
+[ 5258.325571] socket->sk is not NULL
+[ 5258.325573] sk->sk_state: 7
+[ 5258.325575] sk->sk_type: 2
+[ 5258.325576] sk->sk_err: 0
+[ 5258.325578] sk->sk_shutdown: 0
+[ 5258.325580] sk->sk_lock->slock: 0
+[ 5258.325582] sk->sk_rcv_saddr: 0
+[ 5258.325584] sk->sk_daddr: 0
+[ 5258.325586] sk->sk_family: 1
+[ 5258.325588] sk->sk_sndbuf: 212992
+[ 5258.325590] sk->sk_rcvbuf: 212992
+[ 5258.325591] sk->sk_write_space: 0
+[ 5258.325593] sk->sk_data_ready: 0
+[ 5258.325595] ///////////////////////
+[ 5258.325597] /////// After out_put: /////////
+[ 5258.325598] !!!! After out_put: socket is not NULL
+[ 5258.325600] sock->state: 1
+[ 5258.325602] sock->type: 2
+[ 5258.325604] sock->flags: 0
+[ 5258.325606] sock->wq: 0
+[ 5258.325607] sock->file: 0
+[ 5258.325609] sock->sk: 0
+[ 5258.325611] sock->ops: 0
+[ 5258.325613] socket->sk is not NULL
+[ 5258.325614] sk->sk_state: 7
+[ 5258.325616] sk->sk_type: 2
+[ 5258.325618] sk->sk_err: 0
+[ 5258.325620] sk->sk_shutdown: 0
+[ 5258.325622] sk->sk_lock->slock: 0
+[ 5258.325624] sk->sk_rcv_saddr: 0
+[ 5258.325625] sk->sk_daddr: 0
+[ 5258.325627] sk->sk_family: 1
+[ 5258.325629] sk->sk_sndbuf: 212992
+[ 5258.325631] sk->sk_rcvbuf: 212992
+[ 5258.325633] sk->sk_write_space: 0
+[ 5258.325635] sk->sk_data_ready: 0
+[ 5258.325637] ///////////////////////
+[ 5258.325638] /////// after setSockopt fput_light /////////
+[ 5258.325640] &&&& fput_light: socket is not NULL
+[ 5258.325642] sock->state: 1
+[ 5258.325644] sock->type: 2
+[ 5258.325645] sock->flags: 0
+[ 5258.325647] sock->wq: 0
+[ 5258.325649] sock->file: 0
+[ 5258.325651] sock->sk: 0
+[ 5258.325653] sock->ops: 0
+[ 5258.325654] socket->sk is not NULL
+[ 5258.325656] sk->sk_state: 7
+[ 5258.325658] sk->sk_type: 2
+[ 5258.325660] sk->sk_err: 0
+[ 5258.325662] sk->sk_shutdown: 0
+[ 5258.325664] sk->sk_lock->slock: 0
+[ 5258.325665] sk->sk_rcv_saddr: 0
+[ 5258.325667] sk->sk_daddr: 0
+[ 5258.325669] sk->sk_family: 1
+[ 5258.325671] sk->sk_sndbuf: 212992
+[ 5258.325673] sk->sk_rcvbuf: 212992
+[ 5258.325675] sk->sk_write_space: 0
+[ 5258.325677] sk->sk_data_ready: 0
+[ 5258.325678] ///////////////////////
+[ 5258.325687] ///////////////////////
+[ 5258.325689] Connect1-socket is not NULL
+[ 5258.325691] sock->state: 1
+[ 5258.325693] sock->type: 2
+[ 5258.325695] sock->flags: 0
+[ 5258.325696] sock->wq: 0
+[ 5258.325698] sock->file: 0
+[ 5258.325700] sock->sk: 0
+[ 5258.325702] sock->ops: 0
+[ 5258.325704] Connectsocket->sk is not NULL
+[ 5258.325705] sk->sk_state: 7
+[ 5258.325707] sk->sk_type: 2
+[ 5258.325709] sk->sk_err: 0
+[ 5258.325711] sk->sk_shutdown: 0
+[ 5258.325713] sk->sk_lock->slock: 0
+[ 5258.325715] sk->sk_rcv_saddr: 0
+[ 5258.325716] sk->sk_daddr: 0
+[ 5258.325718] sk->sk_family: 1
+[ 5258.325720] sk->sk_sndbuf: 212992
+[ 5258.325722] sk->sk_rcvbuf: 212992
+[ 5258.325724] sk->sk_write_space: 0
+[ 5258.325726] sk->sk_data_ready: 0
+[ 5258.325727] ///////////////////////
+[ 5258.325751] ///////////////////////
+[ 5258.325752] Connect2-socket is not NULL
+[ 5258.325754] sock->state: 1
+[ 5258.325756] sock->type: 2
+[ 5258.325758] sock->flags: 0
+[ 5258.325760] sock->wq: 0
+[ 5258.325762] sock->file: 0
+[ 5258.325763] sock->sk: 0
+[ 5258.325765] sock->ops: 0
+[ 5258.325767] ///////////////////////
+[ 5258.798222] /// CONSTANTS ///////
+[ 5258.798227] family: 1
+[ 5258.798230] type: 524290
+[ 5258.798232] protocol: 0
+[ 5258.798234] SOCK_CLOEXEC: 524288
+[ 5258.798236] O_CLOEXEC: 524288
+[ 5258.798238] SOCK_MAX: 11
+[ 5258.798240] SOCK_TYPE_MASK: 15
+[ 5258.798242] sock: 0
+[ 5258.798243] /// END CONSTANTS ///////
+[ 5258.798245] /// CONSTANTS 2 ///////
+[ 5258.798247] flags: 524288
+[ 5258.798249] type: 2
+[ 5258.798251] /// END CONSTANTS 2 ///////
+[ 5258.798253] /// CONSTANTS 3 ///////
+[ 5258.798255] flags: 524288
+[ 5258.798256] /// END CONSTANTS 3 ///////
+[ 5258.798269] /// CREATE SOCKET ///////
+[ 5258.798270] Connect1-socket is not NULL
+[ 5258.798272] sock->state: 1
+[ 5258.798274] sock->type: 2
+[ 5258.798276] sock->flags: 0
+[ 5258.798278] sock->wq: 0
+[ 5258.798280] sock->file: 1
+[ 5258.798282] sock->sk: 0
+[ 5258.798283] sock->ops: 0
+[ 5258.798285] Create:: socket->sk is not NULL
+[ 5258.798287] sk->sk_state: 7
+[ 5258.798289] sk->sk_type: 2
+[ 5258.798291] sk->sk_err: 0
+[ 5258.798293] sk->sk_shutdown: 0
+[ 5258.798295] sk->sk_lock->slock: 0
+[ 5258.798297] sk->sk_rcv_saddr: 0
+[ 5258.798298] sk->sk_daddr: 0
+[ 5258.798300] sk->sk_family: 1
+[ 5258.798302] sk->sk_sndbuf: 212992
+[ 5258.798304] sk->sk_rcvbuf: 212992
+[ 5258.798306] sk->sk_write_space: 0
+[ 5258.798308] sk->sk_data_ready: 0
+[ 5258.798310] /// END CREATE SOCKET ///////
+[ 5258.798321] /// MAP SOCKET ///////
+[ 5258.798322] After Map:: socket is not NULL
+[ 5258.798324] sock->state: 1
+[ 5258.798326] sock->type: 2
+[ 5258.798328] sock->flags: 0
+[ 5258.798330] sock->wq: 0
+[ 5258.798332] sock->file: 0
+[ 5258.798333] sock->sk: 0
+[ 5258.798335] sock->ops: 0
+[ 5258.798337] Map:: sk is not NULL
+[ 5258.798339] sk->sk_state: 7
+[ 5258.798341] sk->sk_type: 2
+[ 5258.798343] sk->sk_err: 0
+[ 5258.798344] sk->sk_shutdown: 0
+[ 5258.798346] sk->sk_lock->slock: 0
+[ 5258.798348] sk->sk_rcv_saddr: 0
+[ 5258.798350] sk->sk_daddr: 0
+[ 5258.798352] sk->sk_family: 1
+[ 5258.798354] sk->sk_sndbuf: 212992
+[ 5258.798356] sk->sk_rcvbuf: 212992
+[ 5258.798358] sk->sk_write_space: 0
+[ 5258.798360] sk->sk_data_ready: 0
+[ 5258.798361] /// END MAP SOCKET ///////
+[ 5258.798385] ///////////////////////
+[ 5258.798386] @@@@socket is not NULL
+[ 5258.798388] sock->state: 1
+[ 5258.798390] sock->type: 2
+[ 5258.798392] sock->flags: 0
+[ 5258.798394] sock->wq: 0
+[ 5258.798396] sock->file: 0
+[ 5258.798397] sock->sk: 0
+[ 5258.798399] sock->ops: 0
+[ 5258.798401] socket->sk is not NULL
+[ 5258.798403] sk->sk_state: 7
+[ 5258.798405] sk->sk_type: 2
+[ 5258.798407] sk->sk_err: 0
+[ 5258.798408] sk->sk_shutdown: 0
+[ 5258.798410] sk->sk_lock->slock: 0
+[ 5258.798412] sk->sk_rcv_saddr: 0
+[ 5258.798414] sk->sk_daddr: 0
+[ 5258.798416] sk->sk_family: 1
+[ 5258.798418] sk->sk_sndbuf: 212992
+[ 5258.798420] sk->sk_rcvbuf: 212992
+[ 5258.798422] sk->sk_write_space: 0
+[ 5258.798424] sk->sk_data_ready: 0
+[ 5258.798425] ///////////////////////
+[ 5258.798427] ///////////////////////
+[ 5258.798429] ====after setsockopt security check - socket is not NULL
+[ 5258.798431] sock->state: 1
+[ 5258.798433] sock->type: 2
+[ 5258.798435] sock->flags: 0
+[ 5258.798436] sock->wq: 0
+[ 5258.798438] sock->file: 0
+[ 5258.798440] sock->sk: 0
+[ 5258.798442] sock->ops: 0
+[ 5258.798444] socket->sk is not NULL
+[ 5258.798445] sk->sk_state: 7
+[ 5258.798447] sk->sk_type: 2
+[ 5258.798449] sk->sk_err: 0
+[ 5258.798451] sk->sk_shutdown: 0
+[ 5258.798453] sk->sk_lock->slock: 0
+[ 5258.798455] sk->sk_rcv_saddr: 0
+[ 5258.798457] sk->sk_daddr: 0
+[ 5258.798458] sk->sk_family: 1
+[ 5258.798460] sk->sk_sndbuf: 212992
+[ 5258.798462] sk->sk_rcvbuf: 212992
+[ 5258.798464] sk->sk_write_space: 0
+[ 5258.798466] sk->sk_data_ready: 0
+[ 5258.798468] ///////////////////////
+[ 5258.798470] /// sock_setsockopt ////////
+[ 5258.798471] sock_setsockopt:: socket is not NULL
+[ 5258.798473] sock->state: 1
+[ 5258.798475] sock->type: 2
+[ 5258.798477] sock->flags: 0
+[ 5258.798479] sock->wq: 0
+[ 5258.798481] sock->file: 0
+[ 5258.798483] sock->sk: 0
+[ 5258.798485] sock->ops: 0
+[ 5258.798487] sock_setsockopt:: socket->sk is not NULL
+[ 5258.798489] sk->sk_state: 7
+[ 5258.798492] sk->sk_type: 2
+[ 5258.798494] sk->sk_err: 0
+[ 5258.798496] sk->sk_shutdown: 0
+[ 5258.798499] sk->sk_lock->slock: 0
+[ 5258.798501] sk->sk_rcv_saddr: 0
+[ 5258.798504] sk->sk_daddr: 0
+[ 5258.798506] sk->sk_family: 1
+[ 5258.798508] sk->sk_sndbuf: 212992
+[ 5258.798511] sk->sk_rcvbuf: 212992
+[ 5258.798513] sk->sk_write_space: 0
+[ 5258.798515] sk->sk_data_ready: 0
+[ 5258.798518] ///////////////////////
+[ 5258.798524] /// SO_BINDTODEVICE false ////////
+[ 5258.798526] SO_BINDTODEVICE false:: socket is not NULL
+[ 5258.798529] sock->state: 1
+[ 5258.798531] sock->type: 2
+[ 5258.798534] sock->flags: 0
+[ 5258.798536] sock->wq: 0
+[ 5258.798538] sock->file: 0
+[ 5258.798541] sock->sk: 0
+[ 5258.798543] sock->ops: 0
+[ 5258.798544] SO_BINDTODEVICE false:: socket->sk is not NULL
+[ 5258.798548] sk->sk_state: 7
+[ 5258.798550] sk->sk_type: 2
+[ 5258.798553] sk->sk_err: 0
+[ 5258.798555] sk->sk_shutdown: 0
+[ 5258.798557] sk->sk_lock->slock: 0
+[ 5258.798560] sk->sk_rcv_saddr: 0
+[ 5258.798563] sk->sk_daddr: 0
+[ 5258.798567] sk->sk_family: 1
+[ 5258.798569] sk->sk_sndbuf: 16777216
+[ 5258.798572] sk->sk_rcvbuf: 212992
+[ 5258.798574] sk->sk_write_space: 0
+[ 5258.798577] sk->sk_data_ready: 0
+[ 5258.798579] ///////////////////////
+[ 5258.798582] ///sock_setsockopt:: after release_sock() ////////
+[ 5258.798584] after release_sock:: socket is not NULL
+[ 5258.798586] sock->state: 1
+[ 5258.798588] sock->type: 2
+[ 5258.798591] sock->flags: 0
+[ 5258.798593] sock->wq: 0
+[ 5258.798595] sock->file: 0
+[ 5258.798598] sock->sk: 0
+[ 5258.798600] sock->ops: 0
+[ 5258.798602] after release_sock:: socket->sk is not NULL
+[ 5258.798605] sk->sk_state: 7
+[ 5258.798607] sk->sk_type: 2
+[ 5258.798610] sk->sk_err: 0
+[ 5258.798612] sk->sk_shutdown: 0
+[ 5258.798614] sk->sk_lock->slock: 0
+[ 5258.798617] sk->sk_rcv_saddr: 0
+[ 5258.798619] sk->sk_daddr: 0
+[ 5258.798621] sk->sk_family: 1
+[ 5258.798623] sk->sk_sndbuf: 16777216
+[ 5258.798625] sk->sk_rcvbuf: 212992
+[ 5258.798627] sk->sk_write_space: 0
+[ 5258.798628] sk->sk_data_ready: 0
+[ 5258.798630] ///////////////////////
+[ 5258.798632] ///////////////////////
+[ 5258.798634] ****after generic or protoclspecific - socket is not NULL
+[ 5258.798635] sock->state: 1
+[ 5258.798637] sock->type: 2
+[ 5258.798639] sock->flags: 0
+[ 5258.798641] sock->wq: 0
+[ 5258.798643] sock->file: 0
+[ 5258.798645] sock->sk: 0
+[ 5258.798647] sock->ops: 0
+[ 5258.798648] socket->sk is not NULL
+[ 5258.798650] sk->sk_state: 7
+[ 5258.798652] sk->sk_type: 2
+[ 5258.798654] sk->sk_err: 0
+[ 5258.798656] sk->sk_shutdown: 0
+[ 5258.798657] sk->sk_lock->slock: 0
+[ 5258.798659] sk->sk_rcv_saddr: 0
+[ 5258.798661] sk->sk_daddr: 0
+[ 5258.798663] sk->sk_family: 1
+[ 5258.798665] sk->sk_sndbuf: 16777216
+[ 5258.798667] sk->sk_rcvbuf: 212992
+[ 5258.798669] sk->sk_write_space: 0
+[ 5258.798671] sk->sk_data_ready: 0
+[ 5258.798673] ///////////////////////
+[ 5258.798674] /////// After out_put: /////////
+[ 5258.798676] !!!! After out_put: socket is not NULL
+[ 5258.798678] sock->state: 1
+[ 5258.798680] sock->type: 2
+[ 5258.798681] sock->flags: 0
+[ 5258.798683] sock->wq: 0
+[ 5258.798685] sock->file: 0
+[ 5258.798687] sock->sk: 0
+[ 5258.798689] sock->ops: 0
+[ 5258.798690] socket->sk is not NULL
+[ 5258.798692] sk->sk_state: 7
+[ 5258.798694] sk->sk_type: 2
+[ 5258.798696] sk->sk_err: 0
+[ 5258.798698] sk->sk_shutdown: 0
+[ 5258.798700] sk->sk_lock->slock: 0
+[ 5258.798701] sk->sk_rcv_saddr: 0
+[ 5258.798703] sk->sk_daddr: 0
+[ 5258.798705] sk->sk_family: 1
+[ 5258.798707] sk->sk_sndbuf: 16777216
+[ 5258.798709] sk->sk_rcvbuf: 212992
+[ 5258.798711] sk->sk_write_space: 0
+[ 5258.798713] sk->sk_data_ready: 0
+[ 5258.798714] ///////////////////////
+[ 5258.798716] /////// after setSockopt fput_light /////////
+[ 5258.798718] &&&& fput_light: socket is not NULL
+[ 5258.798720] sock->state: 1
+[ 5258.798721] sock->type: 2
+[ 5258.798723] sock->flags: 0
+[ 5258.798725] sock->wq: 0
+[ 5258.798727] sock->file: 0
+[ 5258.798729] sock->sk: 0
+[ 5258.798730] sock->ops: 0
+[ 5258.798732] socket->sk is not NULL
+[ 5258.798734] sk->sk_state: 7
+[ 5258.798736] sk->sk_type: 2
+[ 5258.798738] sk->sk_err: 0
+[ 5258.798739] sk->sk_shutdown: 0
+[ 5258.798741] sk->sk_lock->slock: 0
+[ 5258.798743] sk->sk_rcv_saddr: 0
+[ 5258.798745] sk->sk_daddr: 0
+[ 5258.798747] sk->sk_family: 1
+[ 5258.798749] sk->sk_sndbuf: 16777216
+[ 5258.798751] sk->sk_rcvbuf: 212992
+[ 5258.798753] sk->sk_write_space: 0
+[ 5258.798755] sk->sk_data_ready: 0
+[ 5258.798756] ///////////////////////
+[ 5258.798977] /// CONSTANTS ///////
+[ 5258.798979] family: 1
+[ 5258.798982] type: 524290
+[ 5258.798983] protocol: 0
+[ 5258.798985] SOCK_CLOEXEC: 524288
+[ 5258.798987] O_CLOEXEC: 524288
+[ 5258.798989] SOCK_MAX: 11
+[ 5258.798991] SOCK_TYPE_MASK: 15
+[ 5258.798993] sock: 0
+[ 5258.798995] /// END CONSTANTS ///////
+[ 5258.798996] /// CONSTANTS 2 ///////
+[ 5258.798998] flags: 524288
+[ 5258.799000] type: 2
+[ 5258.799002] /// END CONSTANTS 2 ///////
+[ 5258.799003] /// CONSTANTS 3 ///////
+[ 5258.799005] flags: 524288
+[ 5258.799007] /// END CONSTANTS 3 ///////
+[ 5258.799014] /// CREATE SOCKET ///////
+[ 5258.799015] Connect1-socket is not NULL
+[ 5258.799017] sock->state: 1
+[ 5258.799019] sock->type: 2
+[ 5258.799021] sock->flags: 0
+[ 5258.799023] sock->wq: 0
+[ 5258.799025] sock->file: 1
+[ 5258.799026] sock->sk: 0
+[ 5258.799028] sock->ops: 0
+[ 5258.799030] Create:: socket->sk is not NULL
+[ 5258.799032] sk->sk_state: 7
+[ 5258.799034] sk->sk_type: 2
+[ 5258.799035] sk->sk_err: 0
+[ 5258.799037] sk->sk_shutdown: 0
+[ 5258.799039] sk->sk_lock->slock: 0
+[ 5258.799041] sk->sk_rcv_saddr: 0
+[ 5258.799043] sk->sk_daddr: 0
+[ 5258.799045] sk->sk_family: 1
+[ 5258.799046] sk->sk_sndbuf: 212992
+[ 5258.799048] sk->sk_rcvbuf: 212992
+[ 5258.799050] sk->sk_write_space: 0
+[ 5258.799052] sk->sk_data_ready: 0
+[ 5258.799054] /// END CREATE SOCKET ///////
+[ 5258.799059] /// MAP SOCKET ///////
+[ 5258.799060] After Map:: socket is not NULL
+[ 5258.799062] sock->state: 1
+[ 5258.799064] sock->type: 2
+[ 5258.799066] sock->flags: 0
+[ 5258.799068] sock->wq: 0
+[ 5258.799070] sock->file: 0
+[ 5258.799071] sock->sk: 0
+[ 5258.799073] sock->ops: 0
+[ 5258.799075] Map:: sk is not NULL
+[ 5258.799077] sk->sk_state: 7
+[ 5258.799078] sk->sk_type: 2
+[ 5258.799080] sk->sk_err: 0
+[ 5258.799082] sk->sk_shutdown: 0
+[ 5258.799084] sk->sk_lock->slock: 0
+[ 5258.799086] sk->sk_rcv_saddr: 0
+[ 5258.799088] sk->sk_daddr: 0
+[ 5258.799089] sk->sk_family: 1
+[ 5258.799091] sk->sk_sndbuf: 212992
+[ 5258.799093] sk->sk_rcvbuf: 212992
+[ 5258.799095] sk->sk_write_space: 0
+[ 5258.799097] sk->sk_data_ready: 0
+[ 5258.799099] /// END MAP SOCKET ///////
+[ 5258.799130] ///////////////////////
+[ 5258.799132] @@@@socket is not NULL
+[ 5258.799134] sock->state: 1
+[ 5258.799136] sock->type: 2
+[ 5258.799138] sock->flags: 0
+[ 5258.799139] sock->wq: 0
+[ 5258.799141] sock->file: 0
+[ 5258.799143] sock->sk: 0
+[ 5258.799145] sock->ops: 0
+[ 5258.799147] socket->sk is not NULL
+[ 5258.799149] sk->sk_state: 7
+[ 5258.799150] sk->sk_type: 2
+[ 5258.799152] sk->sk_err: 0
+[ 5258.799154] sk->sk_shutdown: 0
+[ 5258.799156] sk->sk_lock->slock: 0
+[ 5258.799158] sk->sk_rcv_saddr: 0
+[ 5258.799160] sk->sk_daddr: 0
+[ 5258.799161] sk->sk_family: 1
+[ 5258.799163] sk->sk_sndbuf: 212992
+[ 5258.799165] sk->sk_rcvbuf: 212992
+[ 5258.799167] sk->sk_write_space: 0
+[ 5258.799169] sk->sk_data_ready: 0
+[ 5258.799170] ///////////////////////
+[ 5258.799172] ///////////////////////
+[ 5258.799174] ====after setsockopt security check - socket is not NULL
+[ 5258.799176] sock->state: 1
+[ 5258.799178] sock->type: 2
+[ 5258.799179] sock->flags: 0
+[ 5258.799181] sock->wq: 0
+[ 5258.799183] sock->file: 0
+[ 5258.799185] sock->sk: 0
+[ 5258.799187] sock->ops: 0
+[ 5258.799188] socket->sk is not NULL
+[ 5258.799190] sk->sk_state: 7
+[ 5258.799192] sk->sk_type: 2
+[ 5258.799194] sk->sk_err: 0
+[ 5258.799196] sk->sk_shutdown: 0
+[ 5258.799198] sk->sk_lock->slock: 0
+[ 5258.799200] sk->sk_rcv_saddr: 0
+[ 5258.799201] sk->sk_daddr: 0
+[ 5258.799203] sk->sk_family: 1
+[ 5258.799205] sk->sk_sndbuf: 212992
+[ 5258.799207] sk->sk_rcvbuf: 212992
+[ 5258.799209] sk->sk_write_space: 0
+[ 5258.799211] sk->sk_data_ready: 0
+[ 5258.799212] ///////////////////////
+[ 5258.799214] /// sock_setsockopt ////////
+[ 5258.799216] sock_setsockopt:: socket is not NULL
+[ 5258.799218] sock->state: 1
+[ 5258.799220] sock->type: 2
+[ 5258.799221] sock->flags: 0
+[ 5258.799223] sock->wq: 0
+[ 5258.799225] sock->file: 0
+[ 5258.799227] sock->sk: 0
+[ 5258.799229] sock->ops: 0
+[ 5258.799230] sock_setsockopt:: socket->sk is not NULL
+[ 5258.799232] sk->sk_state: 7
+[ 5258.799234] sk->sk_type: 2
+[ 5258.799236] sk->sk_err: 0
+[ 5258.799238] sk->sk_shutdown: 0
+[ 5258.799240] sk->sk_lock->slock: 0
+[ 5258.799241] sk->sk_rcv_saddr: 0
+[ 5258.799243] sk->sk_daddr: 0
+[ 5258.799245] sk->sk_family: 1
+[ 5258.799247] sk->sk_sndbuf: 212992
+[ 5258.799249] sk->sk_rcvbuf: 212992
+[ 5258.799251] sk->sk_write_space: 0
+[ 5258.799253] sk->sk_data_ready: 0
+[ 5258.799254] ///////////////////////
+[ 5258.799257] /// SO_BINDTODEVICE false ////////
+[ 5258.799258] SO_BINDTODEVICE false:: socket is not NULL
+[ 5258.799260] sock->state: 1
+[ 5258.799262] sock->type: 2
+[ 5258.799264] sock->flags: 0
+[ 5258.799266] sock->wq: 0
+[ 5258.799267] sock->file: 0
+[ 5258.799269] sock->sk: 0
+[ 5258.799271] sock->ops: 0
+[ 5258.799273] SO_BINDTODEVICE false:: socket->sk is not NULL
+[ 5258.799275] sk->sk_state: 7
+[ 5258.799276] sk->sk_type: 2
+[ 5258.799278] sk->sk_err: 0
+[ 5258.799280] sk->sk_shutdown: 0
+[ 5258.799282] sk->sk_lock->slock: 0
+[ 5258.799284] sk->sk_rcv_saddr: 0
+[ 5258.799286] sk->sk_daddr: 0
+[ 5258.799288] sk->sk_family: 1
+[ 5258.799289] sk->sk_sndbuf: 212992
+[ 5258.799291] sk->sk_rcvbuf: 212992
+[ 5258.799293] sk->sk_write_space: 0
+[ 5258.799295] sk->sk_data_ready: 0
+[ 5258.799297] ///////////////////////
+[ 5258.799298] ///sock_setsockopt:: after release_sock() ////////
+[ 5258.799300] after release_sock:: socket is not NULL
+[ 5258.799302] sock->state: 1
+[ 5258.799304] sock->type: 2
+[ 5258.799306] sock->flags: 0
+[ 5258.799307] sock->wq: 0
+[ 5258.799309] sock->file: 0
+[ 5258.799311] sock->sk: 0
+[ 5258.799313] sock->ops: 0
+[ 5258.799314] after release_sock:: socket->sk is not NULL
+[ 5258.799316] sk->sk_state: 7
+[ 5258.799318] sk->sk_type: 2
+[ 5258.799320] sk->sk_err: 0
+[ 5258.799322] sk->sk_shutdown: 0
+[ 5258.799324] sk->sk_lock->slock: 0
+[ 5258.799326] sk->sk_rcv_saddr: 0
+[ 5258.799327] sk->sk_daddr: 0
+[ 5258.799329] sk->sk_family: 1
+[ 5258.799331] sk->sk_sndbuf: 212992
+[ 5258.799333] sk->sk_rcvbuf: 212992
+[ 5258.799335] sk->sk_write_space: 0
+[ 5258.799337] sk->sk_data_ready: 0
+[ 5258.799338] ///////////////////////
+[ 5258.799340] ///////////////////////
+[ 5258.799342] ****after generic or protoclspecific - socket is not NULL
+[ 5258.799344] sock->state: 1
+[ 5258.799346] sock->type: 2
+[ 5258.799347] sock->flags: 0
+[ 5258.799349] sock->wq: 0
+[ 5258.799351] sock->file: 0
+[ 5258.799353] sock->sk: 0
+[ 5258.799355] sock->ops: 0
+[ 5258.799356] socket->sk is not NULL
+[ 5258.799358] sk->sk_state: 7
+[ 5258.799360] sk->sk_type: 2
+[ 5258.799362] sk->sk_err: 0
+[ 5258.799363] sk->sk_shutdown: 0
+[ 5258.799365] sk->sk_lock->slock: 0
+[ 5258.799367] sk->sk_rcv_saddr: 0
+[ 5258.799369] sk->sk_daddr: 0
+[ 5258.799371] sk->sk_family: 1
+[ 5258.799373] sk->sk_sndbuf: 212992
+[ 5258.799375] sk->sk_rcvbuf: 212992
+[ 5258.799377] sk->sk_write_space: 0
+[ 5258.799378] sk->sk_data_ready: 0
+[ 5258.799380] ///////////////////////
+[ 5258.799382] /////// After out_put: /////////
+[ 5258.799383] !!!! After out_put: socket is not NULL
+[ 5258.799385] sock->state: 1
+[ 5258.799387] sock->type: 2
+[ 5258.799389] sock->flags: 0
+[ 5258.799391] sock->wq: 0
+[ 5258.799392] sock->file: 0
+[ 5258.799394] sock->sk: 0
+[ 5258.799396] sock->ops: 0
+[ 5258.799398] socket->sk is not NULL
+[ 5258.799399] sk->sk_state: 7
+[ 5258.799401] sk->sk_type: 2
+[ 5258.799403] sk->sk_err: 0
+[ 5258.799405] sk->sk_shutdown: 0
+[ 5258.799407] sk->sk_lock->slock: 0
+[ 5258.799408] sk->sk_rcv_saddr: 0
+[ 5258.799410] sk->sk_daddr: 0
+[ 5258.799412] sk->sk_family: 1
+[ 5258.799414] sk->sk_sndbuf: 212992
+[ 5258.799416] sk->sk_rcvbuf: 212992
+[ 5258.799418] sk->sk_write_space: 0
+[ 5258.799420] sk->sk_data_ready: 0
+[ 5258.799421] ///////////////////////
+[ 5258.799423] /////// after setSockopt fput_light /////////
+[ 5258.799424] &&&& fput_light: socket is not NULL
+[ 5258.799426] sock->state: 1
+[ 5258.799428] sock->type: 2
+[ 5258.799430] sock->flags: 0
+[ 5258.799432] sock->wq: 0
+[ 5258.799433] sock->file: 0
+[ 5258.799435] sock->sk: 0
+[ 5258.799437] sock->ops: 0
+[ 5258.799439] socket->sk is not NULL
+[ 5258.799440] sk->sk_state: 7
+[ 5258.799442] sk->sk_type: 2
+[ 5258.799444] sk->sk_err: 0
+[ 5258.799446] sk->sk_shutdown: 0
+[ 5258.799448] sk->sk_lock->slock: 0
+[ 5258.799450] sk->sk_rcv_saddr: 0
+[ 5258.799451] sk->sk_daddr: 0
+[ 5258.799453] sk->sk_family: 1
+[ 5258.799455] sk->sk_sndbuf: 212992
+[ 5258.799457] sk->sk_rcvbuf: 212992
+[ 5258.799459] sk->sk_write_space: 0
+[ 5258.799461] sk->sk_data_ready: 0
+[ 5258.799462] ///////////////////////
+[ 5258.799478] ///////////////////////
+[ 5258.799480] @@@@socket is not NULL
+[ 5258.799481] sock->state: 1
+[ 5258.799483] sock->type: 2
+[ 5258.799485] sock->flags: 0
+[ 5258.799487] sock->wq: 0
+[ 5258.799489] sock->file: 0
+[ 5258.799490] sock->sk: 0
+[ 5258.799492] sock->ops: 0
+[ 5258.799494] socket->sk is not NULL
+[ 5258.799496] sk->sk_state: 7
+[ 5258.799497] sk->sk_type: 2
+[ 5258.799499] sk->sk_err: 0
+[ 5258.799501] sk->sk_shutdown: 0
+[ 5258.799503] sk->sk_lock->slock: 0
+[ 5258.799505] sk->sk_rcv_saddr: 0
+[ 5258.799506] sk->sk_daddr: 0
+[ 5258.799508] sk->sk_family: 1
+[ 5258.799510] sk->sk_sndbuf: 212992
+[ 5258.799512] sk->sk_rcvbuf: 212992
+[ 5258.799514] sk->sk_write_space: 0
+[ 5258.799516] sk->sk_data_ready: 0
+[ 5258.799517] ///////////////////////
+[ 5258.799519] ///////////////////////
+[ 5258.799521] ====after setsockopt security check - socket is not NULL
+[ 5258.799522] sock->state: 1
+[ 5258.799524] sock->type: 2
+[ 5258.799526] sock->flags: 0
+[ 5258.799528] sock->wq: 0
+[ 5258.799530] sock->file: 0
+[ 5258.799531] sock->sk: 0
+[ 5258.799533] sock->ops: 0
+[ 5258.799535] socket->sk is not NULL
+[ 5258.799536] sk->sk_state: 7
+[ 5258.799538] sk->sk_type: 2
+[ 5258.799540] sk->sk_err: 0
+[ 5258.799542] sk->sk_shutdown: 0
+[ 5258.799544] sk->sk_lock->slock: 0
+[ 5258.799546] sk->sk_rcv_saddr: 0
+[ 5258.799548] sk->sk_daddr: 0
+[ 5258.799549] sk->sk_family: 1
+[ 5258.799551] sk->sk_sndbuf: 212992
+[ 5258.799554] sk->sk_rcvbuf: 212992
+[ 5258.799556] sk->sk_write_space: 0
+[ 5258.799558] sk->sk_data_ready: 0
+[ 5258.799560] ///////////////////////
+[ 5258.799562] /// sock_setsockopt ////////
+[ 5258.799564] sock_setsockopt:: socket is not NULL
+[ 5258.799567] sock->state: 1
+[ 5258.799569] sock->type: 2
+[ 5258.799572] sock->flags: 0
+[ 5258.799574] sock->wq: 0
+[ 5258.799576] sock->file: 0
+[ 5258.799578] sock->sk: 0
+[ 5258.799580] sock->ops: 0
+[ 5258.799583] sock_setsockopt:: socket->sk is not NULL
+[ 5258.799585] sk->sk_state: 7
+[ 5258.799587] sk->sk_type: 2
+[ 5258.799590] sk->sk_err: 0
+[ 5258.799593] sk->sk_shutdown: 0
+[ 5258.799596] sk->sk_lock->slock: 0
+[ 5258.799598] sk->sk_rcv_saddr: 0
+[ 5258.799600] sk->sk_daddr: 0
+[ 5258.799603] sk->sk_family: 1
+[ 5258.799605] sk->sk_sndbuf: 212992
+[ 5258.799607] sk->sk_rcvbuf: 212992
+[ 5258.799611] sk->sk_write_space: 0
+[ 5258.799613] sk->sk_data_ready: 0
+[ 5258.799615] ///////////////////////
+[ 5258.799617] /// SO_BINDTODEVICE false ////////
+[ 5258.799619] SO_BINDTODEVICE false:: socket is not NULL
+[ 5258.799622] sock->state: 1
+[ 5258.799624] sock->type: 2
+[ 5258.799626] sock->flags: 0
+[ 5258.799629] sock->wq: 0
+[ 5258.799631] sock->file: 0
+[ 5258.799633] sock->sk: 0
+[ 5258.799635] sock->ops: 0
+[ 5258.799637] SO_BINDTODEVICE false:: socket->sk is not NULL
+[ 5258.799641] sk->sk_state: 7
+[ 5258.799643] sk->sk_type: 2
+[ 5258.799647] sk->sk_err: 0
+[ 5258.799651] sk->sk_shutdown: 0
+[ 5258.799653] sk->sk_lock->slock: 0
+[ 5258.799655] sk->sk_rcv_saddr: 0
+[ 5258.799657] sk->sk_daddr: 0
+[ 5258.799661] sk->sk_family: 1
+[ 5258.799663] sk->sk_sndbuf: 425984
+[ 5258.799665] sk->sk_rcvbuf: 212992
+[ 5258.799667] sk->sk_write_space: 0
+[ 5258.799670] sk->sk_data_ready: 0
+[ 5258.799673] ///////////////////////
+[ 5258.799676] ///sock_setsockopt:: after release_sock() ////////
+[ 5258.799678] after release_sock:: socket is not NULL
+[ 5258.799680] sock->state: 1
+[ 5258.799683] sock->type: 2
+[ 5258.799686] sock->flags: 0
+[ 5258.799688] sock->wq: 0
+[ 5258.799690] sock->file: 0
+[ 5258.799693] sock->sk: 0
+[ 5258.799695] sock->ops: 0
+[ 5258.799697] after release_sock:: socket->sk is not NULL
+[ 5258.799699] sk->sk_state: 7
+[ 5258.799701] sk->sk_type: 2
+[ 5258.799704] sk->sk_err: 0
+[ 5258.799706] sk->sk_shutdown: 0
+[ 5258.799709] sk->sk_lock->slock: 0
+[ 5258.799711] sk->sk_rcv_saddr: 0
+[ 5258.799713] sk->sk_daddr: 0
+[ 5258.799716] sk->sk_family: 1
+[ 5258.799718] sk->sk_sndbuf: 425984
+[ 5258.799720] sk->sk_rcvbuf: 212992
+[ 5258.799722] sk->sk_write_space: 0
+[ 5258.799725] sk->sk_data_ready: 0
+[ 5258.799727] ///////////////////////
+[ 5258.799729] ///////////////////////
+[ 5258.799731] ****after generic or protoclspecific - socket is not NULL
+[ 5258.799733] sock->state: 1
+[ 5258.799736] sock->type: 2
+[ 5258.799738] sock->flags: 0
+[ 5258.799740] sock->wq: 0
+[ 5258.799742] sock->file: 0
+[ 5258.799745] sock->sk: 0
+[ 5258.799747] sock->ops: 0
+[ 5258.799749] socket->sk is not NULL
+[ 5258.799751] sk->sk_state: 7
+[ 5258.799754] sk->sk_type: 2
+[ 5258.799756] sk->sk_err: 0
+[ 5258.799758] sk->sk_shutdown: 0
+[ 5258.799760] sk->sk_lock->slock: 0
+[ 5258.799762] sk->sk_rcv_saddr: 0
+[ 5258.799765] sk->sk_daddr: 0
+[ 5258.799767] sk->sk_family: 1
+[ 5258.799770] sk->sk_sndbuf: 425984
+[ 5258.799772] sk->sk_rcvbuf: 212992
+[ 5258.799774] sk->sk_write_space: 0
+[ 5258.799777] sk->sk_data_ready: 0
+[ 5258.799779] ///////////////////////
+[ 5258.799781] /////// After out_put: /////////
+[ 5258.799783] !!!! After out_put: socket is not NULL
+[ 5258.799786] sock->state: 1
+[ 5258.799788] sock->type: 2
+[ 5258.799791] sock->flags: 0
+[ 5258.799794] sock->wq: 0
+[ 5258.799796] sock->file: 0
+[ 5258.799799] sock->sk: 0
+[ 5258.799801] sock->ops: 0
+[ 5258.799804] socket->sk is not NULL
+[ 5258.799806] sk->sk_state: 7
+[ 5258.799809] sk->sk_type: 2
+[ 5258.799813] sk->sk_err: 0
+[ 5258.799815] sk->sk_shutdown: 0
+[ 5258.799818] sk->sk_lock->slock: 0
+[ 5258.799821] sk->sk_rcv_saddr: 0
+[ 5258.799823] sk->sk_daddr: 0
+[ 5258.799826] sk->sk_family: 1
+[ 5258.799830] sk->sk_sndbuf: 425984
+[ 5258.799832] sk->sk_rcvbuf: 212992
+[ 5258.799834] sk->sk_write_space: 0
+[ 5258.799837] sk->sk_data_ready: 0
+[ 5258.799839] ///////////////////////
+[ 5258.799841] /////// after setSockopt fput_light /////////
+[ 5258.799843] &&&& fput_light: socket is not NULL
+[ 5258.799845] sock->state: 1
+[ 5258.799848] sock->type: 2
+[ 5258.799851] sock->flags: 0
+[ 5258.799854] sock->wq: 0
+[ 5258.799856] sock->file: 0
+[ 5258.799858] sock->sk: 0
+[ 5258.799862] sock->ops: 0
+[ 5258.799864] socket->sk is not NULL
+[ 5258.799866] sk->sk_state: 7
+[ 5258.799869] sk->sk_type: 2
+[ 5258.799871] sk->sk_err: 0
+[ 5258.799875] sk->sk_shutdown: 0
+[ 5258.799877] sk->sk_lock->slock: 0
+[ 5258.799880] sk->sk_rcv_saddr: 0
+[ 5258.799882] sk->sk_daddr: 0
+[ 5258.799885] sk->sk_family: 1
+[ 5258.799888] sk->sk_sndbuf: 425984
+[ 5258.799891] sk->sk_rcvbuf: 212992
+[ 5258.799893] sk->sk_write_space: 0
+[ 5258.799896] sk->sk_data_ready: 0
+[ 5258.799899] ///////////////////////

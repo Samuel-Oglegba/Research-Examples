@@ -1,0 +1,117 @@
+digraph G {
+   node [style=filled,  color="#D5E8D4", fontsize=30, shape=box];
+   #edge [penwidth = 10, arrowsize=0.1, fontsize=20, color="#C2DFFF"];
+   edge [penwidth = 7.5, fontsize=20, color="#E1D5E7"];
+   compound=true;
+   fontsize=35;
+   labeljust=l;
+   color="red";
+   nodesep=2;
+   rankdir="TD";
+
+ #CreateSocket
+  subgraph cluster_0 {
+    #style=filled;
+    #color=lightgrey;
+    label = "CreateValidSocket";
+    
+    #point0 [shape="point",width=0.5];
+    #CreateTheSocket    
+    subgraph cluster_0_1 {
+         #color=blue;
+         label = "CreateASocket";
+        
+        #CheckProtocolRange
+        subgraph cluster_0_2 {
+            #color=lightgrey;
+            label="CheckProtocolRange";
+        
+            
+            decision0 [label="family < 0 || family >= NPROTO", shape=diamond, color="#FFF2CC"]
+            decision1 [label="type < 0 || type >= SOCK_MAX", shape=diamond, color="#FFF2CC"]
+            
+            decision0 -> decision1 [label="False", style=dotted, penwidth = 5, color=black, arrowsize=1];
+            
+            
+            #point0 -> decision0 [label="[data1] non-empty : SocketSpec"];
+            decision0 -> decision1 [label="[data1] non-empty : SocketSpec"];
+        }
+        #end CheckProtocolRange
+        
+        # CheckCompatibilityAndPermission
+        subgraph cluster_0_3 {
+          label="CheckCompatibilityAndPermission";
+          
+            decision2 [label="family == PF_INET && type == SOCK_PACKET", shape=diamond, color="#FFF2CC"];
+            a3 [label="UpdateSocketSpecFamily"];
+            a4 [label="VerifySocketPermission"];
+            decision2 [label="family == PF_INET && type == SOCK_PACKET", shape=diamond, color="#FFF2CC"];
+            
+            
+            decision2 -> a3 [label="True", style=dotted, penwidth = 5, color=black, arrowsize=1];
+            decision2 -> a4 [label="False", style=dotted, penwidth = 5, color=black, arrowsize=1];
+            
+            decision2 -> a3 [label="[data1] non-empty : SocketSpec"];
+            a3 -> a4 [label="[data1.1] working : SocketSpec (family = PF_PACKET)"];
+           
+        }
+        # end CheckCompatibilityAndPermission
+        
+        decision1 -> decision2 [label="False", style=dotted, penwidth = 5, color=black, arrowsize=1];
+        decision1 -> decision2 [label="[data1] non-empty : SocketSpec"];
+        
+        subgraph cluster_0_4 {
+            label="AllocateSocket";
+            a5 [label="AllocateInodeAndSocket"];
+            a6 [label="UpdateSocketType"];
+            
+            decision3 [label="!Socket", shape=diamond, color="#FFF2CC"];
+            
+            a5 -> decision3  [label="[datat2] non-empty : Socket(state, type, flags, operations, file, networking-protocol, wait-queue)"];
+            decision3 -> a6 [label="False", style=dotted, penwidth = 5, color=black, arrowsize=1];
+            
+       }
+       
+      #a7 [label="ConfigureSocketProtocolFamilyModule"];
+ 
+    }#end CreateTheSocket
+    
+    #MapSocketToFileDescriptor
+    a8 [label="MapSocketToFileDescriptor"];
+    
+    a4 -> a5 [label="[data1.1] working : SocketSpec"];
+  
+    decision3 -> a6 [label="[datat2] non-empty : Socket"];
+    a6 -> a8 [label="[datat2.1] working :Socket(sock->type = type)"];
+    #a7 -> a8 [label="SocketSpec"];
+    
+  }
+ #end CreateSocket
+ 
+  
+  
+
+  user -> decision0 [label="[data1] non-empty : SocketSpec(family, type, protocol)"];
+ 
+  #point0 -> a6 [label="[data1] non-empty : SocketSpec"];
+
+  a8->ConfigureSocket [label="[datat2.2] working :Socket(sock->type = type, sock->file = struct file *file)"];
+  user -> ConfigureSocket [label="SocketOption(level, optname, optval, optlen)"];
+  ConfigureSocket -> end [label="[datat2.3] working :Socket"];
+ 
+ 
+
+  user [shape ="ellipse", style= filled, color="#F8CECC"];
+  end [shape ="ellipse", style= filled, color="#F8CECC"];
+  exit1 [shape ="ellipse", style= filled, color="#F8CECC",label="-EAFNOSUPPORT"];
+  exit2 [shape ="ellipse", style= filled, color="#F8CECC",label="-EINVAL"];
+  exit3 [style= filled, color="#F8CECC",label="-ENFILE"];
+  
+  
+  decision0 -> exit1 [label="True", style=dotted, penwidth = 5, color=black, arrowsize=1];
+  decision1 -> exit2 [label="True", style=dotted, penwidth = 5, color=black, arrowsize=1];
+  decision3 -> exit3 [label="True", style=dotted, penwidth = 5, color=black, arrowsize=1];
+
+  
+
+}
