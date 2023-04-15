@@ -342,6 +342,20 @@ static inline void local_bh_enable(void)
 	__local_bh_enable_ip(_THIS_IP_, SOFTIRQ_DISABLE_OFFSET);
 }
 
+#define call_int_hook(FUNC, IRC, ...) ({			\
+	int RC = IRC;						\
+	do {							\
+		struct security_hook_list *P;			\
+								\
+		list_for_each_entry(P, &security_hook_heads.FUNC, list) { \
+			RC = P->hook.FUNC(__VA_ARGS__);		\
+			if (RC != 0)				\
+				break;				\
+		}						\
+	} while (0);						\
+	RC;							\
+})
+
 ///////////////////////////////////// STRUCTS ///////////////////////////////////
 typedef struct seqcount {
 	unsigned sequence;
@@ -882,10 +896,44 @@ struct rcu_head
 };// struct rcu_head
 
 
-/* unable to get all the system definition */
 struct file {
-	
+	union {
+		struct llist_node	fu_llist;
+		struct rcu_head 	fu_rcuhead;
+	} f_u;
+	struct path		f_path;
+	struct inode		*f_inode;	/* cached value */
+	const struct file_operations	*f_op;
+
+	/*
+	 * Protects f_ep_links, f_flags.
+	 * Must not be taken from IRQ context.
+	 */
+	spinlock_t		f_lock;
+	atomic_long_t		f_count;
+	unsigned int 		f_flags;
+	fmode_t			f_mode;
+	struct mutex		f_pos_lock;
+	loff_t			f_pos;
+	struct fown_struct	f_owner;
+	const struct cred	*f_cred;
+	struct file_ra_state	f_ra;
+
+	u64			f_version;
+#ifdef CONFIG_SECURITY
+	void			*f_security;
+#endif
+	/* needed for tty driver, and maybe others */
+	void			*private_data;
+
+#ifdef CONFIG_EPOLL
+	/* Used by fs/eventpoll.c to link all the hooks to this file */
+	struct list_head	f_ep_links;
+	struct list_head	f_tfile_llink;
+#endif /* #ifdef CONFIG_EPOLL */
+	struct address_space	*f_mapping;
 } __attribute__((aligned(4)));	/* lest something weird decides that 2 is OK */
+
 
 struct fd {
 	struct file *file;
@@ -1686,9 +1734,39 @@ struct xt_mtdtor_param {
 	u_int8_t family;
 };
 
-
 //////////////////////////////////////// END OF STRUCTS ////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
+
+/*
+ * WARNING: non atomic version.
+ */
+static inline void
+__set_bit(unsigned long nr, volatile void * addr)
+{
+	int *m = ((int *) addr) + (nr >> 5);
+
+	*m |= 1 << (nr & 31);
+}
+
+static inline void sock_set_flag(struct sock *sk, enum sock_flags flag)
+{
+	__set_bit(flag, &sk->sk_flags);
+}//sock_set_flag
+
+/**
+ * @brief 
+ * 
+ * @param sk 
+ * @param bit 
+ * @param valbool 
+ */
+static inline void sock_valbool_flag(struct sock *sk, int bit, int valbool)
+{
+	if (valbool)
+		sock_set_flag(sk, bit);
+	else
+		sock_reset_flag(sk, bit);
+}//sock_valbool_flag
 
 /**
  * @brief Source file -- vmalloc.c (line 1720)
@@ -3049,6 +3127,19 @@ static struct socket *sockfd_lookup_light(int fd, int *err, int *fput_needed)
 }//sockfd_lookup_light
 
 /**
+ * @brief 
+ * 
+ * @param sock 
+ * @param level 
+ * @param optname 
+ * @return int 
+ */
+int security_socket_setsockopt(struct socket *sock, int level, int optname)
+{
+	return call_int_hook(socket_setsockopt, 0, sock, level, optname);
+}//security_socket_setsockopt
+
+/**
  * @brief Source file -- file.h (line 23)
  * 
  * @param file 
@@ -3716,22 +3807,443 @@ static int compat_do_replace(struct net *net, void __user *user, unsigned int le
 }//compat_do_replace
 /** End of Step 2 */
 
-
 /**
- * @brief Mock setsockopt call -- The definition of `setsockopt` was not found in the Linux software (external definition)
- * ================= Step 1  ===================== 
- *  
- * @param fd 
- * @param level 
- * @param optname 
+ * @brief 
+ * 
+ * @param sk 
  * @param optval 
  * @param optlen 
  * @return int 
  */
-/*
-int setsockopt(int fd, int level, int optname, const void * optval, socklen_t optlen)
+static int sock_setbindtodevice(struct sock *sk, char __user *optval,
+				int optlen)
 {
-	int ret, err, fput_needed;
+	int ret = -ENOPROTOOPT;
+#ifdef CONFIG_NETDEVICES
+	struct net *net = sock_net(sk);
+	char devname[IFNAMSIZ];
+	int index;
+
+	/* Sorry... */
+	ret = -EPERM;
+	if (!ns_capable(net->user_ns, CAP_NET_RAW))
+		goto out;
+
+	ret = -EINVAL;
+	if (optlen < 0)
+		goto out;
+
+	/* Bind this socket to a particular device like "eth0",
+	 * as specified in the passed interface name. If the
+	 * name is "" or the option length is zero the socket
+	 * is not bound.
+	 */
+	if (optlen > IFNAMSIZ - 1)
+		optlen = IFNAMSIZ - 1;
+	memset(devname, 0, sizeof(devname));
+
+	ret = -EFAULT;
+	if (copy_from_user(devname, optval, optlen))
+		goto out;
+
+	index = 0;
+	if (devname[0] != '\0') {
+		struct net_device *dev;
+
+		rcu_read_lock();
+		dev = dev_get_by_name_rcu(net, devname);
+		if (dev)
+			index = dev->ifindex;
+		rcu_read_unlock();
+		ret = -ENODEV;
+		if (!dev)
+			goto out;
+	}
+
+	lock_sock(sk);
+	sk->sk_bound_dev_if = index;
+	sk_dst_reset(sk);
+	release_sock(sk);
+
+	ret = 0;
+
+out:
+#endif
+
+	return ret;
+}//sock_setbindtodevice
+
+
+/*
+ *	This is meant for all protocols to use and covers goings on
+ *	at the socket level. Everything here is generic.
+ */
+
+int sock_setsockopt(struct socket *sock, int level, int optname,
+		    char __user *optval, unsigned int optlen)
+{
+	struct sock *sk = sock->sk;
+	int val;
+	int valbool;
+	struct linger ling;
+	int ret = 0;
+
+	/*
+	 *	Options without arguments
+	 */
+
+	if (optname == SO_BINDTODEVICE)
+		return sock_setbindtodevice(sk, optval, optlen);
+
+	if (optlen < sizeof(int))
+		return -EINVAL;
+
+	if (get_user(val, (int __user *)optval))
+		return -EFAULT;
+
+	valbool = val ? 1 : 0;
+
+	lock_sock(sk);
+
+	switch (optname) {
+	case SO_DEBUG:
+		if (val && !capable(CAP_NET_ADMIN))
+			ret = -EACCES;
+		else
+			sock_valbool_flag(sk, SOCK_DBG, valbool);
+		break;
+	case SO_REUSEADDR:
+		sk->sk_reuse = (valbool ? SK_CAN_REUSE : SK_NO_REUSE);
+		break;
+	case SO_REUSEPORT:
+		sk->sk_reuseport = valbool;
+		break;
+	case SO_TYPE:
+	case SO_PROTOCOL:
+	case SO_DOMAIN:
+	case SO_ERROR:
+		ret = -ENOPROTOOPT;
+		break;
+	case SO_DONTROUTE:
+		sock_valbool_flag(sk, SOCK_LOCALROUTE, valbool);
+		break;
+	case SO_BROADCAST:
+		sock_valbool_flag(sk, SOCK_BROADCAST, valbool);
+		break;
+	case SO_SNDBUF:
+		/* Don't error on this BSD doesn't and if you think
+		 * about it this is right. Otherwise apps have to
+		 * play 'guess the biggest size' games. RCVBUF/SNDBUF
+		 * are treated in BSD as hints
+		 */
+		val = min_t(u32, val, sysctl_wmem_max);
+set_sndbuf:
+		sk->sk_userlocks |= SOCK_SNDBUF_LOCK;
+		sk->sk_sndbuf = max_t(u32, val * 2, SOCK_MIN_SNDBUF);
+		/* Wake up sending tasks if we upped the value. */
+		sk->sk_write_space(sk);
+		break;
+
+	case SO_SNDBUFFORCE:
+		if (!capable(CAP_NET_ADMIN)) {
+			ret = -EPERM;
+			break;
+		}
+		goto set_sndbuf;
+
+	case SO_RCVBUF:
+		/* Don't error on this BSD doesn't and if you think
+		 * about it this is right. Otherwise apps have to
+		 * play 'guess the biggest size' games. RCVBUF/SNDBUF
+		 * are treated in BSD as hints
+		 */
+		val = min_t(u32, val, sysctl_rmem_max);
+set_rcvbuf:
+		sk->sk_userlocks |= SOCK_RCVBUF_LOCK;
+		/*
+		 * We double it on the way in to account for
+		 * "struct sk_buff" etc. overhead.   Applications
+		 * assume that the SO_RCVBUF setting they make will
+		 * allow that much actual data to be received on that
+		 * socket.
+		 *
+		 * Applications are unaware that "struct sk_buff" and
+		 * other overheads allocate from the receive buffer
+		 * during socket buffer allocation.
+		 *
+		 * And after considering the possible alternatives,
+		 * returning the value we actually used in getsockopt
+		 * is the most desirable behavior.
+		 */
+		sk->sk_rcvbuf = max_t(u32, val * 2, SOCK_MIN_RCVBUF);
+		break;
+
+	case SO_RCVBUFFORCE:
+		if (!capable(CAP_NET_ADMIN)) {
+			ret = -EPERM;
+			break;
+		}
+		goto set_rcvbuf;
+
+	case SO_KEEPALIVE:
+#ifdef CONFIG_INET
+		if (sk->sk_protocol == IPPROTO_TCP &&
+		    sk->sk_type == SOCK_STREAM)
+			tcp_set_keepalive(sk, valbool);
+#endif
+		sock_valbool_flag(sk, SOCK_KEEPOPEN, valbool);
+		break;
+
+	case SO_OOBINLINE:
+		sock_valbool_flag(sk, SOCK_URGINLINE, valbool);
+		break;
+
+	case SO_NO_CHECK:
+		sk->sk_no_check_tx = valbool;
+		break;
+
+	case SO_PRIORITY:
+		if ((val >= 0 && val <= 6) ||
+		    ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN))
+			sk->sk_priority = val;
+		else
+			ret = -EPERM;
+		break;
+
+	case SO_LINGER:
+		if (optlen < sizeof(ling)) {
+			ret = -EINVAL;	/* 1003.1g */
+			break;
+		}
+		if (copy_from_user(&ling, optval, sizeof(ling))) {
+			ret = -EFAULT;
+			break;
+		}
+		if (!ling.l_onoff)
+			sock_reset_flag(sk, SOCK_LINGER);
+		else {
+#if (BITS_PER_LONG == 32)
+			if ((unsigned int)ling.l_linger >= MAX_SCHEDULE_TIMEOUT/HZ)
+				sk->sk_lingertime = MAX_SCHEDULE_TIMEOUT;
+			else
+#endif
+				sk->sk_lingertime = (unsigned int)ling.l_linger * HZ;
+			sock_set_flag(sk, SOCK_LINGER);
+		}
+		break;
+
+	case SO_BSDCOMPAT:
+		sock_warn_obsolete_bsdism("setsockopt");
+		break;
+
+	case SO_PASSCRED:
+		if (valbool)
+			set_bit(SOCK_PASSCRED, &sock->flags);
+		else
+			clear_bit(SOCK_PASSCRED, &sock->flags);
+		break;
+
+	case SO_TIMESTAMP:
+	case SO_TIMESTAMPNS:
+		if (valbool)  {
+			if (optname == SO_TIMESTAMP)
+				sock_reset_flag(sk, SOCK_RCVTSTAMPNS);
+			else
+				sock_set_flag(sk, SOCK_RCVTSTAMPNS);
+			sock_set_flag(sk, SOCK_RCVTSTAMP);
+			sock_enable_timestamp(sk, SOCK_TIMESTAMP);
+		} else {
+			sock_reset_flag(sk, SOCK_RCVTSTAMP);
+			sock_reset_flag(sk, SOCK_RCVTSTAMPNS);
+		}
+		break;
+
+	case SO_TIMESTAMPING:
+		if (val & ~SOF_TIMESTAMPING_MASK) {
+			ret = -EINVAL;
+			break;
+		}
+
+		if (val & SOF_TIMESTAMPING_OPT_ID &&
+		    !(sk->sk_tsflags & SOF_TIMESTAMPING_OPT_ID)) {
+			if (sk->sk_protocol == IPPROTO_TCP &&
+			    sk->sk_type == SOCK_STREAM) {
+				if (sk->sk_state != TCP_ESTABLISHED) {
+					ret = -EINVAL;
+					break;
+				}
+				sk->sk_tskey = tcp_sk(sk)->snd_una;
+			} else {
+				sk->sk_tskey = 0;
+			}
+		}
+		sk->sk_tsflags = val;
+		if (val & SOF_TIMESTAMPING_RX_SOFTWARE)
+			sock_enable_timestamp(sk,
+					      SOCK_TIMESTAMPING_RX_SOFTWARE);
+		else
+			sock_disable_timestamp(sk,
+					       (1UL << SOCK_TIMESTAMPING_RX_SOFTWARE));
+		break;
+
+	case SO_RCVLOWAT:
+		if (val < 0)
+			val = INT_MAX;
+		sk->sk_rcvlowat = val ? : 1;
+		break;
+
+	case SO_RCVTIMEO:
+		ret = sock_set_timeout(&sk->sk_rcvtimeo, optval, optlen);
+		break;
+
+	case SO_SNDTIMEO:
+		ret = sock_set_timeout(&sk->sk_sndtimeo, optval, optlen);
+		break;
+
+	case SO_ATTACH_FILTER:
+		ret = -EINVAL;
+		if (optlen == sizeof(struct sock_fprog)) {
+			struct sock_fprog fprog;
+
+			ret = -EFAULT;
+			if (copy_from_user(&fprog, optval, sizeof(fprog)))
+				break;
+
+			ret = sk_attach_filter(&fprog, sk);
+		}
+		break;
+
+	case SO_ATTACH_BPF:
+		ret = -EINVAL;
+		if (optlen == sizeof(u32)) {
+			u32 ufd;
+
+			ret = -EFAULT;
+			if (copy_from_user(&ufd, optval, sizeof(ufd)))
+				break;
+
+			ret = sk_attach_bpf(ufd, sk);
+		}
+		break;
+
+	case SO_ATTACH_REUSEPORT_CBPF:
+		ret = -EINVAL;
+		if (optlen == sizeof(struct sock_fprog)) {
+			struct sock_fprog fprog;
+
+			ret = -EFAULT;
+			if (copy_from_user(&fprog, optval, sizeof(fprog)))
+				break;
+
+			ret = sk_reuseport_attach_filter(&fprog, sk);
+		}
+		break;
+
+	case SO_ATTACH_REUSEPORT_EBPF:
+		ret = -EINVAL;
+		if (optlen == sizeof(u32)) {
+			u32 ufd;
+
+			ret = -EFAULT;
+			if (copy_from_user(&ufd, optval, sizeof(ufd)))
+				break;
+
+			ret = sk_reuseport_attach_bpf(ufd, sk);
+		}
+		break;
+
+	case SO_DETACH_FILTER:
+		ret = sk_detach_filter(sk);
+		break;
+
+	case SO_LOCK_FILTER:
+		if (sock_flag(sk, SOCK_FILTER_LOCKED) && !valbool)
+			ret = -EPERM;
+		else
+			sock_valbool_flag(sk, SOCK_FILTER_LOCKED, valbool);
+		break;
+
+	case SO_PASSSEC:
+		if (valbool)
+			set_bit(SOCK_PASSSEC, &sock->flags);
+		else
+			clear_bit(SOCK_PASSSEC, &sock->flags);
+		break;
+	case SO_MARK:
+		if (!ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN))
+			ret = -EPERM;
+		else
+			sk->sk_mark = val;
+		break;
+
+	case SO_RXQ_OVFL:
+		sock_valbool_flag(sk, SOCK_RXQ_OVFL, valbool);
+		break;
+
+	case SO_WIFI_STATUS:
+		sock_valbool_flag(sk, SOCK_WIFI_STATUS, valbool);
+		break;
+
+	case SO_PEEK_OFF:
+		if (sock->ops->set_peek_off)
+			ret = sock->ops->set_peek_off(sk, val);
+		else
+			ret = -EOPNOTSUPP;
+		break;
+
+	case SO_NOFCS:
+		sock_valbool_flag(sk, SOCK_NOFCS, valbool);
+		break;
+
+	case SO_SELECT_ERR_QUEUE:
+		sock_valbool_flag(sk, SOCK_SELECT_ERR_QUEUE, valbool);
+		break;
+
+#ifdef CONFIG_NET_RX_BUSY_POLL
+	case SO_BUSY_POLL:
+		/* allow unprivileged users to decrease the value */
+		if ((val > sk->sk_ll_usec) && !capable(CAP_NET_ADMIN))
+			ret = -EPERM;
+		else {
+			if (val < 0)
+				ret = -EINVAL;
+			else
+				sk->sk_ll_usec = val;
+		}
+		break;
+#endif
+
+	case SO_MAX_PACING_RATE:
+		sk->sk_max_pacing_rate = val;
+		sk->sk_pacing_rate = min(sk->sk_pacing_rate,
+					 sk->sk_max_pacing_rate);
+		break;
+
+	case SO_INCOMING_CPU:
+		sk->sk_incoming_cpu = val;
+		break;
+
+	case SO_CNX_ADVICE:
+		if (val == 1)
+			dst_negative_advice(sk);
+		break;
+	default:
+		ret = -ENOPROTOOPT;
+		break;
+	}
+	release_sock(sk);
+	return ret;
+}//sock_setsockopt
+
+/*
+ *	Set a socket option. Because we don't know the option lengths we have
+ *	to pass the user mode parameter for the protocols to sort out.
+ */
+
+SYSCALL_DEFINE5(setsockopt, int, fd, int, level, int, optname,
+		char __user *, optval, int, optlen)
+{
+	int err, fput_needed;
 	struct socket *sock;
 
 	if (optlen < 0)
@@ -3739,13 +4251,339 @@ int setsockopt(int fd, int level, int optname, const void * optval, socklen_t op
 
 	sock = sockfd_lookup_light(fd, &err, &fput_needed);
 	if (sock != NULL) {
-		ret = compat_do_replace(sock_net(sock), optval, optlen);
+		err = security_socket_setsockopt(sock, level, optname);
+		if (err)
+			goto out_put;
+
+		if (level == SOL_SOCKET)
+			err =
+			    sock_setsockopt(sock, level, optname, optval,
+					    optlen);
+		else
+			err =
+			    sock->ops->setsockopt(sock, level, optname, optval,
+						  optlen);
+out_put:
+		fput_light(sock->file, fput_needed);
 	}
-	return ret;
+	return err;
 }
-*/
+
+/**
+ * @brief 
+ * 
+ * @param file 
+ * @param err 
+ * @return struct socket* 
+ */
+struct socket *sock_from_file(struct file *file, int *err)
+{
+	if (file->f_op == &socket_file_ops)
+		return file->private_data;	/* set in sock_map_fd */
+
+	*err = -ENOTSOCK;
+	return NULL;
+}//sock_from_file
+
+/**
+ * @brief 
+ * 
+ * @param fd 
+ * @param err 
+ * @param fput_needed 
+ * @return struct socket* 
+ */
+static struct socket *sockfd_lookup_light(int fd, int *err, int *fput_needed)
+{
+	struct fd f = fdget(fd);
+	struct socket *sock;
+
+	*err = -EBADF;
+	if (f.file) {
+		sock = sock_from_file(f.file, err);
+		if (likely(sock)) {
+			*fput_needed = f.flags;
+			return sock;
+		}
+		fdput(f);
+	}
+	return NULL;
+}//sockfd_lookup_light
+
+/**
+ *	sock_release	-	close a socket
+ *	@sock: socket to close
+ *
+ *	The socket is released from the protocol stack if it has a release
+ *	callback, and the inode is then released if the socket is bound to
+ *	an inode not a file.
+ */
+
+void sock_release(struct socket *sock)
+{
+	if (sock->ops) {
+		struct module *owner = sock->ops->owner;
+
+		sock->ops->release(sock);
+		sock->ops = NULL;
+		module_put(owner);
+	}
+
+	if (rcu_dereference_protected(sock->wq, 1)->fasync_list)
+		pr_err("%s: fasync list not empty!\n", __func__);
+
+	this_cpu_sub(sockets_in_use, 1);
+	if (!sock->file) {
+		iput(SOCK_INODE(sock));
+		return;
+	}
+	sock->file = NULL;
+}//sock_release
+
+
+/**
+ * @brief 
+ * 
+ * @param sock 
+ * @param family 
+ * @param type 
+ * @param protocol 
+ * @param kern 
+ * @return int 
+ */
+int security_socket_post_create(struct socket *sock, int family,
+				int type, int protocol, int kern)
+{
+	return call_int_hook(socket_post_create, 0, sock, family, type,
+						protocol, kern);
+}//security_socket_post_create
+
+/**
+ *	sock_alloc	-	allocate a socket
+ *
+ *	Allocate a new inode and socket object. The two are bound together
+ *	and initialised. The socket is then returned. If we are out of inodes
+ *	NULL is returned.
+ */
+
+/**
+ * @brief 
+ * 
+ * @return struct socket* 
+ */
+struct socket *sock_alloc(void)
+{
+	struct inode *inode;
+	struct socket *sock;
+
+	inode = new_inode_pseudo(sock_mnt->mnt_sb);
+	if (!inode)
+		return NULL;
+
+	sock = SOCKET_I(inode);
+
+	kmemcheck_annotate_bitfield(sock, type);
+	inode->i_ino = get_next_ino();
+	inode->i_mode = S_IFSOCK | S_IRWXUGO;
+	inode->i_uid = current_fsuid();
+	inode->i_gid = current_fsgid();
+	inode->i_op = &sockfs_inode_ops;
+
+	this_cpu_add(sockets_in_use, 1);
+	return sock;
+}//sock_alloc
+
+/**
+ * @brief 
+ * 
+ * @param family 
+ * @param type 
+ * @param protocol 
+ * @param kern 
+ * @return int 
+ */
+int security_socket_create(int family, int type, int protocol, int kern)
+{
+	return call_int_hook(socket_create, 0, family, type, protocol, kern);
+}//security_socket_create
+
+
+/**
+ * @brief creating a socket
+ * 
+ * @param net 
+ * @param family 
+ * @param type 
+ * @param protocol 
+ * @param res 
+ * @param kern 
+ * @return int 
+ */
+int __sock_create(struct net *net, int family, int type, int protocol,
+			 struct socket **res, int kern)
+{
+	int err;
+	struct socket *sock;
+	const struct net_proto_family *pf;
+
+	/*
+	 *      Check protocol is in range
+	 */
+	if (family < 0 || family >= NPROTO)
+		return -EAFNOSUPPORT;
+	if (type < 0 || type >= SOCK_MAX)
+		return -EINVAL;
+
+	/* Compatibility.
+
+	   This uglymoron is moved from INET layer to here to avoid
+	   deadlock in module load.
+	 */
+	if (family == PF_INET && type == SOCK_PACKET) {
+		pr_info_once("%s uses obsolete (PF_INET,SOCK_PACKET)\n",
+			     current->comm);
+		family = PF_PACKET;
+	}
+
+	err = security_socket_create(family, type, protocol, kern);
+	if (err)
+		return err;
+
+	/*
+	 *	Allocate the socket and allow the family to set things up. if
+	 *	the protocol is 0, the family is instructed to select an appropriate
+	 *	default.
+	 */
+	sock = sock_alloc();
+	if (!sock) {
+		net_warn_ratelimited("socket: no more sockets\n");
+		return -ENFILE;	/* Not exactly a match, but its the
+				   closest posix thing */
+	}
+
+	sock->type = type;
+
+#ifdef CONFIG_MODULES
+	/* Attempt to load a protocol module if the find failed.
+	 *
+	 * 12/09/1996 Marcin: But! this makes REALLY only sense, if the user
+	 * requested real, full-featured networking support upon configuration.
+	 * Otherwise module support will break!
+	 */
+	if (rcu_access_pointer(net_families[family]) == NULL)
+		request_module("net-pf-%d", family);
+#endif
+
+	rcu_read_lock();
+	pf = rcu_dereference(net_families[family]);
+	err = -EAFNOSUPPORT;
+	if (!pf)
+		goto out_release;
+
+	/*
+	 * We will call the ->create function, that possibly is in a loadable
+	 * module, so we have to bump that loadable module refcnt first.
+	 */
+	if (!try_module_get(pf->owner))
+		goto out_release;
+
+	/* Now protected by module ref count */
+	rcu_read_unlock();
+
+	err = pf->create(net, sock, protocol, kern);
+	if (err < 0)
+		goto out_module_put;
+
+	/*
+	 * Now to bump the refcnt of the [loadable] module that owns this
+	 * socket at sock_release time we decrement its refcnt.
+	 */
+	if (!try_module_get(sock->ops->owner))
+		goto out_module_busy;
+
+	/*
+	 * Now that we're done with the ->create function, the [loadable]
+	 * module can have its refcnt decremented
+	 */
+	module_put(pf->owner);
+	err = security_socket_post_create(sock, family, type, protocol, kern);
+	if (err)
+		goto out_sock_release;
+	*res = sock;
+
+	return 0;
+
+out_module_busy:
+	err = -EAFNOSUPPORT;
+out_module_put:
+	sock->ops = NULL;
+	module_put(pf->owner);
+out_sock_release:
+	sock_release(sock);
+	return err;
+
+out_release:
+	rcu_read_unlock();
+	goto out_sock_release;
+}//__sock_create
+
+
+/**
+ * @brief 
+ * 
+ * @param family 
+ * @param type 
+ * @param protocol 
+ * @param res 
+ * @return int 
+ */
+int sock_create(int family, int type, int protocol, struct socket **res)
+{
+	return __sock_create(current->nsproxy->net_ns, family, type, protocol, res, 0);
+}//sock_create
 
 /** End Mock socket setup Call **/
+
+/**system call for creating socket
+ * @brief Construct a new syscall define3 object
+ * 
+ */
+SYSCALL_DEFINE3(socket, int, family, int, type, int, protocol)
+{
+	int retval;
+	struct socket *sock;
+	int flags;
+
+	/* Check the SOCK_* constants for consistency.  */
+	BUILD_BUG_ON(SOCK_CLOEXEC != O_CLOEXEC);
+	BUILD_BUG_ON((SOCK_MAX | SOCK_TYPE_MASK) != SOCK_TYPE_MASK);
+	BUILD_BUG_ON(SOCK_CLOEXEC & SOCK_TYPE_MASK);
+	BUILD_BUG_ON(SOCK_NONBLOCK & SOCK_TYPE_MASK);
+
+	flags = type & ~SOCK_TYPE_MASK;
+	if (flags & ~(SOCK_CLOEXEC | SOCK_NONBLOCK))
+		return -EINVAL;
+	type &= SOCK_TYPE_MASK;
+
+	if (SOCK_NONBLOCK != O_NONBLOCK && (flags & SOCK_NONBLOCK))
+		flags = (flags & ~SOCK_NONBLOCK) | O_NONBLOCK;
+
+	retval = sock_create(family, type, protocol, &sock);
+	if (retval < 0)
+		goto out;
+
+	retval = sock_map_fd(sock, flags & (O_CLOEXEC | O_NONBLOCK));
+	if (retval < 0)
+		goto out_release;
+
+out:
+	/* It may be already another descriptor 8) Not kernel problem. */
+	return retval;
+
+out_release:
+	sock_release(sock);
+	return retval;
+}
 
 
 /** MAIN FUNCTION **/
